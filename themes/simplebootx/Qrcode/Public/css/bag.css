@@ -1,0 +1,146 @@
+/*---------------------------------------------------------/
+
+                       ☀ 唐明明20151015 ☀
+
+/---------------------------------------------------------*/
+
+button {
+	border: none;
+}
+
+.Bg {
+	
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+/*红包*/
+
+.red {
+	width:70%;
+	padding-top: 100%;
+	margin: 30% 15%;
+	position: relative;
+}
+
+.red span {
+	background: url(../images/bg.png) no-repeat center;
+	width: 100%;
+	background-size: 100%;
+	display: block;
+	height: 500px;
+	position: absolute;
+	top: 0;
+}
+
+.red .redbutton{
+	position: absolute;
+	top: 65%;
+	left: 34%;
+	font-size: 14px;
+	height: 90px;
+	width: 90px;
+	border-radius: 100%;
+	background: #fdc339;
+	color: #fff;
+	outline: none;
+	opacity: 0;
+}
+
+.red-jg {
+	display: none;
+	position: absolute;
+	top: 32%;
+	text-align: center;
+	width: 100%;
+	z-index: 9999;
+}
+
+.red-text{
+	padding-top: 20%;
+	text-align: center;
+}
+
+.red-text h3{
+	color: #666666;
+	font-weight: normal;
+}
+
+.red-text h1{
+	color: #d85940;
+	font-size: 38px;
+	font-family: arial !important;
+}
+
+.red-text h1 small{
+	color: #333333;
+	font-size: 16px;
+	font-family: "微软雅黑" !important;
+}
+
+/*按钮*/
+
+.t-btn {
+	padding: 10px;
+}
+
+.t-btn>button {
+	width: 100%;
+	background: #fdc339;
+	border-radius: 5px;
+	color: #fff;
+	line-height: 40px;
+	font-size: 14px;
+}
+
+.logo{
+	position: absolute;
+	width: 20%;
+	
+	top:23%;
+	left: 40%;
+}
+
+.logo img{
+	width: 100%;
+	border-radius: 5px;
+}
+
+.logo2{
+	position: absolute;
+	width: 20%;
+	top:0;
+	left: 40%;
+}
+
+.logo2 img{
+	width: 100%;
+	border-radius: 5px;
+}
+
+@media screen and (max-width: 380px) {
+	.logo{
+		top: 30%;
+	}
+	.red-jg{
+		top: 38%;
+	}
+}
+
+@media screen and (max-width: 330px){
+	.logo{
+		top: 45%;
+	}
+	.red-jg{
+		top: 50%;
+	}
+	.red-text h1{
+		margin: 0;
+	}
+	.red{
+		margin: 15% 15%;
+	}
+}

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+		<title>早起挑战</title>
+		<link rel="stylesheet" href="//cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="//cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+		<link rel="stylesheet" type="text/css" href="__TMPL__Public/css/morning.css?v=1" />
+	</head>
+	<body>
+		<div class="header">
+			<div class="container">
+				<div class="weui-flex marg">
+					<div class="weui-flex__item">
+						<div class="myrecord">
+							<span><img src="__TMPL__Public/images/morning/tai.png"/></span>
+							<strong><empty name="today_sign">0<else/>{$today_sign.days}</empty></strong>
+						</div>
+					</div>
+					<div class="weui-flex__item portrait">
+						<span>
+							<a href="{:leuu('Activity/Morning/home')}"><img src="<empty name="user.avatar">__TMPL__/Public/images/headicon_128.png<else/>{$user.avatar}</empty>"/></a>
+						</span>
+					</div>
+				</div>
+				<div class="part">
+					<h2><img src="__TMPL__Public/images/morning/yi.png"/></h2>
+					<p>{$tip}</p>
+				</div>
+				<div class="rule">
+					<div class="title center">
+						|&nbsp;&nbsp;挑战规则&nbsp;&nbsp;|
+					</div>
+					<div class="rule-text">
+						<p><span>1</span>支付{$config.pay_amount}元加入挑战</p>
+						<p><span>2</span>次日早上 {$config.starttime}-{$config.endtime} 打卡</p>
+						<p><span>3</span>准时打卡的人平分挑战金</p>
+					</div>
+				</div>
+				
+				<div class="buton">
+					<div class="potion">
+						<img src="__TMPL__Public/images/morning/cat.gif"/>
+					</div>
+					<div class="ws-button">
+					</div>
+					<a class="ding theme-login sign-btn <eq name="btn" value="getup">hidden</eq>" href="javascript:void(0);">参加挑战</a>
+					<a class="ding theme-login getup-btn <eq name="btn" value="sign">hidden</eq>" href="javascript:void(0);">打卡</a>	
+					
+					
+					
+					<!--<a class="ws-button theme-login sign-btn <eq name="btn" value="getup">hidden</eq>" href="javascript:void(0);">参加挑战</a>
+					<a class="ws-button theme-login getup-btn <eq name="btn" value="sign">hidden</eq>" href="javascript:void(0);">打卡</a>-->
+				</div>
+				<div class="more center">
+					下滑查看大家的打卡记录<span><img src="__TMPL__Public/images/morning/zhi.png"/></span>
+				</div>
+
+			</div>
+		</div>
+		
+		<div class="wrap">
+			<div class="title">
+				<p><i><img src="__TMPL__Public/images/morning/rili.png"/></i>{$record.text}</p>
+				<span>{$record.success_num}成功  {$record.fail_num}失败</span>
+			</div>
+			<div class="wrap-ul">
+				<ul>
+					<li class="ul-start-li">
+						<p class="left">{:date('H:i', $starttime)}</p>
+						<div class="start">
+							<h4>吉时到, 懒货们开始起床打卡啦!</h4>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="wrap-more">
+				<a class="loading-more" sign_at="{$record.sign_at}" point="0" href="javascript:void(0);">点击加载更早打卡记录</a>
+			</div>
+		</div>
+		<div class="weui-flex flex-nav">
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/index')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb11.png" alt="">
+					</div>
+					<p class="weui-tabbar__label color-red">挑战</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/top')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb3.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">排行榜</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/home')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb5.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">我的</p>
+				</a>
+			</div>
+			
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/share')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb4.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">分享</p>
+				</a>
+			</div>
+		</div>
+		<div class="theme-popover sign">
+			<div class="theme-poptit">
+				<a href="javascript:void(0);" title="关闭" class="close">×</a>
+			</div>
+			<div class="theme-popbod">
+				<h2>支付挑战金{$config.pay_amount}元</h2>
+				<img src="__TMPL__Public/images/morning/cat.png"/>
+				<a href="javascript:void(0);" class="weui-btn weui-btn_primary btn-pay-sign">支付，参加挑战</a>
+			</div>
+		</div>
+		<div class="theme-popover pay-success <if condition="$pay_callback && $pay_success">show</if>">
+			<div class="pop-top-tip share-tip hidden">
+				<span style="" class="weui-btn weui-btn_primary">点击右上角分享给好朋友</span>
+			</div>
+			<div class="theme-poptit">
+				<a href="javascript:void(0);" title="关闭" class="close">×</a>
+			</div>
+			<div class="theme-popbod">
+				<h2>您的挑战已启动</h2>
+				<p>{$pay_success_date}{$config.starttime}-{$config.endtime}记得来打卡哦</p>
+				<img src="__TMPL__Public/images/morning/cat_paysuccess.png"/>
+				<a href="javascript:void(0);" class="weui-btn btn-share weui-btn_plain-primary">喊好友来参加</a>
+			</div>
+		</div>
+		<div class="theme-popover getup-success">
+			<div class="pop-top-tip share-tip hidden">
+				<span class="weui-btn weui-btn_primary">点击右上角分享给好朋友</span>
+			</div>
+			<div class="pop-top-tip getup-tip hidden">
+				<span class="weui-btn weui-btn_primary">
+				<img src="__TMPL__Public/images/morning/tai.png" /> 连续早起<span></span>天 !</span>
+			</div>
+			<div class="theme-poptit">
+				<a href="javascript:void(0);" title="关闭" class="close">×</a>
+			</div>
+			<div class="theme-popbod">
+				<h2>挑战成功咯</h2>
+				<p>奖励会在24小时内发送至微信钱包</p>
+				<img src="__TMPL__Public/images/morning/cat_checksuccess.png"/>
+				<a href="javascript:void(0);" class="weui-btn weui-btn_primary btn-sign-again">参加下次挑战</a>
+				<a href="javascript:void(0);" class="weui-btn weui-btn_plain-primary btn-share">喊好友来参加</a>
+			</div>
+		</div>
+		<div class="theme-popover-mask <if condition="$pay_callback && $pay_success">show</if>"></div>
+		<script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+		<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<script src="__TMPL__Public/js/core.js"></script>
+		<script src="__TMPL__Public/js/morning.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+		<eq name="subcribe_tip" value="1">
+		$(function() {
+			setTimeout(function() {
+				$.modal({
+				  	title: "重要提示",
+				  	text: "<strong style='font-size:16px;color:orange;'>奖励通过公众号发出，请关注</strong><br/><img src='{$wechatmp.qrcode}' /><br/><span>长按二维码, 关注{$wechatmp.name}</span>",
+				  	buttons: [
+				    	{ text: "我知道了", className: "default", onClick: function(){} }
+				  	]
+				});
+			}, 500);
+		});
+		</eq>
+			wx.config({$jsconfig});
+			wx.ready(function(){
+				wx.onMenuShareAppMessage({
+				    title: '赌你起不来！不服来挑战',
+				    desc: '挑战早起打卡，起床有钱拿。咯咯咯~',
+				    link: '{$link}',
+				    imgUrl: '{$host}__TMPL__Public/images/morning/cat_checksuccess.png',
+				    type: 'link',
+				    dataUrl: '',
+				    success: function () {},
+				    cancel: function () {}
+				});
+				wx.hideMenuItems({
+				    menuList: ['menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone', 'menuItem:editTag', 'menuItem:delete', 'menuItem:copyUrl', 'menuItem:originPage', 'menuItem:readMode', 'menuItem:openWithQQBrowser', 'menuItem:openWithSafari', 'menuItem:share:email', 'menuItem:share:brand'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+				});
+			});
+        </script>
+	</body>
+</html>

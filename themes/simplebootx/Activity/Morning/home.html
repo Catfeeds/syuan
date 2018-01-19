@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+		<title>我的打卡记录</title>
+		<link rel="stylesheet" href="//cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="//cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+		<link rel="stylesheet" type="text/css" href="__TMPL__Public/css/morning.css" />
+	</head>
+	<body>
+		<div class="personal">
+			<div class="personal-top">
+				<span><img src="<empty name="user.avatar">__TMPL__/Public/images/headicon_128.png<else/>{$user.avatar}</empty>"/></span>
+				<h3>{$user.user_nicename}</h3>
+				
+			</div>
+
+			<div class="personal-Record container">
+				<ul>
+					<li>
+						<i><img src="__TMPL__Public/images/morning/tb1.png"/></i>
+						<p>
+							<span>{$amount}</span> 累计奖励（元）
+						</p>
+					</li>
+					<li>
+						<i><img src="__TMPL__Public/images/morning/tb2.png"/></i>
+						<p>
+							<span>{$success_num}</span> 累计成功次数
+						</p>
+					</li>
+				</ul>
+			</div>
+
+			<div class="calendar container hidden">
+				<div id="inline-calendar">
+					<div class="weui-flex">
+					  <div class="weui-flex__item left">〈</div>
+					  <div class="weui-flex__item"></div>
+					  <div class="weui-flex__item"></div>
+					  <div class="weui-flex__item month" year="{:date('Y', TIMESTAMP)}" month="{:date('n', TIMESTAMP)}">{:date('n月', TIMESTAMP)}</div>
+					  <div class="weui-flex__item"></div>
+					  <div class="weui-flex__item"></div>
+					  <div class="weui-flex__item right"></div>
+					</div>
+					<div class="weui-flex week week1">
+					  <div class="weui-flex__item item1 success"><span>1</span></div>
+					  <div class="weui-flex__item item2 focus"><span>2</span></div>
+					  <div class="weui-flex__item item3 success focus"><span>3</span></div>
+					  <div class="weui-flex__item item4 fail"><span>4</span></div>
+					  <div class="weui-flex__item item5 fail focus"><span>5</span></div>
+					  <div class="weui-flex__item item6"><span>6</span></div>
+					  <div class="weui-flex__item item7"><span>7</span></div>
+					</div>
+					<div class="weui-flex week week2">
+					  <div class="weui-flex__item item8"><span>8</span></div>
+					  <div class="weui-flex__item item9"><span>9</span></div>
+					  <div class="weui-flex__item item10"><span>10</span></div>
+					  <div class="weui-flex__item item11"><span>11</span></div>
+					  <div class="weui-flex__item item12"><span>12</span></div>
+					  <div class="weui-flex__item item13"><span>13</span></div>
+					  <div class="weui-flex__item item14"><span>14</span></div>
+					</div>
+					<div class="weui-flex week week3">
+					  <div class="weui-flex__item item15"><span>15</span></div>
+					  <div class="weui-flex__item item16"><span>16</span></div>
+					  <div class="weui-flex__item item17"><span>17</span></div>
+					  <div class="weui-flex__item item18"><span>18</span></div>
+					  <div class="weui-flex__item item19"><span>19</span></div>
+					  <div class="weui-flex__item item20"><span>20</span></div>
+					  <div class="weui-flex__item item21"><span>21</span></div>
+					</div>
+					<div class="weui-flex week week4">
+					  <div class="weui-flex__item item22"><span>22</span></div>
+					  <div class="weui-flex__item item23"><span>23</span></div>
+					  <div class="weui-flex__item item24"><span>24</span></div>
+					  <div class="weui-flex__item item25"><span>25</span></div>
+					  <div class="weui-flex__item item26"><span>26</span></div>
+					  <div class="weui-flex__item item27"><span>27</span></div>
+					  <div class="weui-flex__item item28"><span>28</span></div>
+					</div>
+					<div class="weui-flex week week5 hidden">
+					  <div class="weui-flex__item item29"><span>29</span></div>
+					  <div class="weui-flex__item item30"><span>30</span></div>
+					  <div class="weui-flex__item item31"><span>31</span></div>
+					  <div class="weui-flex__item"></div>
+					  <div class="weui-flex__item"></div>
+					  <div class="weui-flex__item"></div>
+					  <div class="weui-flex__item"></div>
+					</div>
+				</div>
+			</div>
+			<div class="calendar-result container hidden">
+				<div class="weui-flex">
+					<div class="weui-flex__item">
+						<h5>早起打卡</h5>
+						<p>我在07:32分起床，连续早起100天啦!</p>
+					</div>
+					<div class="right success">挑战失败</div>
+				</div>
+			</div>
+			<div class="personal-more container hidden">
+				本日无挑战记录
+			</div>
+		</div>
+		<div class="weui-flex flex-nav">
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/index')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb011.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">挑战</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/top')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb3.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">排行榜</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/home')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb05.png" alt="">
+					</div>
+					<p class="weui-tabbar__label color-red">我的</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/share')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb4.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">分享</p>
+				</a>
+			</div>
+		</div>
+		<script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+		<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<script src="__TMPL__Public/js/core.js"></script>
+		<script src="__TMPL__Public/js/morning.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			wx.config({$jsconfig});
+			wx.ready(function(){
+				wx.onMenuShareAppMessage({
+				    title: '赌你起不来！不服来挑战',
+				    desc: '挑战早起打卡，起床有钱拿。咯咯咯~',
+				    link: '{$link}',
+				    imgUrl: '{$host}__TMPL__Public/images/morning/cat_checksuccess.png',
+				    type: 'link',
+				    dataUrl: '',
+				    success: function () {},
+				    cancel: function () {}
+				});
+				wx.hideMenuItems({
+				    menuList: ['menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone', 'menuItem:editTag', 'menuItem:delete', 'menuItem:copyUrl', 'menuItem:originPage', 'menuItem:readMode', 'menuItem:openWithQQBrowser', 'menuItem:openWithSafari', 'menuItem:share:email', 'menuItem:share:brand'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+				});
+			});
+        </script>
+	</body>
+</html>

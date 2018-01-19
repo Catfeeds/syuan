@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>个人中心</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+    <link rel="stylesheet" type="text/css" href="__TMPL__User/Wechat/Public/css/app.css" />
+  </head>
+  <body>
+      <div class="weui-flex top">
+        <div></div>
+        <div class="weui-flex__item">
+          <div class="placeholder">个人中心</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="weui-flex ID-top">
+        <div class="headimg">
+            <img src="<empty name="user['avatar']">__TMPL__/Public/images/headicon_128.png<else/>{$user.avatar}</empty>"  />
+        </div>
+        <div class="weui-flex__item user_name">
+          <h4>昵　称: {$user.user_nicename}</h4>
+          <h4>手机号: {$user.mobile}</h4>
+        </div>
+      </div>
+      <div class="ID-ul">
+        <div class="weui-cells">
+        
+        <a class="weui-cell weui-cell_access" href="{:UU('Finance/Wechat/balance')}">
+            <div class="weui-cell__bd ID-ul-img">
+            <i><img src="__TMPL__User/Wechat/Public/images/balance.png"/></i>
+              <p>我的余额</p>
+            </div>
+            <div class="weui-cell__ft ID-ul-red"><p>{$user.account.money}</p></div>
+          </a>
+          <a class="weui-cell weui-cell_access" href="{:UU('Finance/Wechat/integral')}">
+            <div class="weui-cell__bd ID-ul-img"> <i><img src="__TMPL__User/Wechat/Public/images/integral-ico.png"/></i>
+            <p>我的积分</p>
+          </div>
+          <div class="weui-cell__ft"> </div>
+          </a> </div>
+        <hr />
+        <div class="weui-cells"> <a class="weui-cell weui-cell_access" href="{:UU('User/Wechat/spread')}">
+          <div class="weui-cell__bd ID-ul-img"> <i><img src="__TMPL__User/Wechat/Public/images/spread.png"/></i>
+            <p>我要推广</p>
+          </div>
+          <div class="weui-cell__ft"> </div>
+          </a> <a class="weui-cell weui-cell_access" href="{:UU('Finance/Wechat/spreadresult')}">
+          <div class="weui-cell__bd ID-ul-img"> <i><img src="__TMPL__User/Wechat/Public/images/spreadresult.png"/></i>
+            <p>推广收益</p>
+          </div>
+          <div class="weui-cell__ft"> </div>
+          </a> </div>
+      </div>
+  </body>
+</html>

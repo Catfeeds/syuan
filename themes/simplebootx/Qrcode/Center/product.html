@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$site_name}-产品列表-会员中心</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+
+<tc_include file="Public:head" />
+</head>
+
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+
+	<div class="container tc-main">
+        <div class="row">
+            <div class="span2">
+                <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span10">
+               <ul class="nav nav-tabs">
+					<li <eq name="do" value="list">class="active"</eq>><a href="{:leuu('Qrcode/center/product', array('do' => 'list'))}">产品列表</a></li>
+					<li <eq name="do" value="add">cass="active"</eq>><a href="{:leuu('Qrcode/center/add_pro', array('do' => 'add'))}">添加产品</a></li>
+				</ul>
+               <div class="tab-content">
+                   <div class="tab-pane active" id="one">
+                   		<form class="form-inline" method="get">
+                   		<select name="category">
+                   			<option value="0">选择产品分类</option>
+                   			<foreach name="category" item="val">
+                   			<option value="{$val.id}" <if condition="$val['id'] eq $condition['cat']">selected</if> >{$val.name}</option>
+                   			</foreach>
+                   		</select>
+                   		<input type="text" name="name" placeholder="输入产品名称" value="{$condition.name}">
+                   		<button class="btn btn-mini">搜索</button>
+                   		</form>
+                   		<table class="table table-bordered table-striped table-hover">
+					    <thead>
+					      <tr>
+					        <th>产品名称</th>
+					        <th>产品分类</th>
+					        <th>添加时间</th>
+					        <th>批次</th>
+					        <th>操作</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+					    <foreach name="list" item="vo">
+					      <tr>
+					        <td>{$vo.name}</td>
+					        <td>{$category[$vo['category']]['name']}</td>
+					        <td>{$vo.createtime|date="Y-m-d H:i",###}</td>
+					        <td>
+					        	<a href="{:leuu('qrcode/center/add_order',array('id'=>$vo['pid']))}">添加批次</a>
+					        </td>
+					        <td><a href="{:leuu('qrcode/center/edit_pro',array('id'=>$vo['pid']))}">编辑</a> | <a class="js-ajax-dialog-btn" href="{:leuu('qrcode/center/del_pro',array('id'=>$vo['pid']))}" data-msg="您确定要删除吗？" data-ok="" data-cacel="取消">删除</a></td>
+					      </tr>
+					    </foreach>
+					    </tbody>
+					  </table>
+					  {$page}
+                   </div>
+               </div>
+            </div>
+        </div>
+		<tc_include file="Public:footer" />
+	</div>
+	<!-- /container -->
+	<tc_include file="Public:scripts" />
+</body>
+</html>

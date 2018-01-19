@@ -1,0 +1,66 @@
+<admintpl file="header" />
+</head>
+<body class="need_breadcrumb_back">
+	<div class="wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form method="post" class="form-horizontal" action="{:U('AdminConfig/setting_post')}" enctype="multipart/form-data">
+			<input type="hidden" name="type" value="{$payment.type}" />
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label"></label>
+					<div class="controls">
+						<h5>{$payment.name}配置</h5>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">AppID</label>
+					<div class="controls">
+						<input type="text" name="appid" value="{$payment.config.appid}" />
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">AppSecret</label>
+					<div class="controls">
+						<input type="text" name="appsecret" value="{$payment.config.appsecret}" />
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">微支付商户号</label>
+					<div class="controls">
+						<input type="text" name="merchant_id" value="{$payment.config.merchant_id}" />
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">API密钥</label>
+					<div class="controls">
+						<input type="text" name="key" value="{$payment.config.key}" />
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">apiclient_cert私钥文件</label>
+					<div class="controls">
+						<input type="file" name="apiclient_cert" />
+						<span class="form-required">{$payment.config.apiclient_cert}</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">apiclient_key公钥文件</label>
+					<div class="controls">
+						<input type="file" name="apiclient_key" />
+						<span class="form-required">{$payment.config.apiclient_key}</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+					<a class="btn" href="{:U('AdminConfig/index')}">{:L('BACK')}</a>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

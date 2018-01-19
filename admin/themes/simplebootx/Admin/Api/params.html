@@ -1,0 +1,44 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb(array('url' => U('Api/params_add', array('api_id' => $api['id'])), 'icon' => 'plus', 'title' => '添加'))}
+		<h5>{$api.name}API请求参数列表</h5>
+		<form method="post" class="js-ajax-form" action="{:U('Api/params_listorder')}">
+			<table class="table table-hover table-bordered table-list mtop20">
+				<thead>
+					<tr>
+						<th width="60px">排序</th>
+						<th>名称</th>
+						<th>参数类型</th>
+						<th>是否必填</th>
+						<th>默认值</th>
+						<th>字段说明</th>
+						<th width="100px">{:L('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<foreach name="list" item="param">
+					<tr>
+						<td><input type="text" class="input input-order" name="listorders[{$param.id}]" value="{$param.listorder}"></td>
+						<td>{$param.name}</td>
+						<td>{$types[$param['type']]}</td>
+						<td><eq name="param.must" value="1">是<else/>否</eq></td>
+						<td><empty name="param.default">无</empty></td>
+						<td>{$param.introduce}</td>
+						<td>
+							<a href="{:U('Api/params_edit', array('id'=>$param['id']))}">编辑</a> | 
+							<a class="js-ajax-delete" href="{:U('Api/params_del', array('id'=>$param['id']))}">删除</a>
+						</td>
+					</tr>
+					</foreach>
+				</tbody>
+			</table>
+			<div class="table-actions">
+				<button type="submit" class="btn btn-primary btn-small js-ajax-submit">{:L('SORT')}</button>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

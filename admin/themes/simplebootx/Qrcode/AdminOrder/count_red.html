@@ -1,0 +1,45 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('chart',array('status'=>2))}">印刷中</a></li>
+			<li><a href="{:U('chart',array('status'=>3))}">已完成</a></li>
+			<li><a href="{:U('chart',array('status'=>4))}">已取消</a></li>
+			<li><a href="{:U('count',array('status'=>5))}">溯源统计</a></li>
+			<li class="active"><a href="{:U('count_red',array('status'=>6))}">红包统计</a></li>
+			<li><a href="{:U('count_detail',array('status'=>7))}">溯源统计详情</a></li>
+
+		</ul>
+		<!-- <form class="well form-search" method="GET" action="/index.php">
+			<input type="hidden" name="g" value="Qrcode">
+			<input type="hidden" name="m" value="AdminOrder">
+			<input type="hidden" name="a" value="chart">
+			<input type="hidden" name="status" value="{$status}">
+			时间：
+			<input type="text" name="starttime" class="js-date" value="{$formget.starttime|default=''}" style="width: 80px;" autocomplete="off" data-date-format="yyyy-mm">-
+			<input type="text" class="js-date" name="endtime" value="{$formget.endtime}" style="width: 80px;" autocomplete="off" data-date-format="yyyy-mm">
+			<input type="submit" class="btn btn-primary" value="搜索" />
+		</form> -->
+		<table class="table">
+			<tr>
+				<td>客户</td>
+				<td>创建次数</td>
+				<td>总红包个数</td>
+				<td>总金额</td>
+				<td>总领取量</td>
+			</tr>
+			<foreach name="list" item="val">
+			<tr>
+				<td>{$users[$val['uid']]}</td>
+				<td>{$val.total}</td>
+				<td>{$val.num}</td>
+				<td>{$val.money}</td>
+				<td>{$val.view}</td>
+			</tr>
+			</foreach>
+		</table>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		{:sp_get_admin_breadcrumb()}
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#A" data-toggle="tab">{:L('QQ_CONNECT')}</a></li>
+			<li><a href="#B" data-toggle="tab">{:L('WEIBO_CONNECT')}</a></li>
+		</ul>
+		<form method="post" class="js-ajax-form" action="{:U('oauthadmin/setting_post')}">
+			<div class="tabbable">
+				<div class="tab-content" style="padding-left: 20px;line-height: 40px;">
+					<div class="tab-pane active" id="A">
+						<table width="100%" cellpadding="2" cellspacing="2">
+							<tbody>
+								<tr>
+									<td width="120px">是否开启</td>
+									<td>
+										<label class="radio inline">
+										  	<input type="radio" name="qq_enable" value="1" <eq name="config.THINK_SDK_QQ.ENABLE" value="1">checked</eq>>
+										 	开启
+										</label>
+										<label class="radio inline">
+											<input type="radio" name="qq_enable" value="0" <eq name="config.THINK_SDK_QQ.ENABLE" value="0">checked</eq>>
+										  	关闭
+										</label>
+									</td>
+								</tr>
+								<tr>
+									<td>APPkey</td>
+									<td><input type="text" name="qq_key" value="{$Think.config.THINK_SDK_QQ.APP_KEY}" /></td>
+								</tr>
+								<tr>
+									<td>APPsecret</td>
+									<td><input type="text" name="qq_sec" value="{$Think.config.THINK_SDK_QQ.APP_SECRET}" /></td>
+								</tr>
+								<tr>
+									<td>授权回调页：</td>
+									<td>{$qq_callback}</td>
+								</tr>
+								<tr>
+									<td colspan="2"><a href="http://connect.qq.com/" target="_blank">{:L('CLICK_HERE')}</a>{:L('GET_QQ_APPKEY_AND_APPSECRET')}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="tab-pane" id="B">
+						<table width="100%">
+							<tbody>
+								<tr>
+									<td width="120px">是否开启</td>
+									<td>
+										<label class="radio inline">
+										  	<input type="radio" name="sina_enable" value="1" <eq name="config.THINK_SDK_SINA.ENABLE" value="1">checked</eq>>
+										 	开启
+										</label>
+										<label class="radio inline">
+											<input type="radio" name="sina_enable" value="0" <eq name="config.THINK_SDK_SINA.ENABLE" value="0">checked</eq>>
+										  	关闭
+										</label>
+									</td>
+								</tr>
+								<tr>
+									<td>APPkey</td>
+									<td><input type="text" name="sina_key" value="{$Think.config.THINK_SDK_SINA.APP_KEY}" /></td>
+								</tr>
+
+								<tr>
+									<td>APPsecret</td>
+									<td><input type="text" name="sina_sec" value="{$Think.config.THINK_SDK_SINA.APP_SECRET}" /></td>
+								</tr>
+								<tr>
+									<td>{:L('CALLBACK_URL')}</td>
+									<td>{$sina_callback}sina</td>
+								</tr>
+								<tr>
+									<td>{:L('CANCEL_CALLBACK_URL')}</td>
+									<td>{$sina_cancel_callback}</td>
+								</tr>
+								<tr>
+									<td colspan="2"><a href="http://open.weibo.com/" target="_blank">{:L('CLICK_HERE')}</a> {:L('GET_WEIBO_APPKEY_AND_APPSECRET')}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

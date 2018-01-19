@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+		<title>早起挑战邀请</title>
+		<link rel="stylesheet" href="//cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="//cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+		<link rel="stylesheet" type="text/css" href="__TMPL__Public/css/morning.css?v=1" />
+	</head>
+
+	<body class="fen-body">
+		<div class="fen">
+			<div class="fen-title">
+				<img src="__TMPL__Public/images/morning/top-title.png" />
+			</div>
+			<div class="fen-text">
+				<small>我是</small>
+					<notempty name="user.avatar">
+						<img src="{$user.avatar}" />
+						<else/>
+						<img src="__TMPL__/Public/images/headicon_128.png" />
+					</notempty>
+					<span>{$user.user_nicename}</span>
+					坚持早起第{$success_num}天 <br />
+					你是我邀请的第{$recommend_num + 1}位朋友, 赌你起不来，不服就来战!
+			</div>
+			<div class="fen-er">
+				<div class="weui-flex">
+					<div class="weui-flex__item fen-er-border">
+						<img src="{$qrcode}" />
+					</div>
+					<div class="weui-flex__item">
+						<img src="__TMPL__Public/images/morning/zhiwen2.png" />
+					</div>
+				</div>
+			</div>
+
+			<div class="fen-an">
+				<img src="__TMPL__Public/images/morning/anniu.png" id="share-btn" />
+			</div>
+			<div class="fen-bg" id="share-bg"></div>
+			<div class="fen-tan" id="share-bran">
+				<img src="__TMPL__Public/images/morning/fen.png" class="fen-tan-zhi"/>
+				<div class="fen-tan-text">
+					<img src="{$qrcode}" class="fen-tan-er"/>
+					<p>来，面对面扫码</p>
+				</div>
+			</div>
+		</div>
+		<eq name="login_uid" value="$user['id']">
+		<div class="weui-flex flex-nav" style="z-index: 3;">
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/index')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb011.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">挑战</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/top')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb3.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">排行榜</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/home')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb5.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">我的</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/share')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb04.png" alt="">
+					</div>
+					<p class="weui-tabbar__label color-red">分享</p>
+				</a>
+			</div>
+		</div>
+		</eq>
+		<script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+		<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<script src="__TMPL__Public/js/core.js"></script>
+		<script src="__TMPL__Public/js/morning.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			var share_title = '赌你起不来！不服来挑战';
+			var share_desc = '挑战早起打卡，起床有钱拿。咯咯咯~';
+			var share_link = '{$link}';
+			var share_img = '{$host}__TMPL__Public/images/morning/cat_checksuccess.png';
+			$(function() {
+				wx.config({$jsconfig});
+				wx.ready(function() {
+					wx.onMenuShareAppMessage({
+						title: share_title,
+						desc: share_desc,
+						link: share_link,
+						imgUrl: share_img,
+						type: 'link',
+						dataUrl: '',
+						success: function() {},
+						cancel: function() {}
+					});
+					wx.onMenuShareTimeline({
+					    title: share_title,
+					    link: share_link,
+					    imgUrl: share_img,
+					    success: function () {},
+					    cancel: function () {}
+					});
+					wx.hideMenuItems({
+						menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone', 'menuItem:editTag', 'menuItem:delete', 'menuItem:copyUrl', 'menuItem:originPage', 'menuItem:readMode', 'menuItem:openWithQQBrowser', 'menuItem:openWithSafari', 'menuItem:share:email', 'menuItem:share:brand']
+					});
+				});
+				$('#share-btn').bind('click', function(){
+					$('#share-bran').css('display', 'block');
+					$('#share-bg').css('display', 'block');
+				});
+				$('#share-bg').bind('click', function(){
+					$('#share-bran').css('display', 'none');
+					$('#share-bg').css('display', 'none');
+				});
+			});
+		</script>
+	</body>
+</html>

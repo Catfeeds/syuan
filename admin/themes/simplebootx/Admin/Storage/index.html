@@ -1,0 +1,75 @@
+<admintpl file="header" />
+<style>
+.form-horizontal .control-label {
+	width:100px;
+}
+</style>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('storage/index')}">{:L('ADMIN_STORAGE_INDEX')}</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('storage/setting_post')}">
+			<php>$support_storages=array("Local"=>L('DEFAULT'),"Qiniu"=>L('QINIU'));</php>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">存储方式</label>
+					<div class="controls">
+						<select id="type" name="type">
+							<foreach name="support_storages" item="vo"> <php>$type_selected=$type==$key?"selected":"";</php>
+							<option value="{$key}"{$type_selected}>{$vo}</option>
+							</foreach>
+						</select>
+					</div>
+				</div>
+			</fieldset>
+			<div id="Qiniu" style="margin-top:10px;<neq name="type" value="Qiniu">display:none;</neq>">
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label">AccessKey</label>
+						<div class="controls">
+							<input type="text" class="input mr5" name="Qiniu[accessKey]" value="{$Qiniu.accessKey}">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">SecretKey</label>
+						<div class="controls">
+							<input type="text" class="input mr5" name="Qiniu[secretKey]" value="{$Qiniu.secretKey}">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">{:L('DOMAIN')}</label>
+						<div class="controls">
+							<input type="text" class="input mr5" name="Qiniu[domain]" value="{$Qiniu.domain}">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">{:L('BUCKET')}</label>
+						<div class="controls">
+							<input type="text" class="input mr5" name="Qiniu[bucket]" value="{$Qiniu.bucket}">
+						</div>
+					</div>
+				</fieldset>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$('#type').on('change', function(){
+			var type = $(this).val();
+			if(type == 'Qiniu') {
+				$('#Qiniu').css('display', '');
+			} else {
+				$('#Qiniu').css('display', 'none');
+			}
+			return false;
+		});
+	});
+	</script>
+</body>
+</html>

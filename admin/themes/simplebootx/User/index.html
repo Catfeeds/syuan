@@ -1,0 +1,63 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		{:sp_get_admin_breadcrumb(array('url' => UU('User/Indexadmin/adduser'), 'icon' => 'plus', 'title' => '添加会员'))}
+		<ul class="nav nav-tabs">
+			<li <if condition="$status eq -1">class="active"</if>><a href="{:U('index')}">用户列表</a></li>
+			<li <if condition="$status eq 0">class="active"</if>><a href="{:U('index',array('status'=>0))}">已删除用户</a></li>
+		</ul>
+		<form class="well form-search" method="GET" action="/index.php">
+			<input type="hidden" name="g" value="User">
+			<input type="hidden" name="m" value="Indexadmin">
+			<input type="hidden" name="a" value="index">
+			UID: 
+			<input type="text" name="uid" class="span1" value="{$uid}" placeholder="UID">&nbsp;
+			公司名: 
+			<input type="text" name="nick" style="width: 90px;" value="{$nick}" placeholder="请输入公司名">&nbsp;
+			账号: 
+			<input type="text" name="name" style="width: 90px;" value="{$name}" placeholder="请输入用户名">&nbsp;
+			<input type="submit" class="btn btn-primary" value="搜索" />
+		</form>
+		<form method="post" class="js-ajax-form">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th align="center">UID</th>
+						<th>公司名称</th>
+						<th>会员账号</th>
+						<th>添加时间</th>
+						<th>备注</th>
+						<th align="center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<foreach name="lists" item="vo">
+					<tr>
+						<td align="center">{$vo.id}</td>
+						<td>{$vo['user_nicename']}</td>
+						<td>{$vo['user_login']}</td>
+						<td>{$vo.create_time}</td>
+						<td>{$vo.remark}</td>
+						<td align="center">
+						<if condition="$vo['user_status'] eq 1">
+							<a href="{:U('Indexadmin/edituser', array('id' => $vo['id']))}">修改</a>
+							<eq name="vo.user_status" value="1">
+							 | <a href="{:U('Indexadmin/ban',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" data-msg="确定要删除吗！">删除</a>
+							<else />
+							</eq>
+						</if>
+						<if condition="$vo['user_status'] eq 0">
+							<a href="{:U('Indexadmin/cancelban', array('id' => $vo['id']))}" class="js-ajax-dialog-btn" data-msg="确定要恢复？">恢复</a>
+						</if>
+						</td>
+					</tr>
+					</foreach>
+				</tbody>
+			</table>
+			<div class="pagination">{$page}</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

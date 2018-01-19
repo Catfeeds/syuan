@@ -1,0 +1,94 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('AdminMessage/index')}">自动回复列表</a></li>
+			<li><a href="{:U('AdminMessage/subscribe')}">关注时自动回复</a></li>
+			<li><a href="{:U('AdminMessage/noanswer')}">回答不上来时回复</a></li>
+			<li><a href="{:U('AdminMessage/add')}">添加关键词回复</a></li>
+		</ul>
+		<form class="well form-search" method="get" action="{:U('AdminMessage/index')}">
+			<input type="hidden" name="{:C('VAR_MODULE')}" value="Wechat">
+			<input type="hidden" name="{:C('VAR_CONTROLLER')}" value="AdminMessage">
+			<input type="hidden" name="{:C('VAR_ACTION')}" value="index">
+			分类： 
+			<select class="select_2" name="type">
+				<option value='0'>全部</option>
+				<foreach name="types" item="type">
+					<option value='{$key}' <if condition="$formget['type'] eq $key"> selected</if>>{$type}</option>
+				</foreach>
+			</select>
+			规则：
+			<input type="text" name="name" style="width: 120px;" value="{$formget.name}" placeholder="规则">
+			关键词：
+			<input type="text" name="keywords" style="width: 120px;" value="{$formget.keywords}" placeholder="关键词">
+			<button class="btn btn-primary">搜索</button>
+		</form>
+		<form class="js-ajax-form" method="post">
+			<table class="table table-hover table-bordered table-list">
+				<thead>
+					<tr>
+						<th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+						<th width="50">ID</th>
+						<th width="70">类型</th>
+						<th width="130">规则名称</th>
+						<th width="210">关键词</th>
+						<th>消息内容</th>
+						<th width="75"><span>添加时间</span></th>
+						<th width="85">{:L('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<foreach name="list" item="vo">
+				<tr>
+					<td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+					<td><a>{$vo.id}</a></td>
+					<td>{$types[$vo['type']]}</td>
+					<td><span>{$vo.name}</span></td>
+					<td>{$vo.keywords}</td>
+					<td>
+						<switch name="vo.type">
+						    <case value="4">
+						    	<ul class="multiarticle">
+						    		<foreach name="vo.content" item="o">
+						    		<li class="item">
+						    			<img src="{:sp_get_asset_upload_path($o['thumb'])}" >
+						    			<p>{$o.title}</p>
+						    		</li>
+						    		</foreach>
+						    	</ul>
+						    </case>
+						    <case value="3">
+						    	<ul class="singlearticle">
+						    		<li class="item">
+						    			<h4>{$vo.content.title}</h4>
+										<img src="{:sp_get_asset_upload_path($vo['content']['thumb'])}" />
+										<p>{$vo.content.subtitle}</p><hr>
+										<span>阅读原文</span>
+									</li>
+						    	</ul>
+						    </case>
+						    <case value="2">
+								<img title="双击查看大图" src="{:sp_get_asset_upload_path($vo['content'])}" ondblclick="img_priview(this.src);" width="120" style="cursor: pointer;" />
+						    </case>
+						    <default />{$vo.content}
+						</switch>
+					</td>
+					<td>{$vo.create_at}</td>
+					<td>
+						<a href="{:U('AdminMessage/edit',array('id'=>$vo['id']))}">{:L('EDIT')}</a>|
+						<a href="{:U('AdminMessage/delete',array('id'=>$vo['id']))}" class="js-ajax-delete">{:L('DELETE')}</a>
+					</td>
+				</tr>
+				</foreach>
+			</table>
+			<div class="table-actions">
+				<button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('AdminMessage/delete')}" data-subcheck="true" data-msg="你确定删除吗？">{:L('DELETE')}</button>
+			</div>
+			<div class="pagination">{$Page}</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/uploader.js"></script>
+</body>
+</html>

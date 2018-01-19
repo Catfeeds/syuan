@@ -1,0 +1,58 @@
+<admintpl file="header" />
+</head>
+<body class="need_breadcrumb_back">
+	<div class="wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form method="post" class="form-horizontal js-ajax-forms" action="{:U('Finance/AdminConfig/edit_post')}">
+			<input type="hidden" name="type" value="{$payment.type}" />
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">支付类型</label>
+					<div class="controls">
+						<input type="text" name="name" value="{$info.name}" placeholder="请填写支付类型" />
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">支付方式说明</label>
+					<div class="controls">
+						<textarea name="remark" style="width:400px;height:200px;" placeholder="请填写支付说明">{$info.remark}</textarea>
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<input type="hidden" name="id" value="{$info['id']}" />
+					<button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			ajaxFormSubmitInit({
+					'name' : {required : true},
+					'remark' : {required : true}
+				}, {
+					'name' : {required : '请填写支付类型'},
+					'remark': {required : '请填写支付说明'}
+				}, [{
+	                	name : '继续编辑？',
+		                callback : function() {
+		                    reloadPage(window);
+		                    return true;
+		                },
+		                focus : true
+		            }, {
+		                name : '返回列表',
+		                callback : function() {
+		                    location.href = "{:UU('Finance/AdminConfig/index')}";
+		                    return true;
+		                }
+		            }
+	            ]
+            );
+		});
+	</script>
+</body>
+</html>

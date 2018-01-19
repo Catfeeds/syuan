@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>{$site_name}-添加溯源二维码-会员中心</title>
+		<meta name="keywords" content="{$site_seo_keywords}" />
+		<meta name="description" content="{$site_seo_description}">
+
+		<tc_include file="Public:head" />
+	</head>
+
+	<body class="body-white" id="top">
+		<tc_include file="Public:nav" />
+
+		<div class="container tc-main">
+			<div class="row">
+				<div class="span2">
+					<tc_include file="Public:usernav" />
+				</div>
+				<div class="span10">
+					<ul class="nav nav-tabs">
+						<li>
+							<a href="{:leuu('Qrcode/center/order', array('do' => 'list'))}">溯源二维码列表</a>
+						</li>
+						<li class="active">
+							<a href="#">添加批次</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="one">
+							<form id="ff" class="form-horizontal js-forgot-form" action="{:leuu('Qrcode/center/add_pro')}" method="post">
+								<input type="hidden" name="id" value="{$info.pid}">
+								<div class="control-group">
+									<label class="control-label" for="inputname">产品名称</label>
+									<div class="controls">
+										{$info.name}
+										<span class="help-inline"></span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="prefix">批次号前缀</label>
+									<div class="controls">
+										<input type="text" id="prefix" name="prefix" placeholder="请输入批次前缀" class="span4">
+										<span class="help-inline">最多5个英文字母</span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="typedate">生产日期</label>
+									<div class="controls">
+										<input type="text" id="typedate" value="{$date}" name="typedate" placeholder="请输入产品名称" class="span4 js-date">
+										<span class="help-inline"></span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="inputEmail">分组</label>
+									<div class="controls">
+										<input type="number" id="inputEmail" name="block" placeholder="请输入个数" class="span4">个每组
+										<span class="help-inline"></span>
+									</div>
+								</div>
+
+								<div class="" style="border: 2px solid #dbdbdb; padding-top: 20px; margin-bottom: 20px;">
+									<p style="color: #f00; font-size: 16px; margin-bottom: 20px; text-align: center;">设置应用红包后，消费者将有抽奖机会</p>
+									<div class="control-group">
+										<label class="control-label" for="inputEmail">可用红包列表</label>
+										<div class="controls">
+											<select name="bindred" style="width:500px;">
+												<option>不应用</option>
+												<foreach name="red" item="val">
+													<option value="{$val.id}">有效期{$val.starttime}至{$val.endtime}红包{$val.num}个{$val['amount']/100}元  (剩余{$val.left|default=0}个)</option>
+												</foreach>
+											</select>
+											<span class="help-inline"></span>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="space">领奖间隔时间</label>
+										<div class="controls">
+											<input type="number" id="space" name="space" placeholder="请输入数值" class="span4">个小时
+											<span class="help-inline">填写0-9999之间的整数数字，输入0代表无限制9999代表仅可领取一次。其他数值代表领取的间隔时间</span>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="chance">红包中奖率</label>
+										<div class="controls">
+											<input type="number" id="chance" name="chance" placeholder="请输入中奖率" class="span4">%
+											<span class="help-inline">填写1-100之间的整数数字</span>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">红包其他配置</label>
+										<div class="controls">
+											<label class="input inline"><input type="checkbox" name="showdraw" value="1"> 显示已领取人数</label>
+											<label class="input inline"><input type="checkbox" name="showleft" value="1"> 显示剩余红包数量</label>
+											<label class="input inline"><input type="checkbox" name="showendtime" value="1"> 显示红包截至日期</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="control-group">
+									<label class="control-label" for="typedate">过期日期/保修期</label>
+									<div class="controls">
+										<input type="radio" name="types" value="过期日期">过期日期
+										<input type="radio" name="types" value="保修期">保修期
+										<input type="radio" name="types" value="">无
+										<input type="text" id="typesdate" name="typesdate" placeholder="请输入日期" class="span4 js-date">
+										<span class="help-inline"></span>
+									</div>
+								</div>
+								<if condition="$cat['mr1']">
+
+									<div class="control-group">
+
+										<label class="control-label" for="depart">{$cat.mr1}</label>
+
+										<div class="controls">
+
+											<input type="text" id="depart" name="depart" placeholder="请输入{$cat.mr1}" class="span4">
+
+											<span class="help-inline"></span>
+
+										</div>
+
+									</div>
+
+								</if>
+
+								<if condition="$cat['mr2']">
+
+									<div class="control-group">
+
+										<label class="control-label" for="tech">{$cat.mr2}</label>
+
+										<div class="controls">
+
+											<script type="text/plain" id="tech" name="tech"></script>
+
+											<span class="help-inline"></span>
+
+										</div>
+
+									</div>
+
+								</if>
+								<if condition="$cat['field1']">
+									<div class="control-group">
+										<label class="control-label" for="field1">{$cat.field1}</label>
+										<div class="controls">
+											<script type="text/plain" id="field1" name="field1"></script>
+											<span class="help-inline"></span>
+										</div>
+									</div>
+								</if>
+								<if condition="$cat['field2']">
+									<div class="control-group">
+										<label class="control-label" for="field2">{$cat.field2}</label>
+										<div class="controls">
+											<script type="text/plain" id="field2" name="field2"></script>
+											<span class="help-inline"></span>
+										</div>
+									</div>
+								</if>
+								<!-- <div class="control-group">
+						  <label class="control-label" for="num">印刷数量</label>
+						  <div class="controls">
+							<input type="text" id="num" name="num" placeholder="请输入数量" class="span4">
+							<span class="help-inline"></span>
+						  </div>
+						</div> -->
+								<div class="control-group">
+									<label class="control-label" for="remark">厂家备注</label>
+									<div class="controls">
+										<textarea name="remark"></textarea>
+										<span class="help-inline">顾客不显示</span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for=""></label>
+									<div class="controls">
+										<button class="btn btn-primary js-ajax-submit span4" type="button" style="margin-left: 0px" id="subbtn">确定</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<tc_include file="Public:footer" />
+		</div>
+		<!-- /container -->
+		<tc_include file="Public:scripts" />
+		<script type="text/javascript">
+			//编辑器路径定义
+			var editorURL = GV.DIMAUB;
+		</script>
+		<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.config.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.all.min.js"></script>
+		<script type="text/javascript">
+			$('#subbtn').click(function() {
+				$.post("{:leuu('Qrcode/center/add_order')}", $('#ff').serialize(), function(data) {
+					if(data.status == 1) {
+						if(data.url) {
+							window.location.href = data.url;
+						} else {
+							location.reload();
+						}
+					} else {
+						alert(data.info);
+					}
+				})
+			});
+			editor1 = new baidu.editor.ui.Editor({
+				toolbars: [
+					['bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', 'simpleupload', 'insertvideo']
+				],
+				autoHeightEnabled: false,
+				autoFloatEnabled: true,
+				initialFrameWidth: '98%',
+				initialFrameHeight: 600,
+				zIndex: 1,
+			});
+			editor1.render('tech');
+			try {
+				editor1.sync();
+			} catch(err) {}
+			<if condition="$cat['field1']">
+	   		editor2 = new baidu.editor.ui.Editor({
+	          toolbars: [
+	              ['bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc','simpleupload','insertvideo']
+	          ],
+	          autoHeightEnabled: false,
+	          autoFloatEnabled: true,
+	          initialFrameWidth:'98%',
+	          initialFrameHeight:600,
+	          zIndex:1,
+	      });
+	      editor2.render('field1');
+	      try {
+	        editor2.sync();
+	      } catch (err) {
+	      }
+	   	</if> <if condition = "$cat['field2']" >
+				editor3 = new baidu.editor.ui.Editor({
+					toolbars: [
+						['bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', 'simpleupload', 'insertvideo']
+					],
+					autoHeightEnabled: false,
+					autoFloatEnabled: true,
+					initialFrameWidth: '98%',
+					initialFrameHeight: 600,
+					zIndex: 1,
+				});
+			editor3.render('field2');
+			try {
+				editor3.sync();
+			} catch(err) {} </if>
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,59 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs" style="margin-bottom:5px;">
+			<li class="active"><a href="{:U('AdminSpecialmenu/class_index')}">个性化菜单规则</a></li>
+			<li><a href="javascript:open_iframe_dialog('{:U('AdminSpecialmenu/class_add')}', '添加个性化菜单规则', {width:'800px',height:'500px'})">添加个性化菜单规则</a></li>
+		</ul>
+		<table class="table table-hover table-bordered table-list">
+			<thead>
+				<tr>
+					<th>名称</th>
+					<th>用户分组</th>
+					<th>性别</th>
+					<th>手机系统</th>
+					<th>规则生成时间</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="l">
+				<tr>
+					<td>{$l.name}</td>
+					<td>{$l.groupname}</td>
+					<td>
+						<eq name="l.sex" value="1">
+						男
+						<else />
+							<eq name="l.sex" value="2">
+							女
+							<else />
+							未填写
+							</eq>
+						</eq>
+					</td>
+					<td>{$client_platform_type[$l['client_platform_type']]}</td>
+					<td>{$l.create_at}</td>
+					<td>
+						<eq name="l.state" value="1">
+						已生成
+						<else />
+						未生成
+						</eq>
+					</td>
+					<td>
+						<a href="javascript:open_iframe_dialog('{:U('AdminSpecialmenu/menu_index', array('catid' => $l['catid']))}', '设置个性化菜单', {width:'1100px',height:'500px'})">设置菜单</a> | 
+						<a href="javascript:open_iframe_dialog('{:U('AdminSpecialmenu/class_edit', array('catid' => $l['catid']))}', '编辑个性化规则', {width:'800px',height:'500px'})">编辑</a> | 
+						<a href="{:U('AdminSpecialmenu/makemenu', array('catid' => $l['catid']))}">生成菜单</a> | 
+						<a href="{:U('AdminSpecialmenu/class_delete', array('catid' => $l['catid']))}" class="js-ajax-delete">删除</a>
+					</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

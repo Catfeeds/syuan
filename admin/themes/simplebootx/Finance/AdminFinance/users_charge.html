@@ -1,0 +1,46 @@
+<admintpl file="header"/>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form method="post" class="form-horizontal js-ajax-forms" action="{:U('AdminFinance/users_charge_confirm')}">
+			<fieldset class="mtop20">
+				<div class="control-group">
+					<label class="control-label">搜索类型</label>
+					<div class="controls">
+						<label class="radio inline">
+						  	<input type="radio" name="type" value="uid" checked>
+						 	用户ID
+						</label>
+						<label class="radio inline">
+							<input type="radio" name="type" value="mobile">
+						  	手机号
+						</label>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">搜索值</label>
+					<div class="controls">
+						<input type="text" name="content" placeholder="请输入用户ID或手机号" value="" required="">
+						<span class="form-required text-warning">*</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary js-ajax-submit">下一步</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {			
+			ajaxFormSubmitInit({
+				'content' : {required : 1}
+			}, {}, [], function(data) {
+				window.location.href = data.info;
+			}
+            );
+		});
+	</script>
+</body>
+</html>

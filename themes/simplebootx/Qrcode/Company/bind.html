@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>{$site_name}-绑定</title>
+		<link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+		<link rel="stylesheet" type="text/css" href="__TMPL__Qrcode/Public/css/style.css"/>
+	</head>
+
+	<body>
+		<form method="post" action="{:UU('bind')}">
+		<div class="text">
+			<p>公司名称：{$info.name}</p>
+			<p>厂家名称：{$name}</p>
+			<p>手机号码：<input type="text" name="mobile" style="height:30px;" /></p>
+		</div>
+		
+		<div class="text-btn">
+		
+		<input type="hidden" name="id" value="{$info.id}">
+			<button type="submit">确认绑定</button>
+		
+		</div>
+		</form>
+	</body>
+
+</html>

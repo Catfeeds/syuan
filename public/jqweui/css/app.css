@@ -1,0 +1,20 @@
+.index-top-header {
+	padding: 5px 0;
+}
+.index-top-title {
+	text-align: center;
+	font-size: 34px;
+	color: #3cc51f;
+	font-weight: 400;
+	margin: 0 5%;
+}
+
+div.weui-grids.index div.weui-grid__icon {
+	width: 64px;
+	height: 32px;
+	text-align: center;
+}
+div.weui-grids.index div.weui-grid__icon i.fa {
+	color: #30a010;
+	font-size: 40px;
+}

@@ -1,0 +1,71 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb(array('url' => U('Api/add'), 'icon' => 'plus', 'title' => '添加'))}
+		<form class="well form-search" method="GET" action="{:U('Api/index')}">
+			名称: 
+			<input type="text" name="name" class="span2" value="{$name}" placeholder="请输入API名称">&nbsp;
+			路径: 
+			<input type="text" name="path" class="span2" value="{$path}" placeholder="请输入API路径">&nbsp;
+			请求类型:
+			<select class="span1" name="method">
+				<option value="">不限</option>
+				<option value="GET" <eq name="method" value="GET">selected</eq>>GET</option>
+				<option value="POST" <eq name="method" value="POST">selected</eq>>POST</option>
+				<option value="PUT" <eq name="method" value="PUT">selected</eq>>PUT</option>
+				<option value="DELETE" <eq name="method" value="DELETE">selected</eq>>DELETE</option>
+			</select> &nbsp;
+			分组:
+			<select class="span2" name="gid">
+				<option value="0">不限</option>
+				<foreach name="grouplist" key="k" item="name">
+					<option value="{$k}" <eq name="k" value="$gid">selected</eq>>{$name}</option>
+				</foreach>
+			</select> &nbsp;
+			<input type="submit" class="btn btn-primary" value="搜索" />
+		</form>
+		<table class="table table-hover table-bordered table-list mtop20">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>分组</th>
+					<th>名称</th>
+					<th>路径</th>
+					<th>版本</th>
+					<th>请求类型</th>
+					<th>状态</th>
+					<th>登录</th>
+					<th>提示</th>
+					<th>功能介绍</th>
+					<th>{:L('ACTIONS')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="api">
+				<tr>
+					<td>{$api.id}</td>
+					<td><gt name="api.gid" value="0">{$grouplist[$api['gid']]}<else/>无</gt></td>
+					<td>{$api.name}</td>
+					<td>{$api.path}</td>
+					<td>{$api.version}</td>
+					<td>{$api.method}</td>
+					<td><eq name="api.status" value="1">上线<else/>下线</eq></td>
+					<td><eq name="api.oauth" value="1">是<else/>否</eq></td>
+					<td>{$api.warning}</td>					
+					<td title="{$api.introduce}">{:msubstr($api['introduce'], 0, 20)}</td>
+					<td>
+						<a href="javascript:parent.openapp('{:U('Api/params', array('api_id'=>$api['id']))}','api-params-{$api.id}','{$api.name}参数',true);">参数</a> | 
+						<a href="javascript:parent.openapp('{:U('Api/response', array('api_id'=>$api['id']))}','api-rsps-{$api.id}','{$api.name}返回值',true);">返回值</a> | 
+						<a href="{:U('Api/edit', array('id'=>$api['id']))}">编辑</a> | 
+						<a class="js-ajax-delete" href="{:U('Api/del', array('id'=>$api['id']))}">删除</a>
+					</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+		<div class="pagination">{$Page}</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

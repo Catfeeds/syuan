@@ -1,0 +1,236 @@
+@CHARSET "UTF-8";
+
+.hide {
+	display:none;
+}
+.green {
+	color: green;
+}
+.red {
+	color: red;
+}
+.width80p input[type="text"],.width80p textarea {
+	width:80%;
+}
+.width70p input[type="text"],.width70p textarea {
+	width:70%;
+}
+.width60p input[type="text"],.width60p textarea {
+	width:60%;
+}
+
+.wchattab {
+	border:0px;
+}
+
+.input-order{width:30px;}
+.wrap {
+	padding: 10px 10px 50px;
+}
+.table td {font-size:12px;}
+
+.singlearticle {
+	margin: 0px;
+	padding: 0px;
+	width: 300px;
+	border:1px solid #E6E6E6;
+	border-radius:5px 5px 0 0;
+}
+.singlearticle:empty {
+	border: 0px;
+}
+
+.singlearticle li {
+	list-style-type:none;
+	width: 300px;
+	padding: 5px;
+}
+
+.singlearticle li h4 {
+	margin-top: 5px;
+	font-size: 16px;
+	font-weight: normal;
+}
+.singlearticle li img {
+	width: 290px;
+	height: 170px;
+}
+.singlearticle li p {
+	width: 290px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: #6c6c6c;
+}
+.singlearticle li hr {
+	margin: 0px;
+	width: 290px;
+	margin-bottom: 5px;
+}
+.singlearticle li span {
+	padding-top: 5px;
+}
+
+.multiarticle {
+	margin: 0px;
+	padding: 0px;
+	width: 300px;
+	border:1px solid #E6E6E6;
+	border-radius:5px 5px 0 0;
+	border-bottom:0px;
+}
+.multiarticle:empty {
+	border: 0px;
+}
+.multiarticle li {
+	list-style-type:none;
+	border-bottom:1px solid #E6E6E6;
+	width: 300px;
+	position: relative;
+	display: inline-block;
+}
+.multiarticle li:first-child {
+	padding:0px;
+}
+.multiarticle li img{
+	float:right;
+	width:55px;
+	height:50px;
+	margin: 5px; 
+}
+.multiarticle li:first-child img {
+	margin: 0px;
+	width: 300px;
+	height: 150px;
+}
+.multiarticle li p {
+	float:left;
+	width: 220px;
+	font-size:14px;
+	padding: 5px 0px 5px 10px;
+	word-wrap:break-word;
+}
+.multiarticle li:first-child p {
+	position: absolute;
+	z-index: 2;
+	left: 0px;
+	bottom: 0px;
+	margin: 0px;
+	width: 290px;
+	height: 30px;
+	line-height: 30px;
+	text-align: left;
+	color: #FFF;
+	background: #000;
+	opacity:0.5;
+}
+.multiarticle li span.delete {
+	position:absolute;
+	width:20px;
+	height:20px;
+	background:#FFF;
+	opacity:0.5;
+	filter:alpha(opacity=50);
+	border-radius:5px;
+	cursor: pointer;
+	text-align:center;
+	display:block;
+	z-index:1000;
+	top: 2px;
+	right:2px;
+	color:red;
+}
+
+.webuploaderlist {
+	margin: 0px;
+}
+.webuploaderlist li {
+	list-style-type:none;
+	width: 150px;
+	height:150px;
+	text-align:center;
+	border:1px dashed #a9b7b7;
+	display:block;
+	position: relative;
+    display: inline;
+	float:left;
+}
+.webuploaderlist li.hide {
+	display:none;
+}
+.webuploaderlist li img {
+	max-width:100%;
+	max-height:100%;
+	margin: 0 auto;
+	display: table-cell;
+	vertical-align: middle;
+}
+.webuploaderlist li span {
+	position:absolute;
+	width:20px;
+	height:20px;
+	background:#FFF;
+	opacity:0.5;
+	filter:alpha(opacity=50);
+	border-radius:5px;
+	cursor: pointer;
+	text-align:center;
+	display:block;
+	z-index:1000;
+	top: 2px;
+}
+.webuploaderlist li span.view {
+	left:2px;
+	color:green;
+}
+.webuploaderlist li span.delete {
+	right:2px;
+	color:red;
+}
+.webuploaderlist li:last-child {
+	padding:5px 5px 0px;
+	height: auto;
+}
+
+span.wechatlabel {
+	display:inline-block;
+	height:20px;
+	line-height:20px;
+	background:#EEE;
+	margin-left:5px;
+	padding: 0 5px;
+}
+span.blocklabel {
+	display:block;
+	height:20px;
+	line-height: 20px;
+	background:#EEE;
+	margin-top:2px;
+	padding: 0 10px;
+	border-radius: 5px;
+}
+.breadcrumb.no-mbt {
+	margin-bottom: 5px;
+}
+.breadcrumb > li.action {
+	margin-left: 10px;
+	float: right;
+}
+.mtop20 {
+	margin-top: 20px;
+}
+form.well.form-search {
+	background-color: rgba(248, 248, 248, 0.56);
+}
+span.tips_error {
+	font-size: 14px;
+	padding: 5px 5px 5px 20px;
+}
+.span_tip_close {
+	margin-top: -8px;
+	float: inherit;
+	padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}

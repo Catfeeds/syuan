@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$site_name}-领取详情-会员中心</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+<link href="__PUBLIC__/js/artDialog/skins/default.css" rel="stylesheet" />
+<tc_include file="Public:head" />
+</head>
+
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+
+	<div class="container tc-main">
+        <div class="row">
+            <div class="span2">
+                <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span10">
+            	<ul class="nav nav-tabs">
+					<li><a href="{:leuu('Qrcode/center/redbag', array('do' => 'list'))}">营销二维码列表</a></li>
+					<li class="active"><a href="#">查看详情</a></li>
+				</ul>
+               <div class="tab-content">
+                   <div class="tab-pane active" id="one">
+                   
+                   		<table class="table table-bordered table-striped table-hover">
+					    <thead>
+					      <tr>
+					        <th>编号</th>
+					        <th>生成日期</th>
+					        <th>领取有效期</th>
+					        <th>领取日期</th>
+					        <th>微信昵称</th>
+					        <th>领取金额</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+					    <if condition="$list">
+					    <foreach name="list" item="vo">
+					      <tr>
+					        <td>{$vo.id}</td>
+					        <td>{$vo.createtime}</td>
+					        <td>{$vo['starttime']}——{$vo['endtime']}</td>
+					        <td>{$vo.payment_time}</td>
+					        <td>{$vo.nick}</td>
+					        <td>￥{$vo['amount']/100}</td>
+					      </tr>
+					    </foreach>
+					    <else/>
+					    <tr><td colspan="6">
+						<span class="text-info">暂时没有领取记录</span>
+						</td></tr>
+						</if>
+					    </tbody>
+					  </table>
+					
+                   </div>
+               </div>
+            </div>
+        </div>
+		<tc_include file="Public:footer" />
+	</div>
+	<!-- /container -->
+	<tc_include file="Public:scripts" />
+</body>
+</html>

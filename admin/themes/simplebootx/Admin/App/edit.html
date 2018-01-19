@@ -1,0 +1,151 @@
+<admintpl file="header"/>
+</head>
+<body class="need_breadcrumb_back">
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form action="{:U('App/edit_post')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<input type="hidden" name="app_id" value="{$app.app_id}">
+			<div class="row-fluid mtop20">
+				<div class="span7">
+					<fieldset class="width80p">
+						<div class="control-group">
+							<label class="control-label">APP名称</label>
+							<div class="controls">
+								<input type="text" name="name" value="{$app.name}" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">APP类型</label>
+							<div class="controls">
+								<select name="type">
+								<foreach name="types" item="type">
+								<option value="{$key}"<if condition="$app['type'] eq $key"> selected</if>>{$type}</option>
+								</foreach>
+								</select>
+							</div>
+						</div>
+						<div class="control-group smallapp <neq name="app.type" value="5">hide</neq>">
+							<label class="control-label">小程序AppID</label>
+							<div class="controls">
+								<input type="text" name="small_appid" value="{$app.small_appid}">
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group smallapp <neq name="app.type" value="5">hide</neq>">
+							<label class="control-label">API加密</label>
+							<div class="controls">
+								<input type="text" name="small_appsecret" value="{$app.small_appsecret}">
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">应用地址</label>
+							<div class="controls">
+								<input type="text" name="apk_url" value="{$app.apk_url}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">API加密</label>
+							<div class="controls">
+								<label class="checkbox">
+								  <input type="checkbox" name="encryption" value="1" <eq name="app.encryption" value="1">checked</eq>> 勾选加密
+								</label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">加密Key</label>
+							<div class="controls">
+								<input type="text" name="key" value="{$app.key}" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">应用状态</label>
+							<div class="controls">
+								<label class="radio inline">
+								  <input type="radio" name="status" value="1" <eq name="app.status" value="1">checked</eq>>
+								  上架
+								</label>
+								<label class="radio inline">
+								  <input type="radio" name="status" value="0" <eq name="app.status" value="0">checked</eq>>
+								  下架
+								</label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">记录API日志</label>
+							<div class="controls">
+								<label class="checkbox">
+								  <input type="checkbox" name="apilog" value="1" <eq name="app.apilog" value="1">checked</eq>> 勾选记录日志
+								</label>
+							</div>
+						</div>			
+						<div class="control-group">
+							<label class="control-label">介绍</label>
+							<div class="controls">
+								<textarea rows="4" name="introduce">{$app.introduce}</textarea>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="span5"></div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit"><i class="fa fa-save" aria-hidden="true"></i>{:L("SAVE")}</button>
+				<a class="btn" href="{:U('App/index')}"><i class="fa fa-reply" aria-hidden="true"></i>{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('select[name=type]').on('change', function(){
+				var type = $(this).children('option:selected').val();
+				if(type == 5) {
+					$('div.control-group.smallapp').removeClass('hide');
+				} else {
+					$('div.control-group.smallapp').addClass('hide');
+				}
+			});			
+			ajaxFormSubmitInit({
+					'name' : {
+						required : 1
+					},
+					'key': {
+						required : 1
+					},
+					'introduce': {
+						required: 1
+					}
+				}, {
+					'name' : {
+						required : '请输入APP名称'
+					},
+					'key' : {
+						required : '请输入加密KEY'
+					},
+					'introduce': {
+						required : '请输入APP介绍'
+					}
+				}, [{
+						name : '继续编辑？',
+						callback : function() {
+							reloadPage(window);
+							return true;
+						},
+						focus : true
+					}, {
+						name : '返回列表',
+						callback : function() {
+							location.href = "{:U('App/index')}";
+							return true;
+						}
+					}
+	            ]
+            );
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<admintpl file="header"/>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<form action="{:U('AdminFans/edit_post')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<input type="hidden" name="wechatid" value="{$fan.wechatid}">
+			<table class="table table-bordered">
+				<tr>
+					<td width="100">昵称</td>
+					<td width="200">{$fan.nickname}</td>
+					<td width="100">OPENID</td>
+					<td>{$fan.openid}</td>
+				</tr>
+				<tr>
+					<td>性别</td>
+					<td><switch name="fan.sex">
+							<case value="1" break="1">男</case>
+							<case value="1" break="2">女</case>
+							<default />未知
+						</switch>
+					</td>
+					<td>所在地</td>
+					<td>{$fan.country}{$fan.province}{$fan.city}</td>
+				</tr>
+				<tr>
+					<td>头像</td>
+					<td><a href="javascript:void(0);" onclick="img_priview('{$fan.headimgurl}');"><img width="25" height="25" src="{$fan.headimgurl}" /></a></td>
+					<td>语言</td>
+					<td>{$fan.language}</td>
+				</tr>
+				<tr>
+					<td>关注情况</td>
+					<td><eq name="fan.subscribe" value="1"><i class="fa fa-check green" aria-hidden="true"></i>已关注<else /><i class="fa fa-times red" aria-hidden="true"></i>未关注</eq></td>	
+					<td>关注时间</td>
+					<td>{$fan.subscribe_time}</td>
+				</tr>
+				<tr>
+					<td>活跃时间</td>
+					<td>{$fan.lastaction_time}</td>
+					<td>修改时间</td>
+					<td>{$fan.update_at}</td>
+				</tr>
+				<tr>
+					<td>用户标签</td>
+					<td colspan="3">
+						<foreach name="labels" item="name">
+							<label class="checkbox inline">
+							  <input type="checkbox" name="label[]" <if condition="in_array($key, $fan['labelids'])">checked</if> value="{$key}"> {$name}
+							</label>
+						</foreach>
+						<span class="text-warning">*最多可设置三个标签!</span>
+					</td>
+				</tr>
+				<tr>
+					<td>备注</td>
+					<td colspan="3">
+						<input type="text" name="remark" value="{$fan.remark}" maxlength="30" style="width:400px;" />
+					</td>
+				</tr>
+			</table>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit">{:L("EDIT")}</button>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/uploader.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			/////---------------------
+			Wind.use('validate', 'ajaxForm', 'artDialog', function() {
+				//javascript
+	
+				var form = $('form.js-ajax-forms');
+				//ie处理placeholder提交问题
+				if ($.browser.msie) {
+					form.find('[placeholder]').each(function() {
+						var input = $(this);
+						if (input.val() == input.attr('placeholder')) {
+							input.val('');
+						}
+					});
+				}
+	
+				var formloading = false;
+				//表单验证开始
+				form.validate({
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//是否在敲击键盘时验证
+					onkeyup : false,
+					//当鼠标掉级时验证
+					onclick : false,
+					//验证错误
+					showErrors : function(errorMap, errorArr) {
+						//errorMap {'name':'错误信息'}
+						//errorArr [{'message':'错误信息',element:({})}]
+						try {
+							$(errorArr[0].element).focus();
+							art.dialog({
+								id : 'error',
+								icon : 'error',
+								lock : true,
+								fixed : true,
+								background : "#CCCCCC",
+								opacity : 0,
+								content : errorArr[0].message,
+								cancelVal : '确定',
+								cancel : function() {
+									$(errorArr[0].element).focus();
+								}
+							});
+						} catch (err) {
+						}
+					},
+					//验证规则
+					rules : {
+						'remark' : {
+							maxlength : 30
+						}
+					},
+					//给未通过验证的元素加效果,闪烁等
+					highlight : false,
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//验证通过，提交表单
+					submitHandler : function(forms) {
+						if (formloading)
+							return;
+						$(forms).ajaxSubmit({
+							url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+							dataType : 'json',
+							beforeSubmit : function(arr, $form, options) {
+								formloading = true;
+							},
+							success : function(data, statusText, xhr, $form) {
+								formloading = false;
+								if (data.status) {
+									
+									//添加成功
+									Wind.use("artDialog", function() {
+										art.dialog({
+											id : "succeed",
+											icon : "succeed",
+											fixed : true,
+											lock : true,
+											background : "#CCCCCC",
+											opacity : 0,
+											content : data.info,
+											button : [ {
+												name : '继续编辑？',
+												callback : function() {
+													reloadPage(window);
+													return true;
+												},
+												focus : true
+											}, {
+												name : '返回列表',
+												callback : function() {
+													reloadPage(parent.window);
+													parent.closeDialog();
+													return true;
+												}
+											} ]
+										});
+									});
+								} else {
+									error(data.info);
+								}
+							}
+						});
+					}
+				});
+			});
+			////-------------------------
+		});
+	</script>
+</body>
+</html>

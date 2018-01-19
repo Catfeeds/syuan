@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="错误提示">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <title>错误提示</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+</head>
+<body>
+    <div class="weui-msg">
+      <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg-primary"></i></div>
+      <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">{$msgTitle}</h2>
+        <p class="weui-msg__desc">{$error}<br/>{$waitSecond}s 后页面自动跳转</p>
+      </div>
+      <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+          <a href="{$jumpUrl}" class="weui-btn weui-btn_warn">立即跳转</a>
+        </p>
+      </div>
+    </div>
+    <script type="text/javascript">
+        setTimeout(function() {
+            location.href = '{$jumpUrl}';
+        }, 300000);
+    </script>
+    </body>
+</html>

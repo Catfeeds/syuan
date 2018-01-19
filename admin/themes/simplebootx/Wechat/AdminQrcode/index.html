@@ -1,0 +1,67 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form class="well form-search" method="get" action="{:U('AdminQrcode/index')}">
+			<input type="hidden" name="{:C('VAR_MODULE')}" value="Wechat">
+			<input type="hidden" name="{:C('VAR_CONTROLLER')}" value="AdminFans">
+			<input type="hidden" name="{:C('VAR_ACTION')}" value="index">
+			用途：<select name="category" style="width:95px;">
+				<option value="">请选择</option>
+				<foreach name="categorys" key="key" item="name">
+					<option value="{$key}" <eq name="category" value="$key"> selected</eq>>{$name}</option>
+				</foreach>
+			</select>
+			粉丝： 
+			<input type="text" name="keyword" style="width:120px;" value="{$keyword}" placeholder="搜索昵称或者备注">
+			<input type="submit" class="btn btn-primary" value="搜索" />
+		</form>
+		<form method="post" class="js-ajax-form" action="">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th width="50">id</th>
+						<th>用途</th>
+						<th>粉丝昵称</th>						
+						<th>类型</th>
+						<th>过期时间</th>
+						<th>场景值</th>						
+						<th>二维码</th>
+						<th>生成时间</th>
+						<th>修改时间</th>
+						<th width="60">{:L('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<foreach name="list" item="qr">
+					<tr>
+						<td>{$qr.qrid}</td>
+						<td>{$categorys[$qr['category']]}</td>
+						<td><notempty name="qr.openid">{$fans[$qr['openid']]}</notempty></td>
+						<td>
+							<switch name="qr.type">
+								<case value="1" break="1">临时</case>
+								<case value="2" break="2">永久数字</case>
+								<default />永久字符串
+							</switch>
+						</td>
+						<td><eq name="qr.type" value="1">{$qr.expire}<else/>永久</eq></td>						
+						<td>{$qr.sceneid}</td>
+						<td><img src="{$qr.url}" width="64" height="64" />
+							<a href="{$qr.url}" target="_blank">下载</a>
+						</td>
+						<td>{$qr.create_at}</td>
+						<td>{$qr.update_at}</td>
+						<td>
+						</td>
+					</tr>
+					</foreach>
+				</tbody>
+			</table>
+			<div class="pagination">{$Page}</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

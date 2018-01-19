@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$site_name}-生成二维码-会员中心</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+
+<tc_include file="Public:head" />
+</head>
+
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+
+	<div class="container tc-main">
+        <div class="row">
+            <div class="span2">
+                <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span10">
+               <ul class="nav nav-tabs">
+					<li><a href="{:leuu('Qrcode/center/order')}">批次列表</a></li>
+					<li class="active"><a href="#">转移二维码</a></li>
+				</ul>
+               <div class="tab-content">
+                   	<div class="tab-pane active" id="one">
+	                <form id="ff" class="form-horizontal js-forgot-form" action="{:leuu('Qrcode/center/trans')}" method="post">
+	                <input type="hidden" name="id" value="{$batch.id}">
+						<div class="control-group">
+						  <label class="control-label" for="inputEmail">号段</label>
+						  <div class="controls">
+							<input type="number" name="start" placeholder="请输入开始" class="span2">
+							-
+							<input type="number" name="end" placeholder="请输入结束" class="span2">
+							<span class="help-inline">批次{$batch.batch}，请输入序号</span>
+						  </div>
+						</div>
+						<div class="control-group">
+						  <label class="control-label" for="field1">产品批次号</label>
+							<div class="controls">
+								<select class="span2" name="category" id="category">
+									<option value="0">选择产品分类</option>
+									<foreach name="categorys" item="val">
+										<option value="{$val.id}">{$val.name}</option>
+									</foreach>
+								</select>
+								<select class="span2" name="product" id="product">
+									<option value="0">选择产品</option>
+								</select>
+								<select class="span2" id="batch" name="batch">
+									<option value="0">选择批次</option>
+								</select>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for=""></label>
+							<div class="controls">
+								<button class="btn btn-primary js-ajax-submit span4" type="button" style="margin-left: 0px" id="subbtn">确定</button>
+							</div>
+						</div>
+					</form>
+                   </div>
+               </div>
+            </div>
+        </div>
+		<tc_include file="Public:footer" />
+	</div>
+	<!-- /container -->
+	<tc_include file="Public:scripts" />
+	<script type="text/javascript">
+	$('#subbtn').click(function() {
+        $.post("{:leuu('Qrcode/center/trans')}",$('#ff').serialize(),function(data) {
+			if(data.status == 1) {
+				if(data.url) {
+					window.location.href=data.url;
+				} else {
+				    alert('转移成功！');
+				    document.getElementById("ff").reset()
+				}
+			} else {
+				alert(data.info);
+			}
+        })
+    });
+	$('#category').change(function() {
+	    var id = $(this).find(':selected').val();
+	    $.getJSON('{:U("ajax_product")}', {category:id}, function(data) {
+	        $('#product option:gt(0)').remove();
+	        if(data.length > 0) {
+	            for(var i=0;i<data.length;i++) {
+	                $('#product').append('<option value="'+data[i].pid+'">'+data[i].name+'</option>');
+	            }
+	        }
+	    });
+	});
+	$('#product').change(function() {
+	    var v = $(this).find(':selected').val();
+	    $.getJSON('{:U("ajax_batch")}', {pid:v}, function(data) {
+	        $('#batch option:gt(0)').remove();
+	        if(data.length > 0) {
+	            for(var i=0;i<data.length;i++) {
+	                $('#batch').append('<option value="'+data[i].batch+'">'+data[i].batch+'</option>');
+	            }
+	        }
+	    });
+	});
+	</script>
+</body>
+</html>

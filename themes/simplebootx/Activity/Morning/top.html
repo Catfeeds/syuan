@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+		<title>早起排行榜</title>
+		<link rel="stylesheet" href="//cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="//cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+		<link rel="stylesheet" type="text/css" href="__TMPL__Public/css/morning.css?v=1" />
+	</head>
+
+	<body>
+		<div class="head">
+			<img src="__TMPL__Public/images/morning/top.jpg" />
+		</div>
+
+		<div class="pai">
+			<div class="pai-title grid">
+				<div class="width-1-8 text-center">
+					&nbsp;
+				</div>
+				<div class="width-5-8">
+					微信昵称
+				</div>
+				<div class="width-2-8 text-center">
+					成功数
+				</div>
+			</div>
+
+			<div class="my grid">
+				<div class="width-1-8">
+					&nbsp;
+				</div>
+				<div class="width-5-8">
+					<notempty name="user.avatar">
+						<img src="{$user.avatar}" />
+						<else/>
+						<img src="__TMPL__/Public/images/headicon_128.png" />
+					</notempty>
+					<div class="my-text">
+						<h3>{$user.user_nicename}</h3>
+						<p>第{$rank}名</p>
+					</div>
+				</div>
+				<div class="width-2-8">
+					{$success_num}
+				</div>
+			</div>
+
+			<ul>
+				<foreach name="top100" item="item">
+					<li>
+						<div class="grid">
+							<div class="width-1-8 text-center">
+								{$item.order}
+							</div>
+							<div class="width-5-8 pai-tou">
+								<notempty name="item.user.avatar">
+									<img src="{$item.user.avatar}" />
+									<else/>
+									<img src="__TMPL__/Public/images/headicon_128.png" />
+								</notempty>
+								<span>{$item.user.user_nicename}</span>
+							</div>
+							<div class="width-2-8 text-center">
+								<span>{$item.num}</span>
+							</div>
+						</div>
+					</li>
+				</foreach>
+			</ul>
+		</div>
+
+		<div class="weui-flex flex-nav">
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/index')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb011.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">挑战</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/top')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb03.png" alt="">
+					</div>
+					<p class="weui-tabbar__label color-red">排行榜</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/home')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb5.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">我的</p>
+				</a>
+			</div>
+			<div class="weui-flex__item">
+				<a href="{:UU('Activity/Morning/share')}">
+					<div class="weui-tabbar__icon">
+						<img src="__TMPL__Public/images/morning/tb4.png" alt="">
+					</div>
+					<p class="weui-tabbar__label">分享</p>
+				</a>
+			</div>
+		</div>
+		<script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+		<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+		<script src="__TMPL__Public/js/core.js"></script>
+		<script src="__TMPL__Public/js/morning.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			$(function() {
+				wx.config({$jsconfig});
+				wx.ready(function() {
+					wx.onMenuShareAppMessage({
+						title: '赌你起不来！不服来挑战',
+						desc: '挑战早起打卡，起床有钱拿。咯咯咯~',
+						link: '{$link}',
+						imgUrl: '{$host}__TMPL__Public/images/morning/cat_checksuccess.png',
+						type: 'link',
+						dataUrl: '',
+						success: function() {},
+						cancel: function() {}
+					});
+					wx.hideMenuItems({
+						menuList: ['menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone', 'menuItem:editTag', 'menuItem:delete', 'menuItem:copyUrl', 'menuItem:originPage', 'menuItem:readMode', 'menuItem:openWithQQBrowser', 'menuItem:openWithSafari', 'menuItem:share:email', 'menuItem:share:brand']
+					});
+				});
+			});
+		</script>
+	</body>
+
+</html>

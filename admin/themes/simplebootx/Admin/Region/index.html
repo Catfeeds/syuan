@@ -1,0 +1,46 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb(array('url' => U('Region/add', array('pid' => $pid)), 'icon' => 'plus', 'title' => '添加同级地区'))}
+		<h5>{$parent.name}地区列表<gt name="parent.region_id" value="0">, <a class="text-warning" href="{:U('Region/index', array('pid'=>$parent['pid']))}"><i class="fa fa-reply" aria-hidden="true">返回上级</i></a></gt></h5>
+		<form method="post" class="js-ajax-form" action="{:U('Region/listorders')}">
+		<table class="table table-hover table-bordered table-list mtop20">
+			<thead>
+				<tr>
+					<th width="120">排序</th>
+					<th>ID</th>
+					<th>地区名称</th>
+					<th>别名</th>
+					<th>地区号</th>
+					<th width="180">{:L('ACTIONS')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="region">
+				<tr>
+					<td><input name='listorders[{$region.region_id}]' class="input input-order mr5" type='text' size='8' value='{$region.listorder}'></td>
+					<td>{$region.region_id}</td>
+					<td>{$region.name}</td>
+					<td>{$region.alias}</td>
+					<td>{$region.area_code}</td>
+					<td>
+					<lt name="region.type" value="3">
+						<a href="{:U('Region/index', array('pid'=>$region['region_id']))}">下级管理</a> | 
+						<a href="{:U('Region/add', array('pid'=>$region['region_id']))}">添加下级</a> | 
+					</lt>
+						<a href="{:U('Region/edit', array('region_id'=>$region['region_id']))}">编辑</a> | 
+						<a class="js-ajax-delete" href="{:U('Region/delete', array('region_id'=>$region['region_id']))}">删除</a>
+					</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+		<div class="table-actions">
+			<button class="btn btn-primary btn-small js-ajax-submit" type="submit">{:L('SORT')}</button>
+		</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

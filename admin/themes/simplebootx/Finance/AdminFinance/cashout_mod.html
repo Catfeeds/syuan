@@ -1,0 +1,97 @@
+<admintpl file="header"/>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<form action="{:U('AdminFinance/cashout_mod')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<input type="hidden" name="id" value="{$cashout.id}">
+			<table class="table table-bordered">
+				<tr>
+					<td width="100">用户名</td>
+					<td width="200">{$user.user_login}</td>
+					<td width="100">手机号</td>
+					<td>{$user.mobile}</td>
+				</tr>
+				<tr>
+					<td>用户ID</td>
+					<td>{$user.id}</td>
+					<td>邮箱</td>
+					<td>{$user.email}</td>
+				</tr>
+				<tr>
+					<td>提现金额</td>
+					<td>{$cashout.amount}</td>
+					<td>手续费</td>
+					<td>{$cashout.fee}</td>
+				</tr>
+				<tr>
+					<td>可用余额</td>
+					<td>
+						{$user.account.money}
+						<lt name="user.account.money" value="$cashout['amount']">
+							<font class="red">余额不足</font>
+						</lt>
+					</td>	
+					<td>到账机构</td>
+					<td>{$finance['CASHOUT_BANK'][$cashout['bank']]}</td>
+				</tr>
+				<tr>
+					<td>到账账户</td>
+					<td>{$cashout['account']}({$cashout['realname']})</td>
+					<td>申请时间</td>
+					<td>{$cashout.create_at}</td>
+				</tr>
+				<tr>
+					<td>审核状态</td>
+					<td colspan="3">
+						<lt name="cashout.mod_status" value="2">
+							<foreach name="financeconfig.CASHOUT_MOD_STATUS" key="key" item="name">
+								<gt name="key" value="1">
+								<label class="radio inline">
+								  <input type="radio" name="status" value="{$key}"> {$name}
+								</label>
+								</gt>
+							</foreach>
+						<else/>
+							{$financeconfig['CASHOUT_MOD_STATUS'][$cashout['mod_status']]}
+						</lt>
+					</td>
+				</tr>
+				<tr>
+					<td>审核备注</td>
+					<td colspan="3">
+					<lt name="cashout.mod_status" value="2">
+						<input type="text" name="remark" value="" style="width:80%" />
+					<else/>
+						{$cashout.mod_msg}
+					</lt>
+					</td>
+				</tr>
+			</table>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit">{:L("SAVE")}</button>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			ajaxFormSubmitInit({
+					'status' : {required : true},
+					'remark': {required: true}
+				}, {
+					'status' : {required : '请选择审核状态'},
+					'remark': {required : '请填写审核备注'}
+				}, [{
+		                name : '返回',
+		                callback : function() {
+		                    reloadPage(parent.window);
+							parent.closeDialog();
+		                    return true;
+		                }
+		            }
+	            ]
+            );
+		});	
+	</script>
+</body>
+</html>

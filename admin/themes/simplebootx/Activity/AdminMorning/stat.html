@@ -1,0 +1,38 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form method="post" class="js-ajax-form" action="{:U('Api/params_listorder')}">
+			<table class="table table-hover table-bordered table-list mtop20">
+				<thead>
+					<tr>
+						<th width="80px">编号</th>
+						<th>日期</th>
+						<th>参与人数</th>
+						<th>成功人数</th>
+						<th>失败人数</th>
+						<th>奖金/人</th>
+						<th>统计时间</th>
+					</tr>
+				</thead>
+				<tbody>
+					<foreach name="list" key="key" item="item">
+					<tr>
+						<td>{$item.id}</td>
+						<td>{$item.sign_at}</td>
+						<td>{$item.sign_num}</td>
+						<td>{$item.success_num}</td>
+						<td>{$item.fail_num}</td>
+						<td>{$item.pay_account}</td>
+						<td>{$item.create_at}</td>
+					</tr>
+					</foreach>
+				</tbody>
+			</table>
+			<div class="pagination">{$Page}</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

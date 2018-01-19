@@ -1,0 +1,53 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#">添加用户</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('User/Indexadmin/adduser')}">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">公司名称</label>
+					<div class="controls">
+						<input type="text" name="user_nicename" placeholder="请输入公司名称">
+					</div>
+				</div>
+				
+			</fieldset>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">帐号</label>
+					<div class="controls">
+						<input type="text" name="user_login" placeholder="请输入手机号码作为账号">
+					</div>
+				</div>
+				
+			</fieldset>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">密码</label>
+					<div class="controls">
+						<input type="password" name="user_pass">
+					</div>
+				</div>
+				
+			</fieldset>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">备注</label>
+					<div class="controls">
+						<textarea name="remark"></textarea>
+					</div>
+				</div>
+				
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+				<a class="btn" href="{:U('User/Indexadmin/index')}">返回列表</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$title}-会员中心-{$site_name}</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+<tc_include file="Public:head" />
+</head>
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+		<div class="container tc-main">
+			<div class="row">
+				<div class="span3">
+					<tc_include file="Public:usernav"/>
+				</div>
+				<div class="span9">
+				   	<ul class="nav nav-tabs">
+						<li <eq name="do" value="account">class="active"</eq>><a href="{:leuu('Finance/User/index', array('do' => 'account'))}">我的账户</a></li>						
+						<li <eq name="do" value="list">class="active"</eq>><a href="{:leuu('Finance/User/index', array('do' => 'list'))}">财务记录</a></li>
+						<li <eq name="do" value="cashout">class="active"</eq>><a href="{:leuu('Finance/User/index', array('do' => 'cashout'))}">提现</a></li>
+						<li <eq name="do" value="cashoutlist">class="active"</eq>><a href="{:leuu('Finance/User/index', array('do' => 'cashoutlist'))}">提现记录</a></li>
+					</ul>
+				   	<div class="tab-content">
+				   	<eq name="do" value="account">
+				   		<div class="row">
+						  <div class="span3" style="text-align:center;font-size:30px;line-height:50px;color:#f9ca01;"><i class="fa fa-diamond" aria-hidden="true"></i></div>
+						</div>
+						<div class="row">
+						  <div class="span3" style="text-align:center;">账户余额</div>
+						</div>
+						<div class="row">
+							
+							<gt name="account.frozen_money" value="0">
+							<div class="span3" style="text-align:center;">
+								可用金额:<span class="text" style="font-size:20px;line-height:30px;">￥{$account.money}</span>
+								冻结金额:<span class="text" style="font-size:20px;line-height:30px;">￥{$account.frozen_money}</span>
+							</div>
+							<else/>
+							<div class="span3" style="text-align:center;font-size:25px;line-height:40px;">
+								<span class="text">￥{$account.money}</span>
+							</div>
+							</gt>							
+						</div>
+					</eq>
+					<eq name="do" value="cashout">
+					<if condition="$cashlog AND $cashlog['mod_status'] LT 2 ">
+						<div class="alert alert-error fade in">
+				            <button type="button" class="close" data-dismiss="alert">×</button>
+				            <strong>提醒:</strong> 您的提现申请尚未通过审核, 不能再次申请提现。
+				        </div>
+				        <div class="infomation">
+				        	<div class="control-group">
+                                  <label class="control-label">到账机构:</label>
+                                  <div class="controls">{$financeconfig['CASHOUT_BANK'][$cashlog['bank']]}</div>
+                            </div>
+				        	<div class="control-group">
+                                  <label class="control-label">到账账户:</label>
+                                  <div class="controls">{$cashlog.account}（{$cashlog.realname}）</div>
+                            </div>
+                            <div class="control-group">
+                                  <label class="control-label">体现金额:</label>
+                                  <div class="controls">￥{$cashlog.amount}</div>
+                            </div>
+                            <gt name="cashlog.fee" value="0">
+                            <div class="control-group">
+                                  <label class="control-label">手续费:</label>
+                                  <div class="controls">￥{$cashlog.fee}</div>
+                            </div>
+                        	</gt>
+                            <div class="control-group">
+                                  <label class="control-label">申请时间:</label>
+                                  <div class="controls">{$cashlog.create_at}</div>
+                            </div>	                     
+                            <div class="control-group">
+                                  <label class="control-label">审核状态:</label>
+                                  <div class="controls">{$financeconfig['CASHOUT_MOD_STATUS'][$cashlog['mod_status']]}</div>
+                            </div>
+                            <gt name="cashlog.mod_status" value="2">
+                            <div class="control-group">
+                                  <label class="control-label">到账状态:</label>
+                                  <div class="controls">{$financeconfig['CASHOUT_PAY_STATUS'][$cashlog['pay_status']]}</div>
+                            </div>
+                           	</gt>
+                           	<lt name="cashlog.mod_status" value="0">
+                           	<div class="control-group">
+                           		<label class="control-label">&nbsp;</label>
+                   				<div class="controls">
+                   					<button type="submit" class="btn btn-primary">撤销申请</button>
+                   				</div>
+                   			</div>
+                   			</lt>
+                       </div>
+					<else/>
+					<form class="form-horizontal js-cashout-form" action="{:leuu('Finance/User/cashout_post')}" method="post">
+						<gt name="financeconfig.CASHOUT_FEE" value="0">
+						<div class="alert alert-error fade in">
+				            <button type="button" class="close" data-dismiss="alert">×</button>
+				            <strong>注意:</strong> 提现时会扣除手续费:{$financeconfig.CASHOUT_FEE}%，提现成功后实际到账金额为扣除手续费后金额。
+				        </div>
+				    	</gt>
+						<div class="control-group">
+               				<label class="control-label" for="input-bank">到账银行/机构</label>
+               				<div class="controls">
+               					<select id="input-bank" name="bank">
+               					<foreach name="financeconfig.CASHOUT_BANK" key="key" item="item">
+								  <option value="{$key}">{$item}</option>
+								</foreach>
+								</select>
+								<span class="help-inline"></span>
+							</div>
+               			</div>
+               			<div class="control-group">
+               				<label class="control-label" for="input-account">账号</label>
+               				<div class="controls">
+               					<input type="text" id="input-account" placeholder="请输入银行(机构)账号" name="account" required>
+								<span class="help-inline"></span>
+							</div>
+               			</div>
+               			<div class="control-group">
+               				<label class="control-label" for="input-name">开户名</label>
+               				<div class="controls">
+               					<input type="text" id="input-name" placeholder="请输入开户姓名" name="name" required>
+								<span class="help-inline"></span>
+							</div>
+               			</div>
+               			<div class="control-group">
+               				<label class="control-label" for="input-amount">可提现金额:<span class="text">￥{$account.money}</span></label>
+               				<div class="controls">
+               					<input type="number" id="input-amount" placeholder="请输入提现金额" name="amount" required>
+								<span class="help-inline"></span>
+							</div>
+               			</div>
+               			<div class="control-group">
+               				<label class="control-label" for="input-password">账号密码</label>
+               				<div class="controls">
+               					<input type="password" id="input-password" placeholder="请输入密码" name="password" required>
+								<span class="help-inline"></span>
+							</div>
+               			</div>
+               			<div class="control-group">
+               				<div class="controls">
+               					<button type="submit" class="btn btn-primary js-ajax-submit">确认</button>
+               				</div>
+               			</div>
+               		</form>
+               		</if>
+               		</eq>
+					<eq name="do" value="cashoutlist">
+               			<table class="table table-bordered table-striped table-hover table-breakall">
+							<thead>
+								<tr>
+									<th>申请日期</th>
+									<th>金额</th>
+									<th>手续费</th>
+									<th>到账账户</th>
+									<th>审核状态</th>
+									<th>到账状态</th>
+								</tr>
+							</thead>
+							<tbody>
+							<foreach name="cashlist" key="key" item="vo">
+								<tr>
+									<td>{$vo.create_at}</td>
+									<td>{$vo.amount}</td>
+									<td>{$vo.fee}</td>
+									<td>
+										{$financeconfig['CASHOUT_BANK'][$vo['bank']]}:
+										{$vo.account}({$vo.realname})
+									</td>
+									<td>{$financeconfig['CASHOUT_MOD_STATUS'][$vo['mod_status']]}</td>
+									<td>{$financeconfig['CASHOUT_PAY_STATUS'][$vo['pay_status']]}</td>
+								</tr>
+							</foreach>
+							</tbody>
+						</table>
+						<div class="pagination"><ul>{$page}</ul></div>
+					</eq>
+					<eq name="do" value="list">
+						<table class="table table-bordered table-striped table-hover">
+							<thead>
+								<tr>
+									<th>序号</th>
+									<th>金额</th>
+									<th>类型</th>
+									<th>时间</th>
+									<th>详细</th>
+								</tr>
+							</thead>
+							<tbody>
+							<foreach name="list" key="key" item="vo">
+								<tr>
+									<td>{$key+1}</td>
+									<td>{$vo.money}</td>
+									<td>{$type[$vo['type']]}</td>
+									<td>{$vo.create_at}</td>
+									<td>{$vo.remark}</td>
+								</tr>
+							</foreach>
+							</tbody>
+						 </table>
+						 <div class="pagination"><ul>{$page}</ul></div>
+					</eq>
+				   	</div>
+				</div>
+			</div>
+		<tc_include file="Public:footer" />
+		</div>
+	<tc_include file="Public:scripts" />
+	<script type="text/javascript">
+	var fieldfocusmsg = {
+		account : {focusmsg : '请正确填写您的开户账号, 以免提现失败'},
+		name : {focusmsg : '请正确填写您的开户姓名, 以免提现失败'},
+		amount: {focusmsg : '请输入要提现金额, 不得超过账户余额'},
+		password: {focusmsg: '请输入您的账号密码确认安全'}
+	}
+	$(function() {
+		Wind.use('validate', 'ajaxForm', 'noty', 'md5', function() {
+			var form = $('form.js-cashout-form');
+			form.find('input[type!=hidden]').each(function() {
+				$(this).bind('focus', function() {
+					var wrap = $(this).parent().parent();
+					if(wrap.hasClass('error')) {
+						wrap.removeClass('error');
+					}
+					var fieldname = $(this).attr('name');
+					$(this).siblings('span[class=help-inline]').text(fieldfocusmsg[fieldname].focusmsg);
+				});
+				$(this).bind('blur', function() {
+					var wrap = $(this).parent().parent();
+					if(!wrap.hasClass('error')) {
+						$(this).siblings('span[class=help-inline]').text('');
+					}
+				});
+			});
+			//表单验证开始
+			form.validate({
+				onfocusout : function(element) { $(element).valid(); },
+				onkeyup : false,
+				onclick : false,
+				focusInvalid: false,
+				showErrors : function(errorMap, errorArr) {
+					for(var i = 0; i < errorArr.length; i++) {
+						var obj = $(errorArr[i].element);
+						var wrap = obj.parent().parent();
+						if(!wrap.hasClass('error')) {
+							wrap.addClass('error');
+						}
+						obj.siblings('span[class=help-inline]').text(errorArr[i].message);	
+					}
+				},
+				//验证规则
+				rules : {
+					bank: {required: true},
+					account : {required: true, minlength: 3},
+					name : {required: true, minlength: 2},
+					amount: {required: true, min: 1, digits: true},
+					password: {required: true, passwordValidate: true}
+				},
+				messages : {
+					bank: {required: '请选择到账银行(机构)'},
+					account : {required: '开户账号必须填写', minlength: '请正确填写您的开户账号'},
+					name : {required: '开户名必须填写', minlength: '请正确填写您的开户名'},
+					amount: {required: '体现金额必须填写', min: '最低体现金额1元', digits: '请输入整数'},
+					password: {required: '账号密码必须填写', passwordValidate: '密码格式错误'}
+				},
+				submitHandler : function(forms) {
+					var btn = $('button.js-ajax-submit');
+					if(btn.data("loading")) {
+						return false;
+					}
+					btn.data("loading",true);
+					var text = btn.text();
+					//按钮文案、状态修改
+					btn.text('验证中...').prop('disabled', true).addClass('disabled');
+					$(forms).ajaxSubmit({
+						url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+						dataType : 'json',
+						beforeSubmit : function(arr, $form, options) {
+							for(var i = 0; i < arr.length; i++) {
+								if(arr[i].name == 'password') {
+									arr[i].value = md5(arr[i].value);
+								}
+							}
+						},
+						success : function(data, statusText, xhr, $form) {
+							btn.removeProp('disabled').removeClass('disabled');
+							btn.text('确定');
+							btn.data("loading",false);
+							if (data.state === 'success') {
+								noty({text: data.info,
+									type:'success',
+									layout:'center'
+								});
+								setTimeout(function() {
+									if (data.url) {
+										window.location.href = data.url;
+									} else {
+										reloadPage(window);
+									}
+								}, 2500);
+							} else if (data.state === 'fail') {
+								noty({text: data.info,
+									type:'error',
+									layout:'center'
+								});
+							}
+						}
+					});
+				}
+			});
+		});
+	});
+	</script>
+</body>
+</html>

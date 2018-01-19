@@ -1,0 +1,25 @@
+<eq name="end" value="1">
+	<li>
+		<p class="left">{:date('H:i', $endtime)}</p>
+		<div class="end">
+			<h4>{:date('n月j日', endtime)}早起打卡结束</h4>
+		</div>
+	</li>
+</eq>
+<foreach name="list" key="key" item="item">
+	<li>
+		<p class="left">{$item.time}</p>
+		<div class="conter">
+			<h4>{$item.nicename} 连续{$item.days}天早起</h4>
+			<ul>
+				<for start="0" end="$item['days']">
+				<li><img src="__TMPL__Public/images/morning/tai.png"></li>
+				</for>
+			</ul>
+			<small>累计积累奖金{$item.total}元</small>
+		</div>
+		<div class="right">
+			<img src="<empty name="item.avatar">__TMPL__/Public/images/headicon_128.png<else/>{$item.avatar}</empty>">
+		</div>
+	</li>
+</foreach>

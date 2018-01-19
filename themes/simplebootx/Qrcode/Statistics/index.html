@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>溯源二维码列表-会员中心-{$site_name}</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+<link href="__PUBLIC__/js/artDialog/skins/default.css" rel="stylesheet" />
+<tc_include file="Public:head" />
+</head>
+
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+
+	<div class="container tc-main">
+        <div class="row">
+            <div class="span2">
+                <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span10">
+              	<ul class="nav nav-tabs">
+					<li class="active"><a href="{:leuu('Qrcode/Statistics/index', array('type' => '1'))}">溯源扫码地区统计</a></li>
+					<li><a href="{:leuu('Qrcode/Statistics/scan', array('type' => '1'))}">扫码统计</a></li>
+				</ul>
+            	<div class="tab-content">
+					<canvas id="pie" width="400" height="150"></canvas>
+					<canvas id="myChart" width="400" height="150"></canvas>
+            	</div>
+            </div>
+        </div>
+		<tc_include file="Public:footer" />
+	</div>
+	<!-- /container -->
+	<tc_include file="Public:scripts" />
+	<script type="text/javascript" src="__PUBLIC__/js/Chart.min.js"></script>
+	<script type="text/javascript">
+		var ctx = document.getElementById("pie").getContext("2d");
+		var myChart = new Chart(ctx, {
+		    type: 'pie',
+		    data: {
+		        labels:
+		        [
+		        <foreach name="province" item="val">
+		        "{$val.province}",
+		        </foreach>
+		        ],
+		        datasets: [{
+		            data: [
+		            <foreach name="province" item="val">
+			        "{$val.total}",
+			        </foreach>
+		            ],
+		            backgroundColor:[
+		            <foreach name="province" item="val">
+			        "rgb({:rand(0,255)},{:rand(0,255)},{:rand(0,255)})",
+			        </foreach>
+		            ]
+		        }]
+		    },
+		});
+		var ctx = document.getElementById("myChart").getContext("2d");
+		var myChart = new Chart(ctx, {
+		    type: 'bar',
+		    data: {
+		        labels:
+		        [
+		        <foreach name="city" item="val">
+		        "{$val.city}",
+		        </foreach>
+		        ],
+		        datasets: [{
+		            label: '数量',
+		            data: [
+		            <foreach name="city" item="val">
+			        "{$val.total}",
+			        </foreach>
+		            ],
+
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true
+		                }
+		            }]
+		        }
+		    }
+		});
+	</script>
+</body>
+</html>

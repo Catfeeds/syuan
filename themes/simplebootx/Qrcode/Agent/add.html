@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$site_name}-添加-会员中心</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+
+<tc_include file="Public:head" />
+</head>
+
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+
+	<div class="container tc-main">
+        <div class="row">
+            <div class="span2">
+                <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span10">
+               <ul class="nav nav-tabs">
+					<li><a href="{:leuu('Qrcode/agent/index')}">渠道商列表</a></li>
+					<li class="active"><a href="{:leuu('Qrcode/agent/add')}">添加渠道商</a></li>
+				</ul>
+               <div class="tab-content">
+                   	<div class="tab-pane active" id="one">
+	                <form id="ff" class="form-horizontal js-forgot-form" action="{:leuu('Qrcode/agent/add')}" method="post">
+	                	<input type="hidden" name="id" value="{$info.id}">
+						<div class="control-group">
+						  <label class="control-label" for="inputEmail">公司名称</label>
+						  <div class="controls">
+							<input type="text" id="inputEmail" name="name" placeholder="请输入公司名称" class="span4" value="{$info.name}">
+							<span class="help-inline"></span>
+						  </div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for=""></label>
+							<div class="controls">
+								<button class="btn btn-primary js-ajax-submit span4" type="button" style="margin-left: 0px" id="subbtn">确定</button>
+							</div>
+						</div>
+					</form>
+                   </div>
+               </div>
+            </div>
+        </div>
+		<tc_include file="Public:footer" />
+	</div>
+	<!-- /container -->
+	<tc_include file="Public:scripts" />
+	<script type="text/javascript">
+		$('#subbtn').click(function() {
+        $.post("{:leuu('Qrcode/agent/add')}",$('#ff').serialize(),function(data) {
+          if(data.status == 1) {
+            if(data.url) {
+              window.location.href=data.url;
+            } else {
+              location.reload();
+            }
+          } else {
+            alert(data.info);
+          }
+        })
+      });
+	</script>
+</body>
+</html>

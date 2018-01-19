@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="登录">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <title>登录</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+    <style type="text/css">
+      .index-top-title {
+        text-align: center;
+        font-size: 34px;
+        color: #3cc51f;
+        font-weight: 400;
+        margin: 0 5%;
+      }
+      .index-top-header {
+        padding: 5px 0;
+      }
+      .weui-label {
+        width: 80px;
+      }
+    </style>
+</head>
+<body>
+    <header class="index-top-header">
+      <h1 class="index-top-title">管理中心</h1>
+    </header>
+    <form method="post" name="login" action="{:U('public/dologin')}" autoComplete="off">    
+      <div class="weui-cells weui-cells_form">
+          <div class="weui-cell">
+              <div class="weui-cell__hd"><label class="weui-label">用户名</label></div>
+              <div class="weui-cell__bd weui-cell_primary"><input name="username" type="text" class="weui-input" placeholder="请输入用户名"/></div>
+          </div>
+          <div class="weui-cell">
+              <div class="weui-cell__hd"><label class="weui-label">密码</label></div>
+              <div class="weui-cell__bd weui-cell_primary"><input name="password" type="password" class="weui-input" placeholder="请输入用户密码"/></div>
+          </div>
+          <div class="weui-cell weui-cell_vcode">
+              <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+              <div class="weui-cell__bd weui-cell_primary"><input type="text" class="weui-input" name="verify" placeholder="输入验证码"></div>
+              <div class="weui-cell__ft">{:sp_verifycode_img('length=4&font_size=16&width=120&height=40&use_noise=1&use_curve=0','style="cursor: pointer;" title="点击获取"')}</div>
+          </div>
+      </div>
+      <div class="weui-btn-area">
+          <a href="javascript:void(0)" class="weui-btn weui-btn_primary">登录</a>
+      </div>
+    </form>
+    <script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+    <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+    <script src="__PUBLIC__/jqweui/js/core.js"></script>
+    <script src="__PUBLIC__/js/md5.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        $('a.weui-btn.weui-btn_primary').bind('click', function(){
+            if($(this).hasClass('weui-btn_loading')) {
+              return false;
+            } else {                
+                var username = $('input[name=username]').val();
+                var password = $('input[name=password]').val();
+                var verify = $('input[name=verify]').val();
+                if(username.length < 1) {
+                  $.toast("请输入用户名", "forbidden");
+                } else if(password.length < 6) {
+                  $.toast("请输入正确的密码", "forbidden");
+                } else if(verify.length != 4) {
+                  $.toast("请输入正确的验证码", "forbidden");
+                } else {
+                  $(this).addClass('weui-btn_loading');
+                  $(this).text($(this).text() + '中...');
+                  var password = md5(password);
+                  var __hash__ = $('input[name=__hash__]').val();
+                  var url = $('form[name=login]').attr('action');
+                  getJson(url, 'POST', {username: username, password: password, verify: verify, __hash__: __hash__}, function(info, url) {
+                      $.toast(info, '', function() {
+                          if(url) {
+                              window.location.href = url;
+                          }
+                      });
+                    }, function(info) {
+                      $.toast(info, 'forbidden', function() {
+                        $('img.verify_img').trigger('click');                        
+                      });
+                    }, function(info) {
+                      $('a.weui-btn.weui-btn_primary').removeClass('weui-btn_loading');
+                      $('a.weui-btn.weui-btn_primary').text('登录');
+                  });
+                }
+            }
+            return false;
+        });
+      });
+    </script>
+</body>
+</html>

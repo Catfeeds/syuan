@@ -1,0 +1,142 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<foreach name="tpl_type" item="t" key="value">
+				<li<php>if($type == $value)echo ' class="active" ';</php>><a href="{:U('Sms/template', array('type' => $value))}">{$t}模板</a></li>
+			</foreach>
+		</ul>
+		<div class="common-form">
+			<form method="post" class="form-horizontal js-ajax-forms" action="{:U('Sms/template_post')}">
+				<table cellpadding="2" cellspacing="2" width="100%">
+					<tbody>
+						<tr>
+							<td width="100">模板CODE</td>
+							<td>
+								<input type="text" name="tplcode" required value="{$tpl.tplcode}" />
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td>模板内容</td>
+							<td>
+								<textarea name="content" style="width:300px;height:100px;" required>{$tpl.content}</textarea>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<td width="100">模板说明</td>
+							<td>
+								<textarea name="remark" style="width:300px;height:100px;">{$tpl.remark}</textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="form-actions">
+					<input type="hidden" name="type" value="{$type}" />
+					<button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+		<script type="text/javascript">
+		$(function() {
+			Wind.use('validate', 'ajaxForm', 'artDialog', function() {
+				var form = $('form.js-ajax-forms');
+				//表单验证开始
+				form.validate({
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//是否在敲击键盘时验证
+					onkeyup : false,
+					//当鼠标掉级时验证
+					onclick : false,
+					//验证错误
+					showErrors : function(errorMap, errorArr) {
+						//errorMap {'name':'错误信息'}
+						//errorArr [{'message':'错误信息',element:({})}]
+						try {
+							$(errorArr[0].element).focus();
+							art.dialog({
+								id : 'error',
+								icon : 'error',
+								lock : true,
+								fixed : true,
+								background : "#CCCCCC",
+								opacity : 0,
+								content : errorArr[0].message,
+								cancelVal : '确定',
+								cancel : function() {
+									$(errorArr[0].element).focus();
+								}
+							});
+						} catch (err) {
+						}
+					},
+					//验证规则
+					rules : {
+						'tplcode' : {
+							required : 1
+						},
+						'content' : {
+							required : 1
+						}
+					},
+					//验证未通过提示消息
+					messages : {
+						'tplcode' : {
+							required : '请输入模板编号'
+						},
+						'content' : {
+							required : '请输入模板内容'
+						}
+					},
+					//给未通过验证的元素加效果,闪烁等
+					highlight : false,
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//验证通过，提交表单
+					submitHandler : function(forms) {
+						$(forms).ajaxSubmit({
+							url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+							dataType : 'json',
+							beforeSubmit : function(arr, $form, options) {
+
+							},
+							success : function(data, statusText, xhr, $form) {
+								if (data.status) {
+									
+									//添加成功
+									Wind.use("artDialog", function() {
+										art.dialog({
+											id : "succeed",
+											icon : "succeed",
+											fixed : true,
+											lock : true,
+											background : "#CCCCCC",
+											opacity : 0,
+											content : data.info,
+											button : [ {
+												name : '继续编辑？',
+												callback : function() {
+													reloadPage(window);
+													return true;
+												},
+												focus : true
+											}]
+										});
+									});
+								} else {
+									error(data.info);
+								}
+							}
+						});
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

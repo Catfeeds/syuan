@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>溯源二维码列表-会员中心-{$site_name}</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+<link href="__PUBLIC__/js/artDialog/skins/default.css" rel="stylesheet" />
+<tc_include file="Public:head" />
+</head>
+
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+
+	<div class="container tc-main">
+        <div class="row">
+            <div class="span2">
+                <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span10">
+              	<ul class="nav nav-tabs">
+					<li><a href="{:leuu('Qrcode/Statistics/index', array('type' => '1'))}">溯源扫码地区统计</a></li>
+					<li class="active"><a href="{:leuu('Qrcode/Statistics/scan', array('type' => '1'))}">扫码统计</a></li>
+				</ul>
+            	<div class="tab-content">
+						<form class="form-inline" method="get">
+                   		<select name="category">
+                   			<option value="0">选择产品分类</option>
+                   			<foreach name="category" item="val">
+                   			<option value="{$val.id}" <if condition="$val['id'] eq $condition['cat']">selected</if> >{$val.name}</option>
+                   			</foreach>
+                   		</select>
+                   		<input type="text" name="name" placeholder="输入产品名称" value="{$condition.name}">
+                   		<button class="btn btn-mini">搜索</button>
+                   	</form>
+                   		<span class="text-primary">状态为‘开始印刷’时，点击‘开始印刷’进入审核流程。</span>
+                   		<table class="table table-bordered table-striped table-hover">
+					    <thead>
+					      <tr>
+					        <th>产品名称</th>
+					        <th>添加时间</th>
+					        <th>二维码数量</th>
+					        <th>批次编号</th>
+					        <th>扫码率</th>
+					        <th>状态</th>
+					 		<th>有效扫码量</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+					    <foreach name="list" item="vo">
+					      <tr>
+					        <td>{$pro[$vo['pid']]}</td>
+					        <td>{$vo.createtime|date="Y-m-d H:i",###}</td>
+					        <td>{$vo.count}</td>
+					        <td>{$vo.batch}</td>
+					        <td>{$vo['percent']*100}%</td>
+					        <td>
+					        <if condition="$vo['status'] eq 0">
+					        	<a class="btn btn-success btn-mini js-ajax-dialog-btn"  data-msg="提交后，该批次的印刷进入审核阶段，请确保款项已经支付，客服电话：400-0377-0377" data-ok="" data-cacel="取消" href="{:leuu('qrcode/center/start_order',array('id'=>$vo['id']))}">开始印刷</a>
+							<else/>
+								<span class="
+						        <if condition="$vo['status'] eq 1">
+								text-info
+								<elseif condition="$vo['status'] eq 2"/>
+								text-warning
+								<elseif condition="$vo['status'] eq 3"/>
+								text-primary
+								<elseif condition="$vo['status'] eq 4"/>
+								text-danger
+								</if>"/>
+						        	{$status_arr[$vo['status']]}
+						        </span>
+					        </if>
+					        </td>
+							<td>{$vo.scan|default=0}</td>
+					      </tr>
+					    </foreach>
+					    </tbody>
+					  </table>
+					  {$page}
+            	</div>
+            </div>
+        </div>
+		<tc_include file="Public:footer" />
+	</div>
+	<!-- /container -->
+	<tc_include file="Public:scripts" />
+</body>
+</html>

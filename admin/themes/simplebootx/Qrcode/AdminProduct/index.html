@@ -1,0 +1,49 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li <if condition="$status eq 1">class="active"</if>><a href="{:U('index',array('status'=>1))}">产品列表</a></li>
+			<li <if condition="$status eq 2">class="active"</if>><a href="{:U('index',array('status'=>2))}" target="_self">回收站</a></li>
+		</ul>
+		<form class="well form-search" method="GET" action="/index.php">
+			<input type="hidden" name="g" value="Qrcode">
+			<input type="hidden" name="m" value="AdminProduct">
+			<input type="hidden" name="a" value="index">
+			<input type="hidden" name="status" value="{$status}">
+			<input type="text" name="name" value="{$name}" placeholder="请输入产品名称">&nbsp;
+			<input type="submit" class="btn btn-primary" value="搜索" />
+		</form>
+		<form method="post" class="js-ajax-form">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>产品名称</th>
+						<th>所属公司</th>
+						<th>添加时间</th>
+						<th align="center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<foreach name="list" item="vo">
+					<tr>
+						<td>{$vo.name}</td>
+						<td>{$users[$vo['uid']]}</td>
+						<td>{$vo.createtime}</td>
+						<td>
+						<if condition="$vo['status'] eq 1">
+							<a href="{:U('AdminProduct/delete',array('id'=>$vo['pid']))}" class="js-ajax-dialog-btn" data-msg="确定要删除吗！">删除</a>
+						<else/>
+							<a href="{:U('AdminProduct/recover',array('id'=>$vo['pid']))}" class="js-ajax-dialog-btn" data-msg="确定要还原吗！">还原</a>
+						</if>
+						</td>
+					</tr>
+					</foreach>
+				</tbody>
+			</table>
+			<div class="pagination">{$page}</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

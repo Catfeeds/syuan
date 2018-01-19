@@ -1,0 +1,82 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form class="well form-search" method="GET" action="{:U('AdminFinance/cashout')}">
+			<input type="text" name="uid" style="width:120px;" value="{$uid}" placeholder="用户ID">
+			申请时间：<input type="text" name="starttime" value="{$starttime}" class="js-date date" style="width:100px;" />-<input style="width:100px;" type="text" name="endtime" value="{$endtime}" class="js-date date" />
+			<select name="status" style="width:100px;">
+				<option value="-1">审核状态</option>
+				<foreach name="financeconfig.CASHOUT_MOD_STATUS" key="key" item="name">
+					<option value="{$key}"<eq name="key" value="$mod_status"> selected </eq>>{$name}</option>
+				</foreach>
+			</select>
+			<select name="paystatus" style="width:100px;">
+				<option value="-1">转账状态</option>
+				<foreach name="financeconfig.CASHOUT_PAY_STATUS" key="key" item="name">
+					<gt name="key" value="0">
+					<option value="{$key}"<eq name="key" value="$pay_status"> selected </eq>>{$name}</option>
+					</gt>
+				</foreach>
+			</select>
+			<input type="submit" class="btn btn-primary" value="搜索" />
+		</form>
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">序号</th>
+					<th>用户/ID</th>
+					<th>申请时间</th>
+					<th>可用金额</th>
+					<th>提现金额</th>
+					<th>手续费</th>					
+					<th>到账账户</th>
+					<th>审核状态</th>
+					<th>审核备注</th>
+					<th>审核人</th>
+					<th>转账状态</th>
+					<th>转账人员</th>
+					<th>转账备注</th>
+					<th>错误日志</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="vo">
+				<tr>
+					<td>{$vo.id}</td>					
+					<td><gt name="vo.uid" value="0">{$users[$vo['uid']]['user_login']} / {$vo.uid}<else/></gt></td>
+					<td>{$vo.create_at}</td>
+					<td>{$users[$vo['uid']]['money']}</td>
+					<td>{$vo.amount}</td>
+					<td>{$vo.fee}</td>
+					<td>{$financeconfig['CASHOUT_BANK'][$vo['bank']]}<br/>{$vo.account}({$vo.realname})</td>
+					<td><font class="<switch name="vo.mod_status" ><case value="0">red</case><case value="2">green</case><default /></switch>">{$financeconfig['CASHOUT_MOD_STATUS'][$vo['mod_status']]}</font></td>
+					<td>{$vo.mod_msg}</td>
+					<td>{$users[$vo['mod_uid']]['user_login']}</td>
+					<td>
+						<font class="<switch name="vo.pay_status" ><case value="2">green</case><case value="3">red</case><default /></switch>">{$financeconfig['CASHOUT_PAY_STATUS'][$vo['pay_status']]}</font>
+					</td>
+					<td>{$users[$vo['pay_uid']]['user_login']}</td>
+					<td>{$vo.pay_msg}</td>
+					<td>{$vo.err_msg}</td>
+					<td>
+					<lt name="vo.mod_status" value="2">
+						<a href="javascript:open_iframe_dialog('{:U('AdminFinance/cashout_mod', array('id' => $vo['id']))}', '审核', {width:'650px',height:'450px'})">审核</a> 
+					</lt>
+					<eq name="vo.mod_status" value="2">
+						<lt name="vo.pay_status" value="2">
+						<a href="javascript:open_iframe_dialog('{:U('AdminFinance/cashout_pay', array('id' => $vo['id']))}', '转账', {width:'800px',height:'500px'})">转账</a> 
+						</lt>
+					</eq>
+					</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

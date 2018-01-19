@@ -1,0 +1,61 @@
+<admintpl file="header"/>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form method="post" class="form-horizontal js-ajax-forms" action="{:U('AdminFinance/users_charge_post')}">
+			<fieldset class="mtop20">
+				<div class="control-group">
+					<label class="control-label">充值用户</label>
+					<div class="controls">
+						<p class="text">用户ID: {$user.id}</p>
+						<p class="text">手机号: {$user.mobile} (<eq name="user.mobile_status" value="1">已认证<else/>未认证</eq>)</p>
+						<p class="text">用户名: {$user.user_login}</p>
+						<p class="text">用户昵称: {$user.user_nicename}</p>
+						<p class="text">用户类型: <eq name="user.user_type" value="2">会员<else/>管理员</eq></p>
+						<p class="text">可用余额: ￥{$user.account.money}</p>
+						<p class="text">冻结金额: ￥{$user.account.frozen_money}</p>
+						<p class="text">积分/金币: {$user.account.gold} 个</p>
+						<input type="hidden" name="uid" value="{$user.id}">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">充值类型</label>
+					<div class="controls">
+						<select name="charge">
+						<foreach name="chargelist" key="charge" item="name">
+							<option value="{$charge}">{$name}</option>
+						</foreach>
+						</select>
+						<span class="form-required text-warning">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">充值金额</label>
+					<div class="controls">
+						<input type="text" name="money" placeholder="请输入充值金额" value="" required="">
+						<span class="form-required text-warning">*</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary js-ajax-submit">充值</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {			
+			ajaxFormSubmitInit({
+				'money' : {required : 1, min: 1}
+			}, {}, [{
+                name : '确定',
+                callback : function() {
+                    location.href = "{:U('AdminFinance/users_charge')}";
+                    return true;
+                }
+            }]);
+		});
+	</script>
+</body>
+</html>

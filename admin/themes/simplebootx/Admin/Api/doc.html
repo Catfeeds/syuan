@@ -1,0 +1,326 @@
+<admintpl file="header" />
+</head>
+<style>
+.doc-code-pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+.doc-json-type-string { color: green; }
+.doc-json-type-number { color: darkorange; }
+.doc-json-type-boolean { color: blue; }
+.doc-json-type-null { color: magenta; }
+.doc-json-type-key { color: red; }
+.doc-response-param-margin {margin-left: 30px;}
+.container-fluid{ padding-left:0;}
+.doc_left{ background:#f6f4f4; height:100%; border-right: 1px solid #e5e5e5;}
+.doc_left .doc_title{background-color: #1dd2af;min-height: 50px;padding: 0 15px; text-align:center; color:#fff; line-height:50px; font-size:18px;}		
+.doc-nav,.doc_nav_ul{ padding:0; margin:0;}
+.doc_nav_title{ font-size:16px; font-weight:bold; display:block; color:#585858;line-height:42px; padding-left:15px;background-color: #eeecec;}
+.doc_nav_ul li{ border-top: 1px solid #fcfcfc;
+border-bottom: 1px solid #e5e5e5;  display:block;}
+.doc_nav_ul li a{ display:block; font-size:13px;line-height:36px; padding-left:25px; font-weight:normal; color:#585858;}
+.doc_nav_ul li a:hover,.doc_nav_ul li a.active{ text-decoration:none; background:#fff; color:#1dd2af;}
+.doc-container h4.nr_title{min-height: 20px; padding: 19px; margin-bottom: 20px;background-color: #ecf0f1; border-radius:5px;color: #2c3e50;}
+.doc-container h5.nr_title_2{ font-size:18px; }
+.doc-container p.doc_p{  border:solid 1px #ddd; border-radius:5px; padding:10px; }
+.doc-to-top { display: none; padding: 0 20px; color: #fff; background-color: #f50;}
+</style>
+<body>
+	<div class="container-fluid">
+	  <div class="row-fluid">
+	    <div class="span2 doc_left">
+	    	<div class="doc_title">接口导航</div>
+	    	<ul class="doc-nav">
+	    		<foreach name="list" item="group">
+				<li class=""><div class="doc_nav_title">{$group.name}</div>
+				<notempty name="group.child">
+					<ul class="doc_nav_ul">
+					  <foreach name="group.child" item="api">
+					  <li><a href="#api-doc-{$api.id}">{$api.name}</a></li>
+					  </foreach>
+					</ul>
+				</notempty>
+				</li>
+				</foreach>
+            </ul>
+	    </div>
+	    <div class="span10">
+	  	<foreach name="list" item="group">
+	      <notempty name="group.child">
+	        <foreach name="group.child" item="api">
+	    	<div id="api-doc-{$api.id}" class="doc-container">
+	    		<h4 class="nr_title">{$api.name}</h4>
+	    		<h5 class="nr_title_2">请求说明</h5>
+	    		<p class="doc_p">{$api.introduce}</p>
+	    		<h5 class="nr_title_2">注意事项</h5>
+	    		<p class="doc_p">{$api.warning}</p>
+	    		<h5 class="nr_title_2">接口版本</h5>
+	    		<p class="doc_p">{$api.version}</p>
+	    		<h5 class="nr_title_2">发布状态</h5>
+	    		<p class="doc_p"><eq name="api.status" value="1">上线<else/>下线</eq></p>
+	    		<h5 class="nr_title_2">是否需要登录</h5>
+	    		<p class="doc_p"><eq name="api.oauth" value="1">是<else/>否</eq></p>
+	    		<h5 class="nr_title_2">请求地址</h5>
+	    		<p class="doc_p">{$api.path}</p>
+	    		<h5 class="nr_title_2">请求类型</h5>
+	    		<p class="doc_p">{$api.method}</p>
+	    		<h5 class="nr_title_2">请求参数</h5>
+	    		<notempty name="api.params">
+	        		<table class="table table-bordered">
+		              <thead>
+		                <tr>
+		                  <th>参数名称</th>
+		                  <th>类型</th>
+		                  <th>是否必填</th>
+		                  <th>默认值</th>
+		                  <th>说明</th>
+		                </tr>
+		              </thead>
+		              <tbody>
+		              <foreach name="api.params" item="param">
+		                <tr>
+		                  <td>{$param.name}</td>
+		                  <td>{$types[$param['type']]}</td>
+		                  <td><eq name="param.must" value="1">是<else/>否</eq></td>
+		                  <td><empty name="param.default">无</empty></td>
+		                  <td>{$param.introduce}</td>
+		                </tr>
+		              </foreach>		       
+		              </tbody>
+		            </table>
+	        	<else/>
+	        		<p class="doc_p">无</p>
+	        	</notempty>
+	    		<h5>响应参数</h5>
+	    		<notempty name="api.response">
+	        		<table class="table table-bordered">
+		              <thead>
+		                <tr>
+		                  <th>字段名称</th>
+		                  <th>类型</th>
+		                  <th>说明</th>
+		                </tr>
+		              </thead>
+		              <tbody>
+		              <foreach name="api.response" item="rsp">
+		                <tr>
+		                  <td>{$rsp.name}</td>
+		                  <td>{$types[$rsp['type']]}</td>
+		                  <td>{$rsp.introduce}</td>
+		                </tr>
+		              </foreach>       
+		              </tbody>
+		            </table>
+		            <foreach name="api.response" item="rsp">
+		                <notempty name="rsp.child">
+		                	<div class="doc-response-param-margin">
+		            			<h6>字段-{$rsp.name}</h6>
+		            			<table class="table table-bordered">
+					              <thead>
+					                <tr>
+					                  <th>字段名称</th>
+					                  <th>类型</th>
+					                  <th>说明</th>
+					                </tr>
+					              </thead>
+					              <tbody>						         
+						              <volist name="rsp.child" id="rsp1">
+						                <tr>
+						                  <td>{$rsp1.name}</td>
+						                  <td>{$types[$rsp1['type']]}</td>
+						                  <td>{$rsp1.introduce}</td>
+						                </tr>
+						              </volist>
+					              </tbody>
+					            </table>
+					            <volist name="rsp.child" id="rsp1">
+					                <notempty name="rsp1.child">
+					                	<div class="doc-response-param-margin">
+					            			<h6>字段-{$rsp1.name}</h6>
+					            			<table class="table table-bordered">
+								              <thead>
+								                <tr>
+								                  <th>字段名称</th>
+								                  <th>类型</th>
+								                  <th>说明</th>
+								                </tr>
+								              </thead>
+								              <tbody>						         
+									              <volist name="rsp1.child" id="rsp2">
+									                <tr>
+									                  <td>{$rsp2.name}</td>
+									                  <td>{$types[$rsp2['type']]}</td>
+									                  <td>{$rsp2.introduce}</td>
+									                </tr>
+									              </volist>
+								              </tbody>
+								            </table>
+								        <volist name="rsp1.child" id="rsp2">
+							                <notempty name="rsp2.child">
+							                <div class="doc-response-param-margin">
+						            			<h6>字段-{$rsp2.name}</h6>
+						            			<table class="table table-bordered">
+									              <thead>
+									                <tr>
+									                  <th>字段名称</th>
+									                  <th>类型</th>
+									                  <th>说明</th>
+									                </tr>
+									              </thead>
+									              <tbody>
+										              <volist name="rsp2.child" id="rsp3">
+										                <tr>
+										                  <td>{$rsp3.name}</td>
+										                  <td>{$types[$rsp3['type']]}</td>
+										                  <td>{$rsp3.introduce}</td>
+										                </tr>
+										              </volist>
+									              </tbody>
+									            </table>
+									            <volist name="rsp2.child" id="rsp3">
+									                <notempty name="rsp3.child">
+									                <div class="doc-response-param-margin">
+								            			<h6>字段-{$rsp3.name}</h6>
+								            			<table class="table table-bordered">
+											              <thead>
+											                <tr>
+											                  <th>字段名称</th>
+											                  <th>类型</th>
+											                  <th>说明</th>
+											                </tr>
+											              </thead>
+											              <tbody>	         
+												              <volist name="rsp3.child" id="rsp4">
+												                <tr>
+												                  <td>{$rsp4.name}</td>
+												                  <td>{$types[$rsp4['type']]}</td>
+												                  <td>{$rsp4.introduce}</td>
+												                </tr>
+												              </volist>
+											              </tbody>
+											            </table>
+											        </div>
+									                </notempty>
+									            </volist>
+									        </div>
+							                </notempty>
+							            </volist>
+							          	</div>
+					                </notempty>
+					            </volist>
+					        </div>					        
+		                </notempty>
+		            </foreach>
+	        	<else/>
+	        		<p class="doc_p">无</p>
+	        	</notempty>
+	        	<h5>返回示例</h5>
+	        	<notempty name="api.analog_data">
+	        		<pre class="doc-code-pre">
+	        			{$api.analog_data}
+	        		</pre>
+	        	<else/>
+	        		<p class="doc_p">无</p>
+	        	</notempty>
+	    	</div>
+    		</foreach>
+		  </notempty>
+		</foreach>
+	    </div>
+	  </div>
+	  <a class="doc-to-top">Go Top</a>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		function syntaxHighlight(json) {
+		    if (typeof json != 'string') {
+		        json = JSON.stringify(json, undefined, 4);
+		    }
+		    json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
+		    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+		        var cls = 'number';
+		        if (/^"/.test(match)) {
+		            if (/:$/.test(match)) {
+		                cls = 'key';
+		            } else {
+		                cls = 'string';
+		            }
+		        } else if (/true|false/.test(match)) {
+		            cls = 'boolean';
+		        } else if (/null/.test(match)) {
+		            cls = 'null';
+		        }
+		        return '<span class="doc-json-type-' + cls + '">' + match + '</span>';
+		    });
+		}
+		/**
+		 *  Plugin Name: jQuery toTop for smoothly Scroll back to Top
+		 *  Plugin URL: https://github.com/mmkjony/jQuery.toTop
+		 *  Version: 1.1
+		 *  Author: MMK Jony
+		 *  Author URL: https://github.com/mmkjony
+		 *  License: Licensed under MIT
+		 **/
+		(function( $ ){
+		    'use strict';
+		    
+		    $.fn.toTop = function(opt){
+		        
+		        //variables
+		        var elem = this;
+		        var win = $(window);
+		        var doc = $('html, body');
+		        
+		        //Extended Options
+		        var options = $.extend({
+		            autohide: true,
+		            offset: 420,
+		            speed: 500,
+		            position: true,
+		            right: 15,
+		            bottom: 30
+		        }, opt);
+		        
+		        elem.css({
+		            'cursor': 'pointer'
+		        });
+		        
+		        if(options.autohide){
+		            elem.css('display', 'none');
+		        }
+		        
+		        if(options.position){
+		            elem.css({
+		                'position': 'fixed',
+		                'right': options.right,
+		                'bottom': options.bottom,
+		            });
+		        }
+		        
+		        elem.click(function(){
+		            doc.animate({scrollTop: 0}, options.speed);
+		        });
+		        
+		        win.scroll(function(){
+		            var scrolling = win.scrollTop();
+		            
+		            if(options.autohide){
+		                if(scrolling > options.offset){
+		                    elem.fadeIn(options.speed);
+		                }
+		                else elem.fadeOut(options.speed);
+		            }
+		        });  
+		    };
+		}( jQuery ));
+
+		$(function() {
+			$(function() {
+				$('.doc-to-top').toTop();
+			});
+			$('pre.doc-code-pre').each(function(index, item){
+				var res = $(this).html();
+				res = JSON.parse(res);
+				$(this).html(syntaxHighlight(res));
+			});
+		});
+	</script>
+</body>
+</html>

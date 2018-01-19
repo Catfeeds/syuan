@@ -1,0 +1,40 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb(array('url' => U('Api/response_add', array('api_id' => $api['id'])), 'icon' => 'plus', 'title' => '添加'))}
+		<h5>{$api.name}API返回参数列表</h5>
+		<form method="post" class="js-ajax-form" action="{:U('Api/response_listorder')}">
+			<table class="table table-hover table-bordered table-list treeTable mtop20" id="response-table">
+				<thead>
+					<tr>
+						<th width="60px">排序</th>
+						<th>名称</th>
+						<th>参数类型</th>
+						<th>字段说明</th>
+						<th width="100px">{:L('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{$categorys}
+				</tbody>
+			</table>
+			<div class="table-actions">
+				<button type="submit" class="btn btn-primary btn-small js-ajax-submit">{:L('SORT')}</button>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			Wind.css('treeTable');
+			Wind.use('treeTable', function() {
+				$("#response-table").treeTable({
+					indent : 20,
+					expandLevel : 3
+				});
+			});
+		});
+	</script>
+</body>
+</html>

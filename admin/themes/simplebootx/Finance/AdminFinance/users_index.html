@@ -1,0 +1,55 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form class="well form-search" method="GET" action="{:U('AdminFinance/users_index')}">
+			<input type="text" name="uid" style="width:65px;" value="{$uid}" maxlength="11" placeholder="用户ID">
+			<input type="text" name="mobile" style="width:100px;" value="{$mobile}" maxlength="11" placeholder="用户手机号">
+			产生时间：<input type="text" name="starttime" value="{$starttime}" class="js-date date" style="width:100px;" />-<input style="width:100px;" type="text" name="endtime" value="{$endtime}" class="js-date date" />
+			<select name="typevalue" style="width:100px;">
+				<option value="0">财务类型</option>
+				<foreach name="type" key="key" item="name">
+					<option value="{$key}"<eq name="key" value="$typevalue"> selected </eq>>{$name}</option>
+				</foreach>
+			</select>			
+			<input type="submit" class="btn btn-primary" value="搜索" />
+		</form>
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">序号</th>
+					<th>类型</th>
+					<th>方式</th>
+					<th>金额/元</th>
+					<th>用户</th>
+					<th>订单编号</th>
+					<th>明细</th>
+					<th>产生时间</th>
+					<th>余额变化</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="vo">
+				<tr>
+					<td>{$vo.id}</td>
+					<td>{$type[$vo['type']]}</td>
+					<td>{$vo.category}</td>
+					<td>{$vo.money}</td>
+					<td>{$vo.user_login}<br />{$vo.mobile}</td>
+					<td>{$vo.orderid}</td>
+					<td>{$vo.remark}</td>
+					<td>{$vo.create_at}</td>
+					<td>
+						操作前：{$vo.accountbefore}<br />
+						操作后：{$vo.accountafter}
+					</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

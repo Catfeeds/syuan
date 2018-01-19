@@ -1,0 +1,150 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('Sms/setting')}">基本配置</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-forms" action="{:U('Sms/setting_post')}">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">状态</label>
+					<div class="controls inline">
+						<label class="radio inline"><input type="radio" name="status" value="1" <eq name="options.status" value="1">checked</eq> /> 开启</label>
+						<label class="radio inline"><input type="radio" name="status" value="0" <eq name="options.status" value="0">checked</eq> /> 关闭</label>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">阿里签名</label>
+					<div class="controls">
+						<input type="text" name="signname" placeholder="请输入签名" value="{$options.signname}" required />
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">阿里服务密钥ID</label>
+					<div class="controls">
+						<input type="text" name="accesskeyid" placeholder="请输入密钥ID" value="{$options.accesskeyid}" required />
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">阿里服务密钥</label>
+					<div class="controls">
+						<input type="text" name="accesssecret" placeholder="请输入密钥" value="{$options.accesssecret}" required />
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			Wind.use('validate', 'ajaxForm', 'artDialog', function() {
+				var form = $('form.js-ajax-forms');
+				//表单验证开始
+				form.validate({
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//是否在敲击键盘时验证
+					onkeyup : false,
+					//当鼠标掉级时验证
+					onclick : false,
+					//验证错误
+					showErrors : function(errorMap, errorArr) {
+						//errorMap {'name':'错误信息'}
+						//errorArr [{'message':'错误信息',element:({})}]
+						try {
+							$(errorArr[0].element).focus();
+							art.dialog({
+								id : 'error',
+								icon : 'error',
+								lock : true,
+								fixed : true,
+								background : "#CCCCCC",
+								opacity : 0,
+								content : errorArr[0].message,
+								cancelVal : '确定',
+								cancel : function() {
+									$(errorArr[0].element).focus();
+								}
+							});
+						} catch (err) {
+						}
+					},
+					//验证规则
+					rules : {
+						'signname' : {
+							required : 1
+						},
+						'accesskeyid' : {
+							required : 1
+						},
+						'accesssecret' : {
+							required : 1
+						}
+						
+					},
+					//验证未通过提示消息
+					messages : {
+						'signname' : {
+							required : '请输入签名'
+						},
+						'accesskeyid' : {
+							required : '请输入密钥ID'
+						}
+						'accesssecret' : {
+							required : '请输入密钥'
+						}
+					},
+					//给未通过验证的元素加效果,闪烁等
+					highlight : false,
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//验证通过，提交表单
+					submitHandler : function(forms) {
+						$(forms).ajaxSubmit({
+							url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+							dataType : 'json',
+							beforeSubmit : function(arr, $form, options) {
+
+							},
+							success : function(data, statusText, xhr, $form) {
+								if (data.status) {
+									
+									//添加成功
+									Wind.use("artDialog", function() {
+										art.dialog({
+											id : "succeed",
+											icon : "succeed",
+											fixed : true,
+											lock : true,
+											background : "#CCCCCC",
+											opacity : 0,
+											content : data.info,
+											button : [ {
+												name : '继续编辑？',
+												callback : function() {
+													reloadPage(window);
+													return true;
+												},
+												focus : true
+											}]
+										});
+									});
+								} else {
+									error(data.info);
+								}
+							}
+						});
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<admintpl file="header" />
+    <header class="index-top-header">
+      <h1 class="index-top-title">管理中心</h1>
+    </header>
+    <div class="weui-grids index">
+      <foreach name="menulist" key="key" item="item">
+      <a href="{$item.url}" class="weui-grid js_grid">
+        <div class="weui-grid__icon">
+          <i class="fa fa-{$item.icon}" aria-hidden="true"></i>
+        </div>
+        <p class="weui-grid__label">{$item.name}</p>
+      </a>
+      </foreach>
+    </div>    
+<admintpl file="footer" />

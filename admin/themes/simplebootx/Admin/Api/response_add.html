@@ -1,0 +1,100 @@
+<admintpl file="header"/>
+<style type="text/css">
+.table.api-table-params {
+	margin-left: 20px;
+}
+.table.api-table-params > thead > tr > th {
+	border: none;
+	text-align: center;
+}
+.table.api-table-params > tbody > tr > td {
+	border: none;
+	text-align: center;
+}
+</style>
+</head>
+<body class="need_breadcrumb_back">
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<h5>{$api.name}API返回数据字段</h5>
+		<form action="{:U('Api/response_add_post')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<input type="hidden" name="api_id" value="{$api.id}">
+			<input type="hidden" name="parentid" value="{$parentid}">
+			<div class="row-fluid mtop20">
+				<div class="span8">
+					<table class="table table-list api-table-params">
+						<thead>
+							<tr>
+								<th>顺序</th>
+								<th>参数名称</th>
+								<th>字段说明</th>
+								<th>参数类型</th>
+								<th></th>	
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><input type="text" class="input input-order" name="listorders[]" value="0"></td>
+								<td><input type="text" class="input" style="width: 120px;" name="names[]" value=""></td>
+								<td><input type="text" class="input" style="width: 250px" name="introduces[]" value=""></td>
+								<td>
+									<select name="types[]" style="width: 120px;">
+										<foreach name="types" key="key" item="item">
+											<option value="{$key}">{$item}</option>
+										</foreach>
+									</select>
+								</td>
+								<td>
+									<a class="api-table-params-del-row" style="display: none;" href="javascript:void(0);"><i class="fa fa-close" aria-hidden="true"></i></a>
+								</td>							
+							</tr>
+							<tr><td colspan="5">
+								<a id="plus-row" href="javascript:void(0);"><i class="fa fa-plus" aria-hidden="true"></i>新增一项</a>
+							</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="span4"></div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit"><i class="fa fa-save" aria-hidden="true"></i>{:L("SAVE")}</button>
+				<a class="btn" href="javascript:history.back();"><i class="fa fa-reply" aria-hidden="true"></i>{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('#plus-row').bind('click', function(){
+				$('<tr>' + $('.table.api-table-params > tbody > tr:first').html() + '</tr>').insertBefore($(this).parent().parent());
+				$(this).parent().parent().prev().find('a.api-table-params-del-row').css('display', '');
+				$(this).parent().parent().prev().find('a.api-table-params-del-row').bind('click', function(){
+					if($('.table.api-table-params > tbody > tr').length > 2) {
+						$(this).parent().parent().remove();
+					} else {
+						error('请至少保留一行');
+					}
+					return false;
+				});
+				return false;
+			});
+			ajaxFormSubmitInit({}, {}, [{
+	                	name : '继续添加？',
+		                callback : function() {
+		                    reloadPage(window);
+		                    return true;
+		                },
+		                focus : true
+		            }, {
+		                name : '返回列表',
+		                callback : function() {
+		                    location.href = "{:U('Api/response', array('api_id' => $api['id']))}";
+		                    return true;
+		                }
+		            }
+	            ]
+            );
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<admintpl file="header" />
+</head>
+<body class="J_scroll_fixed">
+	<div class="wrap jj">
+		<div class="common-form">
+			<table class="table table-bordered table-condensed">
+				<tr>
+					<td width="100">所属客服</td>
+					<td width="240">{$users[$order['userid']]}</td>
+					<td width="100">创建时间</td>
+					<td>{$order.create_at}</td>
+				</tr>
+				<tr>
+					<td>客户</td>
+					<td>{$order.customer}</td>
+					<td>联系方式</td>
+					<td>{$order.phone}</td>
+				</tr>
+				<tr>
+					<td>邮寄地址</td>
+					<td>{$order.address}</td>
+					<td>快递信息</td>
+					<td>{$order.expressno}</td>
+				</tr>
+				<tr>
+					<td>总价</td>
+					<td>￥{$order.total}</td>
+					<td>成本</td>
+					<td>￥{$order.cost}</td>
+				</tr>
+				<tr>
+					<td>已付</td>
+					<td>￥{$order.amount} <if condition="$order['amount'] lt $order['total']"> (<span class="orders1">￥{$order['total'] - $order['amount']}</span>)</if></td>
+					<td>状态</td>
+					<td><span class="orders{$order.status}">{$status[$order['status']]}</span></td>
+				</tr>
+				<tr>
+					<td>是否完成</td>
+					<td><eq name="order.isfinish" value="1"><span class="green">已完成</span> 【审核人:{$users[$order['mod_userid']]}】<else /> X </eq></td>
+					<td>完成时间</td>
+					<td><eq name="order.isfinish" value="1">{$order.finishtime}<else /> X </eq></td>
+				</tr>
+				<tr>
+					<td>备注</td>
+					<td colspan="3">{$order.remark}</td>
+				</tr>
+				<tr>
+					<td>出售号码</td>
+					<td colspan="3" style="padding:0px;">
+						<table class="table table-condensed" style="margin:0px;">
+							<thead>
+							<tr>
+							  <th width="50">#</th>
+							  <th>所购号码</th>
+							  <th width="90">售价(元)</th>
+							  <th width="120">成本价(元)</th>
+							</tr>
+						  </thead>
+						  <tbody>
+							<foreach name="productlist" item="vo">
+							<tr>
+							  <td style="border-left:0px;">{$key+1}</td>
+							  <td>{$vo.phone}</td>
+							  <td>￥{$vo.price}</td>
+							  <td>￥{$vo.cost}</td>
+							</tr>
+							</foreach>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<notempty name="billlist">
+			<table class="table table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th width="80">付款金额</th>
+						<th width="120">付款时间</th>
+						<th width="100">付款方式</th>
+						<th width="80">录单人</th>
+						<th width="80">到账情况</th>
+						<th width="80">查账人员</th>
+						<th>备注</th>
+					</tr>
+				</thead>
+				<tbody>
+				<foreach name="billlist" item="vo">
+					<tr>
+						<td><lt name="vo.amount" value="0"><span class="red">￥{$vo.amount}</span><else />￥{$vo.amount}</lt></td>
+						<td>{$vo.paytime}</td>
+						<td>{$vo.paytype}</td>
+						<td>{$users[$vo['add_userid']]}</td>
+						<td><span class="orderb{$vo['status'] + 1}">{$billstatus[$vo['status']]}</span></td>
+						<td><gt name="vo.mod_userid" value="0">{$users[$vo['mod_userid']]}</gt></td>
+						<td>{$vo.remark}</td>
+					</tr>
+				</foreach>
+				</tbody>
+			</table>
+			</notempty>
+		</form>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+<?phprequire_once 'phpqrcode.php';$url = urldecode($_GET["data"]);QRcode::png($url, false, 20, 15);

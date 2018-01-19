@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>{$site_name}-{$company.name}</title>
+		<link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+		<link rel="stylesheet" type="text/css" href="__TMPL__Qrcode/Public/css/style.css?8664"/>
+	</head>
+	<body>
+		<if condition="$pics">
+		<div class="banner">
+			<div class="swiper-container swiper-container-horizontal">
+				<div class="swiper-wrapper" style="transform: translate3d(-640px, 0px, 0px); transition-duration: 0ms;">
+					<foreach name="pics" item="vo" key="k">
+					<div class="swiper-slide" data-swiper-slide-index="{$k}">
+						<img src="{:sp_get_asset_upload_path($vo['url'])}">
+					</div>
+					</foreach>
+				</div>
+				<div class="swiper-pagination swiper-pagination-bullets">
+					<foreach name="pics" item="vo" key="k">
+						<span class="swiper-pagination-bullet"></span>
+					</foreach>
+				</div>
+			</div>
+		</div>
+		</if>
+
+		<if condition="!empty($redbag)">
+		<div class="Packet">
+			<div class="main">
+				<div class="opacity"></div>
+				<if condition="$xianshi eq 1">
+				<div class="red-bg">
+					<div class="red"><img src="/themes/simplebootx/Qrcode/Public/images/asd.png"></div>
+				</div>
+				<elseif condition="$xianshi eq 3"/>
+					<div class="out-red-bg">
+						<div class="out-red"><img src="/themes/simplebootx/Qrcode/Public/images/hongbao2.jpg"></div>
+					</div>
+				<else/>
+					<div class="out-red-bg">
+						<div class="out-red"><img src="/themes/simplebootx/Qrcode/Public/images/hongbao1.jpg"></div>
+					</div>
+				</if>
+				<div class="windows" id="redbag-faild">
+					<div class="windows-img">
+						<img src="/themes/simplebootx/Qrcode/Public/images/bugao.png" />
+					</div>
+					<div class="text2" id="redbag-faild-message">不好意思，您没有中奖</div>
+					<div class="close"><img src="/themes/simplebootx/Qrcode/Public/images/close.png" /></div>
+				</div>
+				<div class="windows" id="redbag-success">
+					<div class="windows-img">
+						<img src="/themes/simplebootx/Qrcode/Public/images/gao.png" />
+					</div>
+					<div class="text2" id="redbag-success-message">恭喜您中奖了！</div>
+					<div class="close"><img src="/themes/simplebootx/Qrcode/Public/images/close.png" /></div>
+				</div>
+				<div class="Packet-text">
+					<if condition="$xianshi eq 1">
+						<p>您有一个红包可以领取</p>
+					<elseif condition="$xianshi eq 3"/>
+						<p>{$redbag['msg']}</p>
+					<else/>
+						<p>本批次红包已被领完</p>
+					</if>
+					<eq name="order.showdraw" value="1"><p>已领取 <span>{$redbag['winnum']}</span> 人</p></eq>
+					<eq name="order.showleft" value="1"><p>剩余红包 <span>{$redbag['leftnum']}</span> 个</p></eq>
+					<eq name="order.showendtime" value="1"><p>红包到期日期： <span>{$redbag['endtime']}</span> </p></eq>
+				</div>
+			</div>
+		</div>
+		</if>
+
+		<div class="wrap">
+			<div class="tab">
+				<ul class="tab-hd">
+					<if condition="$hide">
+						<li style="width:100%">公司信息</li>
+					<else/>
+						<li class="active">产品信息</li>
+						<li>公司信息</li>
+					</if>
+				</ul>
+					<if condition="$hide">
+				<ul class="tab-bd">
+						<li class="thisclass">
+							<div class="part">
+								<div class="title">
+									公司简介
+								</div>
+								<div class="part-text">
+									{$company.about|htmlspecialchars_decode}
+								</div>
+							</div>
+							<div class="part">
+								<div class="title">
+									企业文化
+								</div>
+								<div class="part-text">
+									{$company.culture|htmlspecialchars_decode}
+								</div>
+							</div>
+
+							<div class="part">
+								<div class="title">
+									资质荣誉
+								</div>
+								<div class="part-text">
+									<php>
+										$imgs = json_decode($company['honor'],true);
+									</php>
+									<foreach name="imgs" item="vo">
+										<p style="margin-top: 5px;"><img src="{:sp_get_asset_upload_path($vo['url'])}"/></p>
+									</foreach>
+								</div>
+							</div>
+							<div class="part">
+								<div class="title">
+									形象展示
+								</div>
+								<div class="part-text">
+									<php>
+										$imgs = json_decode($company['pics'],true);
+									</php>
+									<foreach name="imgs" item="vo">
+										<p style="margin-top: 5px;"><img src="{:sp_get_asset_upload_path($vo['url'])}"/></p>
+									</foreach>
+								</div>
+							</div>
+						</li>
+				</ul>
+					<else/>
+				<ul class="tab-bd">
+						<li class="thisclass">
+							<div class="part">
+								<div class="title" id="qrorder-info" data-view_id="{$view_id}">
+									<if condition="$category['xxlb']">
+
+										{$category['xxlb']}
+
+									</if>
+								</div>
+								<div class="part-text">
+									<if condition="$category['mr1']">
+
+										{$category['mr1']}：{$order.depart}<br/>
+
+									</if>
+									<php>$number=1;</php>
+									<foreach name="trace" item="val">
+										<if condition="$val.identity eq '厂家'">
+											<span style="color:#c1191e;"><php>echo $number;</php>、</span>{$comname[$val['company']]['name']}<br/><neq name="order.typedate" value="0000-00-00">（生产日期：{$order.typedate}）</neq>销往地（{$val.province}{$val.city}{$val.sendtime}）<br/>
+											<php>$number++;</php>
+										</if>
+									</foreach>
+
+									<foreach name="trace" item="val">
+										<if condition="$val.identity neq '厂家'">
+											<span style="color:#c1191e;"><php>echo $number;</php>、</span></font>{$comname[$val['company']]['name']}<br/>（时间：{$val.createtime}）<br/>
+											<php>$number++;</php>
+										</if>
+									</foreach>
+								</div>
+							</div>
+
+							<if condition="$qrcode['scunitcode']">
+								<div class="part">
+									<div class="title">
+										产品单元识别代码
+									</div>
+									<div class="part-text">
+										{$qrcode.scunitcode}
+									</div>
+								</div>
+							</if>
+
+							<div class="part">
+								<div class="title">
+									{$product.name}
+								</div>
+								<div class="part-text">
+									<h3>基本信息</h3>
+									{$product.description|htmlspecialchars_decode}
+								</div>
+							</div>
+
+							<if condition="$order.typedate neq '0000-00-00'">
+								<div class="part">
+									<div class="title">
+										生产日期
+									</div>
+									<div class="part-text">
+										{$order.typedate}
+									</div>
+								</div>
+							</if>
+							<?php
+						if($order['types'] && $order['typesdate']!='0000-00-00') {
+						?>
+							<div class="part">
+								<div class="title">
+									{$order.types}
+								</div>
+								<div class="part-text">
+									<?php
+								echo $order['typesdate'];
+								if($order['typesdate']!='0000-00-00' &&  strtotime($order['typesdate']) < time() && $order['types'] == '过期日期') {
+									echo '该产品已过期，请勿使用。';
+								}
+								?>
+								</div>
+							</div>
+							<?php
+							}
+						?>
+							<if condition="$category['mr2']">
+
+								<div class="part">
+
+									<div class="title">
+
+										{$category['mr2']}
+
+									</div>
+
+									<div class="part-text">
+
+										{$order.tech|htmlspecialchars_decode}
+
+									</div>
+
+								</div>
+
+							</if>
+							<if condition="$category['field1']">
+								<div class="part">
+									<div class="title">
+										{$category['field1']}
+									</div>
+									<div class="part-text">
+										{$order.field1|htmlspecialchars_decode}
+									</div>
+								</div>
+							</if>
+							<if condition="$category['field2']">
+								<div class="part">
+									<div class="title">
+										{$category['field2']}
+									</div>
+									<div class="part-text">
+										{$order.field2|htmlspecialchars_decode}
+									</div>
+								</div>
+							</if>
+						</li>
+
+						<li>
+							<div class="part part2">
+								<div class="title">
+									公司简介
+								</div>
+								<div class="part-text">
+									{$company.about|htmlspecialchars_decode}
+								</div>
+							</div>
+							<div class="part part2">
+								<div class="title">
+									企业文化
+								</div>
+								<div class="part-text">
+									{$company.culture|htmlspecialchars_decode}
+								</div>
+							</div>
+
+							<div class="part part2">
+								<div class="title">
+									资质荣誉
+								</div>
+								<div class="part-text">
+									<php>
+										$imgs = json_decode($company['honor'],true);
+									</php>
+									<foreach name="imgs" item="vo">
+										<p style="margin-top: 5px;"><img src="{:sp_get_asset_upload_path($vo['url'])}"/></p>
+									</foreach>
+								</div>
+							</div>
+							<div class="part part2">
+								<div class="title">
+									形象展示
+								</div>
+								<div class="part-text">
+									<php>
+										$imgs = json_decode($company['pics'],true);
+									</php>
+									<foreach name="imgs" item="vo">
+										<p style="margin-top: 5px;"><img src="{:sp_get_asset_upload_path($vo['url'])}"/></p>
+									</foreach>
+								</div>
+							</div>
+						</li>
+				</ul>
+					</if>
+
+
+			</div>
+		</div>
+
+		<div class="footer">
+			<if condition="$company_user['website']"><a href="{$company_user['website']}">进店看看</a><else />技术支持：大友印相</if>
+		</div>
+
+		<div class="potion">
+			<img src="/themes/simplebootx/Qrcode/Public/images/true_tel.png" usemap="#true_tel">
+			<map name="true_tel" id="true_tel">
+				<area shape="rect" coords="0,0,50,50" href="#" onclick="zhenpin();">
+				<area shape="rect" coords="0,52,100,100" href="tel:{$company.phone}" >
+			</map>
+		</div>
+
+		<script type="text/javascript" src="__TMPL__Qrcode/Public/js/jquery.min.js"></script>
+		<script type="text/javascript">
+            var count = 1;
+            var zhenpin_time = "{$qrcode['zhenpin_time']}";
+            function zhenpin(){
+                if(zhenpin_time == '0'){
+                $.post("{:leuu('Qrcode/Company/update_zhenwei')}",
+                    {id:"{$qrcode['id']}",code:"{$qrcode['code']}"},
+                    function(data){alert(data.msg);zhenpin_time=data.time;count++;},'json');
+                }else{
+                    if(count==1){
+                        alert("您购买的是真品！当前产品已于{$qrcode['zhenpin_time']|date='Y-m-d H:m:s',###}查证！");
+                    }else {
+                        alert("您购买的是真品！当前产品已于"+zhenpin_time+"查证！");
+                    }
+
+                }
+            }
+			$(function() {
+				function tabs(tabTit, on, tabCon) {
+					$(tabTit).children().click(function() {
+						$(this).addClass(on).siblings().removeClass(on);
+						var index = $(tabTit).children().index(this);
+						$(tabCon).children().eq(index).show().siblings().hide();
+					});
+				};
+				tabs(".tab-hd", "active", ".tab-bd");
+			});
+		</script>
+		<script src="http://cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+		<script src="http://cdn.bootcss.com/jquery-weui/1.0.1/js/swiper.min.js"></script>
+		<script src="http://cdn.bootcss.com/jquery-weui/1.0.1/js/city-picker.min.js"></script>
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_1271612451'%3E%3C/span%3E%3Cscript  src='" + cnzz_protocol + "s19.cnzz.com/stat.php%3Fid%3D1271612451%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+		<script charset="utf-8" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js?v=<php>echo time();</php>" type="text/javascript"></script>
+		<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=f57ed64590e8bbc591180c98516bcd10&plugin=AMap.Geocoder"></script>
+		<script type="text/javascript">
+            var view_id = $('#qrorder-info').data('view_id');
+            if(view_id > 0) {
+                wx.config(<?php echo $wechat_js->config(array('getLocation'));?>);
+                wx.ready(function(){
+                    wx.getLocation({
+                        type: 'wgs84',
+                        success: function (res) {
+                            var latitude = res.latitude;
+                            var longitude = res.longitude;
+                            lnglatXY = [longitude, latitude];
+                            var geocoder = new AMap.Geocoder({
+                                radius: 1000,
+                                extensions: "all"
+                            });
+                            geocoder.getAddress(lnglatXY, function(status, result) {
+                                if (status === 'complete' && result.info === 'OK') {
+                                    var city = result.regeocode.addressComponent.city;
+                                    var province = result.regeocode.addressComponent.province;
+                                    if(city && province) {
+                                        $.post("{:leuu('Qrcode/Company/update_view')}",
+                                            {view_id:view_id,city:city,province:province,latitude:latitude,longitude:longitude},
+                                            function(data){},'json');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+		</script>
+		<script>
+			$(function() {
+				$(".swiper-container").swiper();
+			})
+		</script>
+		<script>
+			$(".swiper-container").swiper({
+				loop: true,
+				autoplay: 3000
+			});
+		</script>
+
+		<script>
+			$(function() {
+				$(".red").click(function() {
+					$(this).addClass("shake");
+					setTimeout(function() {
+						$(".red").removeClass("shake");
+						$(".opacity").fadeIn();
+						$.get("{:U('Qrcode/Company/openbag', array('id' => $qrcode['id'], 'code' => $qrcode['code']))}", function(data) {
+								if(data.result) {
+									$('#redbag-success-message').html('<font size="3" face="arial">'+data.msg+'</font>');
+									$("#redbag-success").fadeIn();
+								} else {
+									$('#redbag-faild-message').html('<font size="3" face="arial">'+data.msg+'</font>');
+									$("#redbag-faild").fadeIn();
+								}
+						}, 'json');
+
+					}, 2000);
+				});
+				$(".close").click(function() {
+					$(this).parent().fadeOut();
+					$(".opacity").fadeOut();
+					//alert("刷新！！");
+					window.location.reload();
+				});
+			})
+		</script>
+	</body>
+</html>

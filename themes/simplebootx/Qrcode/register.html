@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>注册-{$site_name}</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+
+<tc_include file="Public:head" />
+</head>
+
+<body class="body-white">
+	<tc_include file="Public:nav" />
+	<div class="container tc-main">
+		<div class="row">
+			<div class="span7 offset2">
+				<h2 class="text-center">用户注册</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span10 offset2">
+				<div class="tab-content">
+					<div class="tab-pane active">
+						<form class="form-horizontal register-form" action="{:leuu('user/register/doregister')}" method="post" data-ckusernameurl="{:leuu('user/register/checkusername')}" data-ckemailurl="{:leuu('user/register/checkemail')}" data-ckmobileurl="{:leuu('user/register/checkmobile')}" >
+							<div class="control-group">
+							  <label class="control-label" for="inputUsername">登录名</label>
+							  <div class="controls">
+								<input type="text" id="inputUsername" name="username" maxlength="15" placeholder="请输入登录名" class="span4">
+								<span class="help-inline"></span>
+							  </div>
+							</div>
+							 
+							<div class="control-group">
+							  <label class="control-label" for="inputEmail">邮箱</label>
+							  <div class="controls">
+								<input type="text" id="inputEmail" name="email" placeholder="建议使用常用邮箱" class="span4">
+								<span class="help-inline"></span>
+							  </div>
+							</div> 
+							<div class="control-group">
+							  <label class="control-label" for="inputPass">密码</label>
+							  <div class="controls">
+								<input type="password" id="inputPass" name="password" placeholder="建议至少两种字符组合" class="span4">
+								<span class="help-inline"></span>
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="inputMobile">手机号</label>
+							  <div class="controls">
+								<input type="text" id="inputMobile" name="mobile" placeholder="建议使用常用手机" maxlength="11" class="span4">
+								<span class="help-inline"></span>
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="inputMobileCode">验证码</label>
+							  <div class="controls">
+									<input type="text" id="inputMobileCode" maxlength="6" name="mobile_verify" placeholder="手机验证码" style="width:100px;">
+									<a class="btn btn-success" id="getmobilecode" style="width: 110px;">获取手机验证码</a>
+									<span class="help-inline"></span>
+							  </div>
+							</div>
+							<div class="control-group">
+								<label class="control-label"></label>
+								<div class="controls">
+									<button class="btn btn-primary js-ajax-submit span4" type="submit" data-wait="1500" style="margin-left: 0px;">确定注册</button>
+								</div>
+							</div>
+							<div class="control-group" style="text-align: center;">
+								<p>
+									已有账号? <a href="{:leuu('user/login/index')}">点击此处登录</a>
+								</p>
+							</div>
+						</form>
+					</div>
+				</div>	
+			</div>
+		</div>
+<div class="modal imgcodemodal hide"  id="imgcodeModal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<strong>请输入图片验证码</strong>
+	</div>
+	<div class="modal-body">
+		<div style="text-align:center;">
+			{:sp_verifycode_img('length=4&font_size=16&width=180&height=40&charset=1234567890&use_noise=1&use_curve=1')}
+			<input type="text" id="imgcodeverify" placeholder="图片验证码" style="width:166px;">
+			<div class="text-error"></div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="javascript:void(0);" data-url="{:leuu('api/mobileverify/send')}" id="imgcodebtn" class="btn btn-primary">确定</a>
+	</div>
+</div>
+		<tc_include file="Public:footer" />
+	</div>
+	<tc_include file="Public:scripts" />
+	<script src="__TMPL__Public/js/passport.js"></script>
+</body>
+</html>

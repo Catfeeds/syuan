@@ -1,0 +1,13 @@
+<foreach name="list" item="item">
+  <a href="{:UU('Finance/Wechat/balancedetail', array('id' => $item['id']))}" class="weui-media-box weui-media-box_appmsg">
+    <div class="weui-media-box__bd">
+      <h4 class="weui-media-box__title">{$item.remark}</h4>
+      <p class="weui-media-box__desc">{$item.create_at}</p>
+    </div>
+    <gt name="item.accountafter" value="$item['accountbefore']"> 
+      <span class="weui-cell__ft add">+{$item.money}</span>
+    <else/>
+      <span class="weui-cell__ft minus">-{$item.money}</span>
+    </gt>
+  </a>
+</foreach>

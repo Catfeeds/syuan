@@ -1,0 +1,56 @@
+﻿* { padding: 0; margin: 0; }
+html{font: normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;}
+ul { list-style: none; }
+a { text-decoration: none; }
+a:hover { text-decoration: none; }
+.mg-margin { margin-top: 0 !important; }
+.t_center{ text-align:center}
+p, h1, h2, h3, h4, h5, h6, small, div, li, a { font-family: "Microsoft YaHei" !important; color: #999999; }
+
+.top { background: #d90000; padding: 10px; }
+.top .placeholder { color: #fff; text-align: center; font-size: 1.2em }
+.top .top-left a { display: block; }
+.top .top-left img { height: 24px; }
+.top .top-right { font-size: 1em; color: #fff; }
+/*个人中心*/
+.ID-top { overflow: hidden; border-bottom: 10px solid #f5f5f5; padding: 4%; }
+.ID-top .headimg { padding-top: 1%; width: 25%; }
+.ID-top .headimg img { border-radius: 50%; width: 100%; }
+.ID-top .user_name { width: 75%; color: #000000; margin-top: 3%; margin-left: 10px; }
+.ID-top .user_name h4 { margin: 10px 0 0 0; font-size: 16px;line-height: 22px;font-weight: normal;color: #999999; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.ID-ul { }
+.ID-ul p { margin: 0; }
+.ID-ul a { display: block; overflow: hidden; }
+.ID-ul .weui-cell { padding: 15px 25px; ; }
+.ID-ul .weui-cells { margin-top: 0; }
+.ID-ul-img i { float: left; width: 50px; height: 50px; }
+.ID-ul-img i img { width: 100%; }
+.ID-ul-img p { float: left; font-size: 1.1em; line-height: 50px; margin-left: 5%; color: #000000; }
+.ID-ul-red { }
+.ID-ul-red p{ margin-top:12px;color: #D90000; padding-right:10px;}
+.ID-ul .weui-cell_access .weui-cell__ft.ID-ul-red:after{ margin-top:-5px;}
+.ID-ul .weui-cell_access .weui-cell__ft:after { width: 10px; height: 10px; margin-top: 20px; }
+.ID-ul hr { border-top: 10px solid #f5f5f5; margin: 0; }
+.ID-ul .weui-cells:before { border-top: none; }
+/*我的零钱*/
+.money_icon{ padding-top:10%; }
+.money_icon img{ width:35%; height:auto;}
+.money_title{ color:#000; font-size:1.2em;}
+.money_contact{color:#000; font-size:3em;}
+
+.detail .weui-media-box:before{ left:0;}
+.detail .weui-panel{ margin:0;}
+.detail .weui-media-box__title{ font-size:1.1em; color:#000;}
+.detail .weui-media-box__desc{ font-size:0.6em; color: #999;}
+.detail .weui-cell__ft.add{ font-size:1.5em; color:#13ca00;}
+.detail .weui-cell__ft.minus{font-size:1.5em; color:#000;}
+.contact .add{color:#13ca00;}
+.contact .minus{color:#000;}
+.contact .nr{color:#000;}
+.contact .weui-form-preview__hd:after{ left:0;}
+.spread_haed { background:#fa3433; height:130px;  padding-top:20px;}
+.spread_haed span{ font-size:3em;color:#fff;}
+.spread_haed p{color:#fff;}
+.spread_title{ background:#eeeeee;}
+.spread_title .weui-cell__bd p{ color:#000;}
+.share_img img{ width:100%; height:auto; display:block;}

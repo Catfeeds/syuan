@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+		<title>早起打卡</title>
+		<link rel="stylesheet" href="//cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="//cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+		<link rel="stylesheet" type="text/css" href="__TMPL__Public/css/morning.css" />
+	</head>
+
+	<body class="share-body">
+		<div class="share" <notempty name="background">style="background-image:url({$background})";</notempty>>
+			<div class="share-top">
+				<h3>{$sign.name}</h3>
+				<h4>{$sign.sign_at}早起打卡</h4>
+			</div>
+			<div class="share-contont">
+				<img src="<empty name="sign.avatar">__TMPL__/Public/images/headicon_128.png<else/>{$sign.avatar}</empty>"/>
+				<div style="clear: both;"></div>
+				<div class="share-groud">
+					<div class="share-part">
+						<p>起床时间</p>
+						<h3>{$sign.getup_at}</h3>
+					</div>
+					
+					<div class="share-part">
+						<p>连续早起天数</p>
+						<h3>{$sign.days}</h3>
+					</div>
+					
+					<div class="share-part">
+						<p>今日击败</p>
+						<h3>{$sign.percent}%</h3>
+					</div>
+				</div>
+			</div>
+			<div class="description">
+				<empty name="tip">晨光是手中的金子<else/>{$tip}</empty>
+			</div>
+			<div class="share-groud share-er" style="overflow: hidden;">
+				<div class="share-wrap">
+					<img src="{$sign.qrcode}"/>
+				</div>
+				<div class="share-wrap">
+					<img src="__TMPL__Public/images/zhiwen.png"/>
+				</div>
+			</div>
+			<div class="description share-color">
+				长按图片扫描二维码即可参加早起打卡活动
+			</div>
+		</div>
+	</body>
+</html>

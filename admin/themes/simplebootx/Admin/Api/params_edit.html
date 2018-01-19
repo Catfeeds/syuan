@@ -1,0 +1,87 @@
+<admintpl file="header"/>
+</head>
+<body class="need_breadcrumb_back">
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form action="{:U('Api/params_edit_post')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<input type="hidden" name="id" value="{$param.id}">
+			<div class="row-fluid mtop20">
+				<div class="span7">
+					<fieldset class="width80p">
+						<div class="control-group">
+							<label class="control-label">参数名称</label>
+							<div class="controls">
+								<input type="text" name="name" value="{$param.name}" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">参数说明</label>
+							<div class="controls">
+								<input type="text" name="introduce" value="{$param.introduce}" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">参数类型</label>
+							<div class="controls">
+								<select name="type">
+									<foreach name="types" key="id" item="name">
+										<option value="{$id}" <eq name="id" value="$param.type">selected</eq>>{$name}</option>
+									</foreach>
+								</select>								
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">是否必填</label>
+							<div class="controls">
+								<label class="checkbox">
+								  <input type="checkbox" name="must" value="1" <eq name="param.must" value="1">checked</eq>>是
+								</label>
+							</div>							
+						</div>
+						<div class="control-group">
+							<label class="control-label">默认值</label>
+							<div class="controls">
+								<input type="text" name="default" value="{$param.default}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">顺序</label>
+							<div class="controls">
+								<input type="text" name="listorder" value="{$param.listorder}">
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="span5"></div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit"><i class="fa fa-save" aria-hidden="true"></i>{:L("SAVE")}</button>
+				<a class="btn" href="{:U('Api/params', array('api_id' => $param['api_id']))}"><i class="fa fa-reply" aria-hidden="true"></i>{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			ajaxFormSubmitInit({}, {}, [{
+	                	name : '继续编辑？',
+		                callback : function() {
+		                    reloadPage(window);
+		                    return true;
+		                },
+		                focus : true
+		            }, {
+		                name : '返回列表',
+		                callback : function() {
+		                    location.href = "{:U('Api/params', array('api_id' => $param['api_id']))}";
+		                    return true;
+		                }
+		            }
+	            ]
+            );
+		});
+	</script>
+</body>
+</html>

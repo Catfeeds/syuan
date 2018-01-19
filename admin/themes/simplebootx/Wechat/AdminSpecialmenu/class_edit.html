@@ -1,0 +1,167 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap ">
+		<form action="{:U('AdminSpecialmenu/class_edit_post')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">规则名称</label>
+					<div class="controls">
+						<input type="text" name="name" required value="{$classinfo.name}"><span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">用户组</label>
+					<div class="controls">
+						<select name="group_id">
+							<option value="">选择用户组</option>
+							<foreach name="labels" item="l">
+							<option value="{$l.labelid}"<eq name="classinfo.group_id" value="$l['labelid']"> selected </eq>>{$l.name}</option>
+							</foreach>
+						</select>
+						<p>若与公众号中的不一样可以点击进入【分组管理】去同步用户组后再来这里。（推荐先同步后来设置）（可以不做设置）</p>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">性别</label>
+					<div class="controls">
+						<select name="sex">
+							<option value="0"<eq name="classinfo.sex" value="0"> selected </eq>>选择性别</option>
+							<option value="1"<eq name="classinfo.sex" value="1"> selected </eq>>男</option>
+							<option value="2"<eq name="classinfo.sex" value="2"> selected </eq>>女</option>
+						</select>（可以不做设置）
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">手机操作系统</label>
+					<div class="controls">
+						<select name="client_platform_type">
+							<option value="">选择手机操作系统</option>
+							<foreach name="client_platform_type" key="value" item="name">
+							<option value="{$value}"<eq name="classinfo.client_platform_type" value="$value"> selected </eq>>{$name}</option>
+							</foreach>
+						</select>（可以不做设置）
+					</div>
+				</div>
+				
+			</fieldset>
+		    <div class="form-actions">
+				<input type="hidden" name="catid" value="{$classinfo.catid}" />
+		     	<button class="btn btn-primary js-ajax-submit"type="submit">保存</button>
+		    </div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			/////---------------------
+			Wind.use('validate', 'ajaxForm', 'artDialog', function() {
+				//javascript
+	
+				var form = $('form.js-ajax-forms');
+				//ie处理placeholder提交问题
+				if ($.browser.msie) {
+					form.find('[placeholder]').each(function() {
+						var input = $(this);
+						if (input.val() == input.attr('placeholder')) {
+							input.val('');
+						}
+					});
+				}
+	
+				var formloading = false;
+				//表单验证开始
+				form.validate({
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//是否在敲击键盘时验证
+					onkeyup : false,
+					//当鼠标掉级时验证
+					onclick : false,
+					//验证错误
+					showErrors : function(errorMap, errorArr) {
+						//errorMap {'name':'错误信息'}
+						//errorArr [{'message':'错误信息',element:({})}]
+						try {
+							$(errorArr[0].element).focus();
+							art.dialog({
+								id : 'error',
+								icon : 'error',
+								lock : true,
+								fixed : true,
+								background : "#CCCCCC",
+								opacity : 0,
+								content : errorArr[0].message,
+								cancelVal : '确定',
+								cancel : function() {
+									$(errorArr[0].element).focus();
+								}
+							});
+						} catch (err) {
+						}
+					},
+					//验证规则
+					rules : {
+						'name' : {required : true}
+					},
+					//验证未通过提示消息
+					messages : {
+						'name' : {required : '请输入规则名称'}
+					},
+					//给未通过验证的元素加效果,闪烁等
+					highlight : false,
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//验证通过，提交表单
+					submitHandler : function(forms) {
+						if (formloading)
+							return;
+						$(forms).ajaxSubmit({
+							url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+							dataType : 'json',
+							beforeSubmit : function(arr, $form, options) {
+								formloading = true;
+							},
+							success : function(data, statusText, xhr, $form) {
+								formloading = false;
+								if (data.status) {
+									
+									//添加成功
+									Wind.use("artDialog", function() {
+										art.dialog({
+											id : "succeed",
+											icon : "succeed",
+											fixed : true,
+											lock : true,
+											background : "#CCCCCC",
+											opacity : 0,
+											content : data.info,
+											button : [ {
+												name : '继续编辑？',
+												callback : function() {
+													reloadPage(window);
+													return true;
+												},
+												focus : true
+											}, {
+												name : '返回列表',
+												callback : function() {
+													parent.location.reload();
+													return true;
+												}
+											} ]
+										});
+									});
+								} else {
+									error(data.info);
+								}
+							}
+						});
+					}
+				});
+			});
+			////-------------------------
+		});
+	</script>
+</body>
+</html>

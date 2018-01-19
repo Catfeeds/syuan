@@ -1,0 +1,120 @@
+<admintpl file="header"/>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form method="post" class="form-horizontal js-ajax-forms" action="{:U('AdminMorning/config')}">
+			<fieldset class="mtop20">
+				<div class="control-group">
+					<label class="control-label">开启活动</label>
+					<div class="controls">
+						<label class="radio inline">
+						  	<input type="radio" name="status" value="1" <eq name="config.status" value="1">checked</eq>>
+						 	开启
+						</label>
+						<label class="radio inline">
+							<input type="radio" name="status" value="0" <eq name="config.status" value="0">checked</eq>>
+						  	关闭
+						</label>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">打卡时间段</label>
+					<div class="controls">
+						<input type="text" class="span1" name="starttime" placeholder="开始时间" value="{$config.starttime}" required />
+						- <input type="text" class="span1" name="endtime" placeholder="结束时间" value="{$config.endtime}" required />
+						<span class="form-required text-warning">*(请勿随意更改, 更改需要配合更新服务器cron任务)</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">挑战开启客服消息提醒</label>
+					<div class="controls">
+						<textarea name="success_sign_tip" class="span4" rows="5" required>{$config.success_sign_tip}</textarea>
+						<span class="form-required text-warning">*(发送时会自动加一行“去打卡”链接, #datetime#为次日打卡时间段)</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">每晚挑战客服消息提醒</label>
+					<div class="controls">
+						<textarea name="need_sign_tip" class="span4" rows="5" required>{$config.need_sign_tip}</textarea>
+						<span class="form-required text-warning">*(发送时会自动加一行“参加挑战”链接)</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">早起打卡客服消息提醒</label>
+					<div class="controls">
+						<textarea name="wake_sign_tip" class="span4" rows="5" required>{$config.wake_sign_tip}</textarea>
+						<span class="form-required text-warning">*(发送时会自动加一行“去打卡”链接, #timeleft#为打卡剩余时间, #endtime#为打卡结束时间)</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">打卡成功客服消息提醒</label>
+					<div class="controls">
+						<textarea name="ok_sign_tip" class="span4" rows="5" required>{$config.ok_sign_tip}</textarea>
+						<span class="form-required text-warning">*(发送时会自动加一行“参加明日打卡”链接, #endtime#为打卡结束时间, #days#为连续打卡天数)</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">打卡失败客服消息提醒</label>
+					<div class="controls">
+						<textarea name="fail_sign_tip" class="span4" rows="5" required>{$config.fail_sign_tip}</textarea>
+						<span class="form-required text-warning">*(发送时会自动加一行“不服！继续挑战”链接, #date为打卡日期, #ok_num#为挑战成功人数, #amount#为参战金)</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">生成分享图片文字</label>
+					<div class="controls">
+						<textarea name="share_message" class="span4" rows="5" required>{$config.share_message}</textarea>
+						<span class="form-required text-warning">*(每行一条, 随机展示)</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">生成分享图片背景图片(420*420px, 随机展示)</label>
+					<div class="controls">
+						<ul class="webuploaderlist">
+							<li id="photos">
+								<img src="__TMPL__Public/assets/images/uploader.png" />
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/uploader.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			webupload('photos', 'photos_url', false<notempty name="config.share_backgroundimages">, '<foreach name="config.share_backgroundimages" item="vo"><gt name="key" value="0">,</gt>{:sp_get_asset_upload_path($vo)}</foreach>'</notempty>);
+			ajaxFormSubmitInit({
+				'starttime' : {required : 1},
+				'endtime': {required : 1},
+				'success_sign_tip': {required: 1},
+				'need_sign_tip': {required: 1},
+				'wake_sign_tip': {required: 1},
+				'ok_sign_tip': {required: 1},
+				'fail_sign_tip': {required: 1}
+			}, {
+				'starttime' : {required : '请填写开始时间'},
+				'endtime': {required : '请填写结束时间'},
+				'success_sign_tip': {required: '请填些参战成功提醒'},
+				'need_sign_tip': {required: '请填写每晚挑战客服消息提醒'},
+				'wake_sign_tip': {required: '请填写早起打卡客服消息提醒'},
+				'ok_sign_tip': {required: '请填写打卡成功客服消息提醒'},
+				'fail_sign_tip': {required: '请填写打卡失败客服消息提醒'}
+			}, [{
+	                	name : '确定',
+		                callback : function() {		        
+		                    return true;
+		                },
+		                focus : true
+		            }
+	            ]
+            );
+		});
+	</script>
+</body>
+</html>

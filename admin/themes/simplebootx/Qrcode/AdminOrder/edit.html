@@ -1,0 +1,144 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#">编辑订单</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('AdminOrder/edit')}">
+			<input type="hidden" name="id" value="{$info.id}"/>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">产品名称</label>
+					<div class="controls">
+						<input type="text" readonly="" value="{$info.proname}"/>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">印刷日期</label>
+					<div class="controls">
+						<input type="text" readonly="" value="{$info.typedate}"/>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">公司名称</label>
+					<div class="controls">
+							<input type="text" readonly="" value="{$info.username}"/>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">生产部门</label>
+					<div class="controls">
+							<input type="text" readonly="" value="{$info.depart}"/>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">工艺流程</label>
+					<div class="controls">
+						{$info.tech|htmlspecialchars_decode}
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">批次号</label>
+					<div class="controls">
+							<input type="text" readonly="" value="{$info.batch}"/>
+					</div>
+				</div>
+			</fieldset>
+			<if condition="$info.status eq 1">
+				<!-- <fieldset>
+					<div class="control-group">
+						<label class="control-label">印刷数量</label>
+						<div class="controls">
+								<input type="text" name="num" value="{$info.num}"/>
+						</div>
+					</div>
+				</fieldset> -->
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label">金额</label>
+						<div class="controls">
+								<input type="text" name="money" value="{$info.money}"/>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label">状态</label>
+						<div class="controls">
+							<input type="radio" name="status" value="2">审核通过
+							<input type="radio" name="status" value="4">取消
+						</div>
+					</div>
+				</fieldset>
+			<elseif condition="$info.status eq 2"/>
+				<!-- <fieldset>
+					<div class="control-group">
+						<label class="control-label">印刷数量</label>
+						<div class="controls">
+								<input type="text" readonly="" value="{$info.num}"/>
+						</div>
+					</div>
+				</fieldset> -->
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label">金额</label>
+						<div class="controls">
+								<input type="text" readonly="" value="{$info.money}"/>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label">状态</label>
+						<div class="controls">
+							<input type="radio" name="status" value="3">已完成
+							<input type="radio" name="status" value="2" checked="">印刷中
+						</div>
+					</div>
+				</fieldset>
+			<else/>
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label">印刷数量</label>
+						<div class="controls">
+								<input type="text" readonly="" value="{$info.num}"/>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label">金额</label>
+						<div class="controls">
+								<input type="text" readonly="" value="{$info.money}"/>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label">状态</label>
+						<div class="controls">
+							{$status_arr[$info['status']]}
+						</div>
+					</div>
+				</fieldset>
+			</if>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+				<a class="btn" href="{:U('AdminOrder/index')}">返回列表</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('AdminMessage/index')}">自动回复列表</a></li>
+			<li class="active"><a href="{:U('AdminMessage/edit', array('id' => $message['id']))}">修改自动回复</a></li>
+		</ul>
+		<form action="{:U('AdminMessage/edit_post')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<input type="hidden" name="id" value="{$message.id}">
+			<div class="row-fluid">
+				<div class="span7">
+					<fieldset class="width80p">
+						<div class="control-group">
+							<label class="control-label">规则名称</label>
+							<div class="controls">
+								<input type="text" name="name" value="{$message.name}" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">关键词</label>
+							<div class="controls">
+								<textarea name="keywords" id="keywords" maxlength="300" style='width:60%; height:150px;' required>{$message.keywords}</textarea>
+								<span class="form-required">*关键词, 每行一个</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">类型</label>
+							<div class="controls">
+								<input type="hidden" id="type" name="type" value="{$message.type}">
+								<ul class="nav nav-tabs wchattab">
+								  <li <equal name="message.type" value="1"> class="active"</equal>><a val="1" href="#text" data-toggle="tab">文本</a></li>
+								  <!-- <li <equal name="message.type" value="2"> class="active"</equal>><a val="2" href="#images" data-toggle="tab">图片</a></li> -->
+								  <li <equal name="message.type" value="3">  class="active"</equal>><a val="3" href="#singlearticle" data-toggle="tab">单图文</a></li>
+								  <li <equal name="message.type" value="4">  class="active"</equal>><a val="4" href="#multarticle" data-toggle="tab">多图文</a></li>
+								</ul>
+								<div class="tab-content">
+								  <div class="tab-pane <equal name="message.type" value="1">active</equal>" id="text">
+									<textarea id="replytext" name="content" maxlength="300" style='width:95%; height:160px;'><equal name="message.type" value="1">{$message.content}</equal></textarea>
+									最多输入300个字符
+								  </div>
+								  <div class="tab-pane <equal name="message.type" value="2">active</equal>" style="height:180px;" id="images">
+										<div style="height:150px;">
+											<h4>请上传自动回复图片</h4>
+											<div>
+												<ul class="webuploaderlist">
+													<li id="replyimg">
+														<img src="__TMPL__Public/assets/images/uploader.png" />
+													</li>
+												</ul>
+											</div>
+										</div>
+								  </div>
+								  <div class="tab-pane <equal name="message.type" value="3">active</equal>" id="singlearticle">
+								  	<a class="btn btn-small btn-info" href="javascript:void(0);">选择图文<i class="fa fa-plus"></i></a>
+								  </div>
+								  <div class="tab-pane <equal name="message.type" value="4">active</equal>" id="multarticle">
+									<a class="btn btn-small btn-info" href="javascript:void(0);">添加图文<i class="fa fa-plus"></i></a>
+								  </div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="span5">
+				<equal name="message.type" value="3">
+					<div id="dtab3">
+						<ul class="singlearticle">
+							<li class="item" aid="{$message.content.from}{$message.content.oid}" oid="{$message.content.oid}" from="{$message.content.from}" title="{$message.content.title}" subtitle="{$message.content.subtitle}">
+				    			<h4>{$message.content.title}</h4>
+								<img src="{:sp_get_asset_upload_path($message['content']['thumb'])}" />
+								<p>{$message.content.subtitle}</p><hr>
+								<span>阅读原文</span>
+							</li>
+						</ul>
+					</div>
+				<else/>
+					<div id="dtab3" class="hide">
+						<ul class="singlearticle"></ul>
+					</div>
+				</equal>
+				<equal name="message.type" value="4">
+					<div id="dtab4" class="">
+						<ul class="multiarticle">
+							<foreach name="message.content" item="o">
+				    		<li class="item" aid="{$o.from}{$o.oid}" oid="{$o.oid}" from="{$o.from}" title="{$o.title}" subtitle="{$o.subtitle}">
+				    			<img src="{:sp_get_asset_upload_path($o['thumb'])}" >
+				    			<p>{$o.title}</p>
+				    			<span class="delete"><i class="fa fa-trash" onclick="multiarticle_delete('{$o.from}{$o.oid}')" aria-hidden="true"></i></span>
+				    		</li>
+				    		</foreach>
+						</ul>
+					</div>
+				<else/>
+					<div id="dtab4" class="hide">
+						<ul class="multiarticle"></ul>
+					</div>
+				</equal>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit">{:L('SAVE')}</button>
+				<a class="btn" name="back" href="#">{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/uploader.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/wechat.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			<equal name="message.type" value="2">
+			 	var initwebuploader = true;
+			 	webupload('replyimg', 'replyimg', true, '{:sp_get_asset_upload_path($message['content'])}');
+			<else/>
+				var initwebuploader = false;
+			</equal>
+			$('a[data-toggle="tab"]').each(function() {
+				$(this).on('shown', function(e) {
+					var type = $(this).attr('val');
+					if(type === '2' && initwebuploader === false) {
+						initwebuploader = true;
+						webupload('replyimg', 'replyimg', true);
+					}
+					$('#type').val(type);
+					for(var i = 1; i < 5; i++) {
+						$('#dtab' + i).addClass('hide');
+					}
+					$('#dtab' + type).removeClass('hide');
+				});
+			});
+			$('#singlearticle > a').on('click', function(e) {
+				e.preventDefault();
+				wechatArticle('addsinglearticel', '添加图文', true);
+			});
+			$('#multarticle > a').on('click', function(e) {
+				e.preventDefault();
+				wechatArticle('addmultiarticel', '添加图文', false);
+			});
+
+			$(".js-ajax-close-btn").on('click', function(e) {
+				e.preventDefault();
+				Wind.use("artDialog", function() {
+					art.dialog({
+						id : "question",
+						icon : "question",
+						fixed : true,
+						lock : true,
+						background : "#CCCCCC",
+						opacity : 0,
+						content : "您确定需要关闭当前页面嘛？",
+						ok : function() {
+							window.close();
+							return true;
+						}
+					});
+				});
+			});
+			/////---------------------
+			Wind.use('validate','ajaxForm','artDialog',function() {
+				var form = $('form.js-ajax-forms');
+				//ie处理placeholder提交问题
+				if ($.browser.msie) {
+					form.find('[placeholder]').each(function() {
+						var input = $(this);
+						if (input.val() == input
+								.attr('placeholder')) {
+							input.val('');
+						}
+					});
+				}
+				//表单验证开始
+				form.validate({
+					ignore: [],
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//是否在敲击键盘时验证
+					onkeyup : false,
+					//当鼠标掉级时验证
+					onclick : false,
+					//验证错误
+					showErrors : function(errorMap, errorArr) {
+						try {
+							$(errorArr[0].element).focus();
+							art.dialog({
+								id : 'error',
+								icon : 'error',
+								lock : true,
+								fixed : true,
+								background : "#CCCCCC",
+								opacity : 0,
+								content : errorArr[0].message,
+								cancelVal : '确定',
+								cancel : function() {
+									$(errorArr[0].element).focus();
+								}
+							});
+						} catch (err) {}
+					},
+					//验证规则
+					rules : {
+						'type': {
+							required: true, 'wechatMsgType1': '#replytext',wechatMsgType2: 'replyimg',wechatMsgType3: 'singlearticle',wechatMsgType4: 'multiarticle'
+						},
+						'name' : {required : true, minlength: 2},
+						'keywords' : {required : true, minlength: 2}
+						
+					},
+					//验证未通过提示消息
+					messages : {
+						'name' : {required : '请输入规则名称!', minlength: '规则名称只是2个字符!'},
+						'keywords' : {required : '关键词不能为空!', minlength: '关键词至少为2个字符!'}
+					},
+					//给未通过验证的元素加效果,闪烁等
+					highlight : false,
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//验证通过，提交表单
+					submitHandler : function(forms) {
+						$(forms).ajaxSubmit({
+							url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+							dataType : 'json',
+							beforeSubmit : function(arr,$form,options) {
+								var type = $('#type').val();
+								if(type == 3 || type == 4) {
+									var wrap = 'singlearticle';
+									if(type == 4) {
+										wrap = 'multiarticle';
+									}
+									$('ul[class="'+wrap+'"').find('li').each(function(index, el) {
+										arr.push({
+											name: 'oid[]',
+											required: true,
+											type: 'text',
+											value: $(this).attr('oid')
+										});
+										arr.push({
+											name: 'from[]',
+											required: true,
+											type: 'text',
+											value: $(this).attr('from')
+										});
+										arr.push({
+											name: 'title[]',
+											required: true,
+											type: 'text',
+											value: $(this).attr('title')
+										});
+										arr.push({
+											name: 'subtitle[]',
+											required: true,
+											type: 'text',
+											value: $(this).attr('subtitle')
+										});
+										arr.push({
+											name: 'thumb[]',
+											required: true,
+											type: 'text',
+											value: $(this).find('img').attr('src')
+										});
+									});
+								}
+							},
+							success : function(data,statusText,xhr,$form) {
+								if (data.status) {
+									//添加成功
+									Wind.use("artDialog",function() {
+										art.dialog({
+											id : "succeed",
+											icon : "succeed",
+											fixed : true,
+											lock : true,
+											background : "#CCCCCC",
+											opacity : 0,
+											content : data.info,
+											button : [ {
+												name : '继续编辑？',
+												callback : function() {
+													reloadPage(window);
+													return true;
+												},
+												focus : true
+											}, {
+												name : '返回列表',
+												callback : function() {
+													location.href = "{$referer}";
+													return true;
+												}
+											} ]
+										});
+									});
+								} else {
+									error(data.info);
+								}
+							}
+						});
+					}
+				});
+			});
+		////-------------------------
+		});
+	</script>
+</body>
+</html>

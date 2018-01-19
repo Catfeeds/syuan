@@ -1,0 +1,39 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		{:sp_get_admin_breadcrumb(array('url' => UU('index'), 'icon' => 'back', 'title' => '返回列表'))}
+		<form method="post" class="js-ajax-form">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>编号</th>
+				        <th>生成日期</th>
+				        <th>领取日期</th>
+				        <th>微信昵称</th>
+				        <th>领取金额</th>
+				        <th>有效期</th>
+					</tr>
+				</thead>
+				<tbody>
+				<if condition="$list">
+					<foreach name="list" item="vo">
+				      <tr>
+				        <td>{$vo.id}</td>
+				        <td>{$vo.createtime}</td>
+				        <td>{$vo.payment_time}</td>
+				        <td>{$vo.nick}</td>
+				        <td>￥{$vo['amount']/100}</td>
+				        <td>{$vo['starttime']}——{$vo['endtime']}</td>
+				      </tr>
+				    </foreach>
+				<else/>
+					<tr><td colspan="6"><span class="text-info">暂时没有领取记录</span></td></tr>
+				</if>
+				</tbody>
+			</table>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

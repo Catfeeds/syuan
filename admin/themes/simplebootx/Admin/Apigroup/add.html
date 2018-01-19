@@ -1,0 +1,76 @@
+<admintpl file="header"/>
+</head>
+<body class="need_breadcrumb_back">
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form action="{:U('Apigroup/add_post')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<div class="row-fluid mtop20">
+				<div class="span7">
+					<fieldset class="width80p">
+						<div class="control-group">
+							<label class="control-label">分类名称</label>
+							<div class="controls">
+								<input type="text" name="name" value="" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>		
+						<div class="control-group">
+							<label class="control-label">介绍</label>
+							<div class="controls">
+								<textarea rows="4" name="introduce"></textarea>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">顺序</label>
+							<div class="controls">
+								<input type="text" name="listorder" value="0">
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="span5"></div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit"><i class="fa fa-save" aria-hidden="true"></i>{:L("SAVE")}</button>
+				<a class="btn" href="{:U('Apigroup/index')}"><i class="fa fa-reply" aria-hidden="true"></i>{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			ajaxFormSubmitInit({
+					'name' : {
+						required : 1
+					},
+					'introduce': {
+						required: 1
+					}
+				}, {
+					'name' : {
+						required : '请输入分类名称'
+					},
+					'introduce': {
+						required : '请输入分类介绍'
+					}
+				}, [{
+						name : '继续添加？',
+						callback : function() {
+							reloadPage(window);
+							return true;
+						},
+						focus : true
+					}, {
+						name : '返回列表',
+						callback : function() {
+							location.href = "{:U('Apigroup/index')}";
+							return true;
+						}
+					}
+	            ]
+            );
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb(array('url' => U('App/add'), 'icon' => 'plus', 'title' => '添加应用'))}
+		<table class="table table-hover table-bordered table-list mtop20">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>名称</th>
+					<th>类型</th>
+					<th>当前版本</th>
+					<th>地址</th>
+					<th>加密</th>
+					<th>API日志</th>
+					<th>状态</th>
+					<th>介绍</th>
+					<th>{:L('ACTIONS')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="app">
+				<tr>
+					<td>{$app.app_id}</td>
+					<td>{$app.name}</td>
+					<td>{$types[$app['type']]}</td>
+					<td>{$app.version}</td>
+					<td><empty name="app.apk_url">-<else/><a href="{$app.apk_url}" target="_blank">查看</a></empty></td>
+					<td><eq name="app.encryption" value="1"><i class="fa fa-check green" aria-hidden="true"></i><else/><i class="fa fa-close red" aria-hidden="true"></i></eq></td>
+					<td><eq name="app.apilog" value="1"><i class="fa fa-check green" aria-hidden="true"></i><else/><i class="fa fa-close red" aria-hidden="true"></i></eq></td>
+					<td><eq name="app.status" value="1">上线<else/>下线</eq></td>
+					<td title="{$app.introduce}">{:msubstr($app['introduce'], 0, 18)}</td>
+					<td>
+						<a href="{:U('App/edit', array('app_id'=>$app['app_id']))}">编辑</a> | 
+						<a href="{:U('App/upgrade_add', array('app_id'=>$app['app_id']))}">发布版本</a> | 
+						<a class="js-ajax-delete" href="{:U('App/del', array('app_id'=>$app['app_id']))}">删除</a>
+					</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

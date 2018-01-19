@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>详情</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+  <link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+  <link rel="stylesheet" type="text/css" href="__TMPL__User/Wechat/Public/css/app.css" />
+</head>
+
+<body class="contact">
+<div class="weui-flex top">
+  <div><a class="top-left" href="javascript:history.back();"><img src="__TMPL__User/Wechat/Public/images/back.png"></a></div>
+  <div class="weui-flex__item">
+    <div class="placeholder">详情</div>
+  </div>
+  <div></div>
+</div>
+<div class="weui-form-preview">
+  <div class="weui-form-preview__hd">
+    <label class="weui-form-preview__label">积分数量</label>
+    <em class="weui-form-preview__value <gt name="item.goldafter" value="$item['goldbefore']">add<else/>minus</gt>">{$item.gold}</em>
+  </div>
+  <div class="weui-form-preview__bd">
+    <div class="weui-form-preview__item">
+      <label class="weui-form-preview__label">类型</label>
+      <span class="weui-form-preview__value nr">{$type[$item['type']]}</span>
+    </div>
+    <div class="weui-form-preview__item">
+      <label class="weui-form-preview__label">时间</label>
+      <span class="weui-form-preview__value nr">{$item.create_at}</span>
+    </div>
+    <div class="weui-form-preview__item">
+      <label class="weui-form-preview__label">备注</label>
+      <span class="weui-form-preview__value nr">{$item.remark}</span>
+    </div>
+    <div class="weui-form-preview__item">
+      <label class="weui-form-preview__label">交易后积分</label>
+      <span class="weui-form-preview__value nr">{$item.goldafter}</span>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

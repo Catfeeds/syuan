@@ -1,0 +1,21 @@
+{
+  "name": "snowair/think-dotenv",
+  "description": "ThinkPHP3.2集成php-dotenv",
+  "license": "apache",
+  "authors": [
+    {
+      "name": "朱亚杰",
+      "email": "xcoolcc@gmail.com"
+    }
+  ],
+  "require": {
+    "josegonzalez/dotenv": "^1.0",
+    "snowair/think-hookagent": ">=0.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Snowair\\Dotenv\\": "."
+    },
+    "files": ["DotEnv.php"]
+  }
+}

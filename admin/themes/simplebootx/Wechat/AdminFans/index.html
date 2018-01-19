@@ -1,0 +1,93 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('AdminFans/index')}">粉丝列表</a></li>
+			<li><a href="{:U('AdminFans/sync')}"> <i class="fa fa-refresh" aria-hidden="true"></i> 同步粉丝信息</a></li>
+		</ul>
+		<form class="well form-search" method="get" action="{:U('AdminFans/index')}">
+			<input type="hidden" name="{:C('VAR_MODULE')}" value="Wechat">
+			<input type="hidden" name="{:C('VAR_CONTROLLER')}" value="AdminFans">
+			<input type="hidden" name="{:C('VAR_ACTION')}" value="index"> 
+			<select name="labelid" style="width:95px;">
+				<option value="0">全部标签</option>
+				<foreach name="labels" item="name">
+					<option value="{$key}" <eq name="formget.labelid" value="$key"> selected</eq>>{$name}</option>
+				</foreach>
+			</select>
+			<select name="subscribe" style="width:95px;">
+				<option value="-1">是否关注</option>
+				<option value="1"<eq name="formget.subscribe" value="1">1</eq>>已关注</option>
+				<option value="0"<eq name="formget.subscribe" value="0">0</eq>>未关注</option>
+			</select>
+			关注时间：
+			<input type="text" name="startdate" class="js-date" value="{$formget.startdate}" style="width: 80px;" autocomplete="off">-
+			<input type="text" class="js-date" name="enddate" value="{$formget.enddate}" style="width: 80px;" autocomplete="off"> &nbsp; &nbsp;
+			关键字： 
+			<input type="text" name="keyword" style="width:120px;" value="{$formget.keyword}" placeholder="搜索昵称或者备注">
+			<input type="submit" class="btn btn-primary" value="搜索" />
+		</form>
+		<form method="post" class="js-ajax-form" action="">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th width="50">id</th>
+						<th>昵称</th>
+						<th>性别</th>
+						<th>地区</th>
+						<th>头像</th>
+						<th>标签</th>
+						<th>关注</th>
+						<th>关注时间</th>
+						<th>活跃时间</th>
+						<th>修改时间</th>
+						<th>备注</th>
+						<th width="60">{:L('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<foreach name="list" item="user">
+					<tr>
+						<td>{$user.wechatid}</td>
+						<td>{$user.nickname}</td>
+						<td>
+							<switch name="user.sex">
+								<case value="1" break="1">男</case>
+								<case value="1" break="2">女</case>
+								<default />未知
+							</switch>
+						</td>
+						<td>{$user.country}{$user.province}{$user.city}</td>
+						<td><a href="javascript:void(0);" onclick="img_priview('{$user.headimgurl}');"><img width="25" height="25" src="{$user.headimgurl}" /></a></td>
+						<td>
+							<if condition="is_array($user['labelids'])">
+								<foreach name="user.labelids" item="lid">
+									<span class="wechatlabel">{$labels[$lid]}</span>
+								</foreach>
+							</if>
+						</td>
+						<td><eq name="user.subscribe" value="1"><i class="fa fa-check green" aria-hidden="true"></i><else /><i class="fa fa-times red" aria-hidden="true"></i></eq></td>
+						<td>{$user.subscribe_time}</td>
+						<td>{$user.lastaction_time}</td>
+						<td>{$user.update_at}</td>
+						<td>{$user.remark}</td>
+						<td>
+							<a href="javascript:open_iframe_dialog('{:U('AdminFans/edit', array('wechatid' => $user['wechatid']))}', '编辑', {width:'800px',height:'500px'})">{:L('EDIT')}</a> | 
+							<a class="js-ajax-btn" href="{:U('AdminFans/refresh',array('id'=>$user['openid']))}">刷新</a>
+							<a href="{:U('AdminFans/forever_qr', array('wechatid' => $user['wechatid']))}" class="js-ajax-dialog-btn" data-msg="确定生成么">生成永久推荐码</a>
+						</td>
+					</tr>
+					</foreach>
+				</tbody>
+			</table>
+			<!-- <div class="table-actions">
+				<button type="submit" class="btn btn-primary btn-small js-ajax-submit">{:L('SORT')}</button>
+			</div> -->
+			<div class="pagination">{$Page}</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script src="__PUBLIC__/js/uploader.js"></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>绑定手机-个人中心-{$site_name}</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+
+<tc_include file="Public:head" />
+</head>
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+		<div class="container tc-main">
+        <div class="row">
+            <div class="span3">
+                <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span9">
+               	<ul class="nav nav-tabs">
+					<li class="active"><a><i class="fa fa-mobile" aria-hidden="true"></i>手机号激活绑定</a></li>
+				</ul>
+                <div class="tab-content">
+                   <div class="tab-pane active" id="one">
+                   		<form class="form-horizontal js-ajax-form" action="{:leuu('profile/mobile')}" method="post">
+                   			<div class="control-group">
+							  <label class="control-label" for="inputMobile">手机号</label>
+							  <div class="controls">
+								<input type="text" id="inputMobile" value="{$user.mobile}" name="mobile" placeholder="建议使用常用手机" maxlength="11" class="span4">
+								<span class="help-inline"></span>
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="inputMobileCode">验证码</label>
+							  <div class="controls">
+									<input type="text" id="inputMobileCode" maxlength="6" name="mobile_verify" placeholder="手机验证码" style="width:100px;">
+									<a class="btn btn-success" id="getmobilecode" style="width: 110px;">获取手机验证码</a>
+									<span class="help-inline"></span>
+							  </div>
+							</div>
+                   			<div class="control-group">
+                   				<div class="controls">
+                   					<button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+                   				</div>
+                   			</div>
+                   		</form>
+                   </div>
+               </div>						
+            </div>
+        </div>
+        <div class="modal imgcodemodal hide"  id="imgcodeModal">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<strong>请输入图片验证码</strong>
+			</div>
+			<div class="modal-body">
+				<div style="text-align:center;">
+					{:sp_verifycode_img('length=4&font_size=16&width=180&height=40&charset=1234567890&use_noise=1&use_curve=1')}
+					<input type="text" id="imgcodeverify" placeholder="图片验证码" style="width:166px;">
+					<div class="text-error"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="javascript:void(0);" data-url="{:leuu('api/mobileverify/send')}" id="imgcodebtn" class="btn btn-primary">确定</a>
+			</div>
+		</div>
+		<tc_include file="Public:footer" />
+	</div>
+	<tc_include file="Public:scripts" />
+	<script type="text/javascript">
+	$(function() {
+
+		var regcountdown = 60; 
+		function regsmstimecount(obj) { 
+			if (regcountdown == 0) { 
+				obj.text('获取手机验证码').prop('disabled', false).removeClass('disabled');
+				obj.data("loading", false);
+				regcountdown = 60; 
+			} else { 
+				obj.text("(" + regcountdown + "s)后重新发送"); 
+				regcountdown--; 
+				setTimeout(function() { 
+					regsmstimecount(obj);
+				}, 1000);
+			} 
+		}
+		$('#getmobilecode').on('click', function() {
+			if($('#inputMobile').parent().parent().hasClass('error')) {
+				return false;
+			}
+			var btn = $(this);
+			if(btn.data("loading")) {
+				return false;
+			}
+			var mobile = $('#inputMobile');
+			if(/^1[3|4|5|7|8]\d{9}$/.test(mobile.val())) {
+				$('#imgcodebtn').data("loading", false).text('确定').prop('disabled', false).removeClass('disabled');
+				$('#imgcodeverify').val('').siblings('div').text('');
+				var $verify_img = $('#imgcodeverify').parent().find(".verify_img");
+				if($verify_img.length){
+					$verify_img.attr("src",  $verify_img.attr("src")+"&refresh="+Math.random()); 
+				}
+				$('#imgcodeModal').modal('show');
+			} else {
+				mobile.trigger('blur');
+			}
+		});
+		$('#imgcodebtn').on('click', function() {
+			var btn = $(this);
+			if(btn.data("loading")) {
+				return false;
+			}
+			btn.data("loading", true);
+			var code = $('#imgcodeverify');
+			if(!/^\w{4}$/.test(code.val())) {
+				code.siblings('div').text('验证码错误, 请重新填写');
+				code.focus();
+				btn.data("loading", false);
+				return false;
+			}
+			var oldtext = btn.text();
+            btn.text('验证中...').prop('disabled', true).addClass('disabled');
+			var data = {type: 3, mobile : $('#inputMobile').val(), verify: code.val()};
+			$.getJSON(btn.data('url'), data, function(response) {
+				btn.data("loading", false);
+				btn.text(oldtext).prop('disabled', false).removeClass('disabled');
+				if(response.status == 1 && response.info == 'ok') {
+					$('#imgcodeModal').modal('hide');
+					var sendbtn = $('#getmobilecode');
+					sendbtn.text('验证码已发送').prop('disabled', true).addClass('disabled');
+					sendbtn.data("loading", true);
+					sendbtn.siblings('span[class=help-inline]').text('手机验证码已发送');
+					sendbtn.parent().parent().removeClass('error');
+					//倒计时
+					regsmstimecount(sendbtn);
+				} else {
+					code.siblings('div').text(response.info);
+					var $verify_img = code.parent().find(".verify_img");
+					if($verify_img.length){
+						$verify_img.attr("src",  $verify_img.attr("src")+"&refresh="+Math.random()); 
+					}
+					code.val('');
+				}
+			});
+		});
+		$('#imgcodeverify').on('keyup', function() {
+			$(this).siblings('div').text('');
+		});
+	});
+	</script>
+</body>
+</html>

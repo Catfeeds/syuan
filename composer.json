@@ -1,0 +1,30 @@
+{
+    "name": "lezhizhe/basecms",
+    "description": "Lezhizhe's cms - CMS.",
+    "keywords": ["framework", "lezhizhe.net", "thinkphp", "basecms"],
+    "license": "Apache2",
+    "type": "cms",
+    "require": {
+        "php": ">=5.5",
+        "overtrue/wechat": "~3.1",
+        "snowair/think-dotenv": "dev-master",
+		"mobiledetect/mobiledetectlib": "^2.8",
+        "phpcasperjs/phpcasperjs": "^1.3"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "classmap": []
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$site_name}-查看详情-会员中心</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+<link href="__PUBLIC__/js/artDialog/skins/default.css" rel="stylesheet" />
+<tc_include file="Public:head" />
+</head>
+
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+
+	<div class="container tc-main">
+        <div class="row">
+            <div class="span2">
+                <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span10">
+            	<ul class="nav nav-tabs">
+					<li><a href="{:leuu('Qrcode/center/order', array('do' => 'list'))}">批次列表</a></li>
+					<li class="active"><a href="#">查看详情</a></li>
+				</ul>
+               <div class="tab-content">
+                   <div class="tab-pane active" id="one">
+                   		<form class="form-inline" method="get">
+                   		<select name="isdel">
+                   			<option value="-1">作废状态</option>
+                   			<option value="1">已作废</option>
+                   			<option value="0">未作废</option>
+                   		</select>
+                   		<select name="trace">
+                   			<option value="-1">溯源状态</option>
+                   			<option value="1">已溯源</option>
+                   			<option value="0">未溯源</option>
+                   		</select>
+                   		<input type="text" name="listorder" placeholder="码号" value="">
+                   		<button class="btn btn-mini">搜索</button>
+                   		</form>
+                   		<table class="table table-bordered table-striped table-hover">
+					    <thead>
+					      <tr>
+					        <th>id</th>
+					        <th>码号</th>
+					        <th>生成日期</th>
+					        <th>
+					        	<a href="{:UU('Qrcode/Center/qrcode',array('id' => $id, 'sort' => $sort))}">有效扫码量
+					        		<eq name="sort" value="desc"><i class="fa fa-long-arrow-up"></i></eq>
+					        		<eq name="sort" value="asc"><i class="fa fa-long-arrow-down"></i></eq>
+					        	</a>
+					        </th>
+					        <th>溯源状态</th>
+					        <th>状态</th>
+					        <th>操作</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+					    <if condition="$list">
+					    <foreach name="list" item="vo">
+					      <tr>
+					        <td>{$vo.id}</td>
+					        <td><if condition="!empty($vo['batch'])">{$vo.batch}<else />{$batch}</if>-{$vo.block}-{$vo.listorder}</td>
+					        <td>{$vo.createtime}</td>
+					        <td>{$vo.hits}</td>
+					        <td>{$vo['trace']==1?'已溯源':'未溯源'}</td>
+					        <td>
+					        	<if condition="$vo.isdel eq 1">
+					        	已作废
+								<else/>
+								正常
+					        	</if>
+					        </td>
+					        <td><a href="{:leuu('qrcode/center/order_view',array('id'=>$vo['id']))}">访问记录</a> <a href="javascript:void(0);" onclick="showewm({$vo.id},'{$vo.code}')">下载二维码</a></td>
+					      </tr>
+					    </foreach>
+					    <else/>
+					    <tr><td colspan="6">
+						<span class="text-info">暂时没有记录</span>
+						</td></tr>
+						</if>
+					    </tbody>
+					  </table>
+					{$page}
+                   </div>
+               </div>
+            </div>
+        </div>
+		<tc_include file="Public:footer" />
+	</div>
+	<!-- /container -->
+	<tc_include file="Public:scripts" />
+	<script type="text/javascript">
+	function showewm(id,code) {
+		var http = window.location.protocol;
+		var host = window.location.host;
+		var url  = escape(http+'//'+host+'/sy/qrcode/company/index/id/'+id+'/code/'+code+'.html?v='+new Date().getTime());
+		console.log(http+'//'+host+'/sy/qrcode/company/index/id/'+id+'/code/'+code+'.html?v='+new Date().getTime());
+		Wind.use("artDialog",function(){
+	        art.dialog({
+	            title: '二维码查看',
+	            fixed: true,
+	            width:"300px",
+	            height: '320px',
+	            id:"image_priview",
+	            lock: false,
+	            background:"#CCCCCC",
+	            opacity:0,
+	            content: '<img src="/sy/qrcode.php?data='+url+'" width="290px" height="290px"/><br/>右击鼠标，点图片另存为，可以保存图片',
+	        });
+	    });
+	}
+	</script>
+</body>
+</html>

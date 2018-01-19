@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+<title>手机号绑定</title>
+<link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+<link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+<style type="text/css">
+  /*注册页面*/
+.page-pd{ padding:0 15px;}
+.m15{ margin-top:15px;}
+.title01{ text-align:center; box-shadow: 0px 2px 3px #bfbfbf; margin-left:-2px; padding:10px 0;font-size: 20px;font-weight: 400;}
+.register  .weui-cell:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 0px;
+    border-top: 0px solid #D9D9D9;
+    color: #D9D9D9;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    /* left: 15px; */
+}
+.register .weui-cell:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px solid #D9D9D9;
+    color: #D9D9D9;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    /* left: 15px; */
+}
+.register .mask {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+}
+.register .dialog {
+    position: fixed;
+    z-index: 13;
+    width: 100%;
+    top: 0;
+    left: 0;
+  
+}
+.register .weui-label { width:60px;}
+</style>
+</head>
+<body class="register">
+  <div class="title01">手机号验证</div>
+  <div class="weui-cell">
+    <div class="weui-cell-hd">
+      <label class="weui-label">手机号</label>
+    </div>
+    <div class="weui-cell__bd">
+        <input id="reg-mobile" value="{$user['mobile']}" class="weui-input" type="tel" placeholder="请输入手机号">
+      </div>
+    <div class="weui-cell__ft">
+        <button id="get_mobile_verify" data-url="{:leuu('api/mobileverify/send')}" class="weui-vcode-btn">获取验证码</button>
+      </div>
+  </div>
+  <div class="weui-cell">
+    <div class="weui-cell_hd">
+      <label class="weui-label">验证码</label>
+    </div>
+    <div class="weui-cell-bd ">
+      <input id="reg-verify" class="weui-input" type="number" placeholder="请输入短信验证码">
+    </div>
+  </div>
+  <div class="page-pd m15 car" >
+    <a id="reg-btn" href="javascript:;" data-referer="{$referer}" data-url="{:leuu('Wechat/User/regmobile')}" class="weui-btn weui-btn_primary">立即验证</a>
+  <gt name="backable" value="0">
+    <a href="javascript:javascript:history.back();" class="weui-btn weui-btn_default">返回</a>
+  </gt>
+  </div>
+  <div class="weui-msg__extra-area">
+    <div class="weui-footer">
+      <p class="weui-footer__links">
+        <a href="javascript:void(0);" class="weui-footer__link">{$site_options.site_name}</a>
+      </p>
+      <p class="weui-footer__text">Copyright © 2008-2016 {$site_options.site_host}</p>
+    </div>
+  </div>
+  <script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+  <script src="__TMPL__Public/js/core.js"></script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" charset="utf-8">
+    $(function(){
+      var regcountdown = 60; 
+      function smstimecount() { 
+        var $this = $('#get_mobile_verify');
+        if(regcountdown == 0) {
+          $this.removeClass('');
+          $this.text('获取验证码').removeClass('weui-btn_disabled');
+          regcountdown = 60; 
+        } else { 
+          $this.text(regcountdown + "s后重发"); 
+          regcountdown--; 
+          setTimeout(function() { 
+            smstimecount();
+          }, 1000);
+        } 
+      }
+      $('#get_mobile_verify').bind('click', function() {
+        if($(this).hasClass('weui-btn_disabled')) {
+          return false;
+        }
+        var mobile = $('#reg-mobile').val();
+        if(!/^1[3|4|5|7|8][0-9]{9}$/.test(mobile)) {
+          $.toast("请输入正确的手机号码", "forbidden");
+          return false;
+        }
+        var url = $(this).data('url');
+        $(this).addClass('weui-btn_disabled');
+        getJson(url, 'GET', {mobile:mobile, type: 3}, function(info, url) {
+          $.toast("验证码已发送");
+          smstimecount();
+        }, function(info) {
+          $('#get_mobile_verify').removeClass('weui-btn_disabled');
+          $.toast(info, 'forbidden');
+          return true;
+        }, function() {
+          
+        });
+      });
+      $('#reg-btn').bind('click', function() {
+        if($(this).hasClass('weui-btn_disabled')) {
+          return false;
+        }
+        var mobile = $('#reg-mobile').val();
+        var code = $('#reg-verify').val();
+        if(!/^1[3|4|5|7|8][0-9]{9}$/.test(mobile)) {
+          $.toast("请输入正确的手机号码", "forbidden");
+          return false;
+        } else if(!/^\d{4}$/.test(code)) {
+          $.toast("请输入正确的验证码", "forbidden");
+          return false;
+        } else {
+          $(this).addClass('weui-btn_disabled');
+          var url = $(this).data('url');
+          var referer = $(this).data('referer');
+          getJson(url, 'POST', {mobile:mobile, code:code}, function(info, url){
+              $.alert(info, "提示", function() {
+                window.location.href = referer;
+              });
+          }, function(info){
+            $.toast(info, "forbidden");
+          }, function(){
+            $('#reg-btn').removeClass('weui-btn_disabled');
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

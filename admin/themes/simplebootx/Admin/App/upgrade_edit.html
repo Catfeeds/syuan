@@ -1,0 +1,143 @@
+<admintpl file="header"/>
+</head>
+<body class="need_breadcrumb_back">
+	<div class="wrap js-check-wrap">
+		{:sp_get_admin_breadcrumb()}
+		<form action="{:U('App/upgrade_edit_post')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<input type="hidden" name="id" value="{$info.id}">
+			<div class="row-fluid mtop20">
+				<div class="span7">
+					<fieldset class="width80p">
+						<div class="control-group">
+							<label class="control-label">APP</label>
+							<div class="controls">
+								<select name="app_id">
+									<foreach name="applist" key="id" item="app">
+										<option value="{$id}" <eq name="id" value="$info.app_id">selected</eq>>{$app.name}({$types[$app['type']]})</option>
+									</foreach>
+								</select>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">版本标志</label>
+							<div class="controls">
+								<input type="text" name="version_code" placeholder="请输入版本号, 例如1.2" value="{$info.version_code}" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">安装地址</label>
+							<div class="controls">
+								<input type="text" name="apk_url" placeholder="请输入安装地址" value="{$info.apk_url}" required>
+								<span class="form-required">*</span>
+							</div>							
+						</div>
+						<div class="control-group">
+							<label class="control-label">升级类型</label>
+							<div class="controls">
+								<label class="radio inline">
+								  <input type="radio" name="type" value="0" <eq name="info.type" value="0">checked</eq>>
+								  不升级
+								</label>
+								<label class="radio inline">
+								  <input type="radio" name="type" value="1" <eq name="info.type" value="1">checked</eq>>
+								  升级
+								</label>
+								<label class="radio inline">
+								  <input type="radio" name="type" value="2" <eq name="info.type" value="2">checked</eq>>
+								  强制升级
+								</label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">升级提示文字</label>
+							<div class="controls">
+								<input type="text" name="upgrade_point" value="{$info.upgrade_point}" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">确认升级按钮提示文字</label>
+							<div class="controls">
+								<input type="text" name="confirm_title" value="{$info.confirm_title}" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">取消升级按钮提示文字</label>
+							<div class="controls">
+								<input type="text" name="cancel_title" value="{$info.cancel_title}" required>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">发布状态</label>
+							<div class="controls">
+								<label class="radio inline">
+								  <input type="radio" name="status" value="1" <eq name="info.status" value="1">checked</eq>>
+								  已发布
+								</label>
+								<label class="radio inline">
+								  <input type="radio" name="status" value="0" <eq name="info.status" value="0">checked</eq>>
+								  待发布
+								</label>
+								<label class="radio inline">
+								  <input type="radio" name="status" value="-1" <eq name="info.status" value="-1">checked</eq>>
+								  已下线
+								</label>
+							</div>
+						</div>		
+						<div class="control-group">
+							<label class="control-label">升级内容</label>
+							<div class="controls">
+								<textarea rows="3" name="mark">{$info.mark}</textarea>
+								<span class="form-required">*</span>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="span5"></div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit"><i class="fa fa-save" aria-hidden="true"></i>{:L("SAVE")}</button>
+				<a class="btn" href="{:U('App/upgrade')}"><i class="fa fa-reply" aria-hidden="true"></i>{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			ajaxFormSubmitInit({
+					'version_code' : {required : 1},
+					'apk_url': {required : 1},
+					'upgrade_point': {required: 1},
+					'confirm_title': {required: 1},
+					'cancel_title': {required: 1},
+					'mark': {required: 1}
+				}, {
+					'version_code' : {required : '请输入升级版本号'},
+					'apk_url': {required : '请输入安装地址'},
+					'upgrade_point': {required: '请输入升级提示文字'},
+					'confirm_title': {required: '请输入确认升级按钮文字'},
+					'cancel_title': {required: '请输入取消升级按钮文字'},
+					'mark': {required: '请输入升级内容'}
+				}, [{
+	                	name : '继续添加？',
+		                callback : function() {
+		                    reloadPage(window);
+		                    return true;
+		                },
+		                focus : true
+		            }, {
+		                name : '返回列表',
+		                callback : function() {
+		                    location.href = "{:U('App/upgrade')}";
+		                    return true;
+		                }
+		            }
+	            ]
+            );
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>设置头像-个人中心-{$site_name}</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+<tc_include file="Public:head" />
+</head>
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+	<div class="container tc-main">
+        <div class="row">
+            <div class="span3">
+                <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span9">
+               <tc_include file="Public:profilenav"/>
+               <div class="tab-content">
+                   <div class="tab-pane active" id="one">
+                   		<div class="row">
+							<div id="avatar-parent" class="span2 headicon_parent">
+								<if condition="empty($user.avatar)">
+									<img src="__TMPL__/Public/images/headicon_128.png" class="headicon"/>
+								<else/>
+									<img src="{:leuu('user/public/avatar',array('id'=> $user['id']))}" class="headicon"/>
+								</if>
+							</div>
+						</div>
+						<div class="row">
+							<div class="span2 headicon_parent" id="avatar-picker-progress" style="margin-top:20px;">
+								
+							</div>
+						</div>
+						<div class="row">
+							<div class="span2 headicon_parent">
+								<button id="avatar-picker" class="btn btn-primary"><i class="fa fa-camera"></i> 设置头像</button>
+							</div>
+						</div>
+					</div>
+                   </div>
+               </div>					
+            </div>
+        </div>
+		<tc_include file="Public:footer" />
+	</div>
+	<!-- /container -->
+	<tc_include file="Public:scripts" />
+<script type="text/javascript" src="http://cdn.staticfile.org/webuploader/0.1.0/webuploader.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	Wind.use("noty",function() {
+		var uploader = WebUploader.create({
+			swf: 'http://cdn.staticfile.org/webuploader/0.1.0/Uploader.swf',
+			auto: true,
+			server: '{:leuu('User/Profile/avatar_upload')}',
+			fileNumLimit: 1,
+			fileSingleSizeLimit: 1 * 1024 * 1024,
+			pick: '#avatar-picker',
+			accept: {
+				title: 'Images',
+				extensions: 'gif,jpg,jpeg,bmp,png',
+				mimeTypes: 'image/*'
+			},
+			compress: {
+			    width: 1024,
+			    height: 1024,
+				quality: 90,
+				allowMagnify: false,
+				crop: false,
+				preserveHeaders: true,
+				noCompressIfLarger: true,
+				compressSize: 0
+			}
+		});
+		uploader.on('uploadProgress', function(file, percentage ) {
+			var $parent = $( '#avatar-picker-progress');
+			var $percent = $parent.find('.progress .progress-bar');
+
+			// 避免重复创建
+			if ( !$percent.length ) {
+				$percent = $('<div class="progress progress-striped active">' +
+				  '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+				  '</div>' +
+				'</div>').appendTo( $parent ).find('.progress-bar');
+			}
+			$percent.css( 'width', percentage * 100 + '%' );
+		});
+		uploader.on('uploadSuccess', function( file , response) {
+			if(response.status == 0) {
+				noty({
+					type: 'error',
+					text: response.info,
+					layout: "center"
+				});
+			} else {
+				$('#avatar-parent > img').attr('src', response.data.url);
+			}
+			uploader.removeFile(file);
+		});
+
+		uploader.on('uploadError', function( file ) {
+			noty({
+				type: 'error',
+				text: '上传失败!',
+				layout: "center",
+				timeout: 3000
+			});
+			uploader.removeFile(file);
+		});
+		uploader.on('error', function(error) {
+			var msg = '';
+			switch(error) {
+				case 'Q_EXCEED_NUM_LIMIT':
+					msg = '添加的文件总数量超出限制!';
+					break;
+				case 'Q_EXCEED_SIZE_LIMIT':
+					msg = '上传文件总大小超过限制';
+					break;
+				case 'Q_TYPE_DENIED':
+					msg = '上传文件类型错误!';
+					break;
+				case 'F_EXCEED_SIZE':
+					msg = '单个图片大小超过限制, 请上传2M以内大小的图片!';
+					break;
+				case 'F_DUPLICATE':
+					msg = '上传文件重复!';
+					break;
+				default:
+					msg = '上传错误:' + error + '!';
+			}
+			uploader.removeFile(file);
+			noty({
+				type: 'error',
+				text: msg,
+				layout: "center",
+				timeout: 3000
+			});
+		});
+		uploader.on( 'uploadComplete', function( file ) {
+			$('#avatar-picker-progress').find('.progress').fadeOut();
+		});
+	});
+});
+</script>
+</body>
+</html>

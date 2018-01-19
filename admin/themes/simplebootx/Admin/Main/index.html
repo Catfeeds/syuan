@@ -1,0 +1,36 @@
+<admintpl file="header" />
+<style>
+.home_info li em {
+	float: left;
+	width: 120px;
+	font-style: normal;
+}
+li {
+	list-style: none;
+}
+</style>
+</head>
+<body>
+	<div class="wrap">
+		<div id="home_toptip"></div>
+		<h4 class="well">{:L('MEMBER_LOGIN_INFO')}</h4>
+		<div class="home_info">
+			<ul>
+				<li><em>当前登录日期:</em> {$admin.last_login_time}</li>
+				<li><em>当前登录IP:</em> {$admin.last_login_ip}</li>
+				<li><em>上次登录日期:</em> {$last_login.time}</li>
+				<li><em>上次登录IP:</em> {$last_login.ip}</li>
+			</ul>
+		</div>
+		<h4 class="well">{:L('SYSTEM_INFORMATIONS')}</h4>
+		<div class="home_info">
+			<ul>
+				<volist name="server_info" id="vo">
+					<li><em>{$key}</em> <span>{$vo}</span></li>
+				</volist>
+			</ul>
+		</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

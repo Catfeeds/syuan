@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<title>{$site_name}-拆红包了</title>
+		<link rel="stylesheet" href="__TMPL__Qrcode/Public/css/csshake.min.css">
+		<link rel="stylesheet" href="__TMPL__Qrcode/Public/css/bag.css">
+		<script src="__TMPL__Qrcode/Public/js/zepto.min.js"></script>
+		<script src="__TMPL__Qrcode/Public/js/mathlib-min.js"></script>
+		<script src="__TMPL__Qrcode/Public/js/k3d-min.js"></script>
+		<script src="__TMPL__Qrcode/Public/js/radiation.js"></script>
+		<script src="__TMPL__Qrcode/Public/js/layer.js"></script>
+	</head>
+
+	<body>
+		<div class="Bg">
+			<canvas id="canvas" style="position: relative; background-color: #fed261;"></canvas>
+		</div>
+		<div class="red">
+			<span style=""></span>
+			<button class="redbutton" type="领取红包" id="open"></button>
+			<!-- <div class="logo">
+				<img src="img/logo.jpg" />
+			</div> -->
+			<div class="red-jg">
+				<!-- <div class="logo2">
+					<img src="img/logo.jpg" />
+				</div> -->
+				<div class="red-text">
+					<h3>{$redbag.wish}</h3>
+					<h1>{$redbag['amount']/100}<small>元</small></h1>
+					<div class="t-btn">
+						<button>红包已发放到您的零钱账户</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<script type="text/javascript">
+		$('#open').click(function() {
+			$.post('{:U("Redbag/open")}',{code:'{$redbag.code}'},function(data){
+				if(data.success) {
+			        // 在带有red样式的div中添加shake-chunk样式
+			        $('.red').addClass('shake-chunk');
+			        // 点击按钮2000毫秒后执行以下操作
+			        setTimeout(function(){
+			            // 在带有red样式的div中删除shake-chunk样式
+			            $('.red').removeClass('shake-chunk');
+			            // 将redbutton按钮隐藏
+			            $('.redbutton').css("display" , "none");
+			            $('.logo').css("display" , "none");
+			            // 修改red 下 span   背景图
+			            $('.red > span').css("background-image" , "url(img/bg2.jpg)");
+			            // 修改red-jg的css显示方式为块
+			            $('.red-jg').css("display" , "block");
+			        },2000);
+				} else {
+					layer.open({
+						content: data.msg
+						,btn: '确定'
+					});
+				}
+			},'json');
+		});
+		</script>
+	</body>
+
+</html>

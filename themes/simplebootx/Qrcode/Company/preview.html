@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>{$site_name}-{$company.name}</title>
+		<link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+		<link rel="stylesheet" type="text/css" href="__TMPL__Qrcode/Public/css/style.css"/>
+	</head>
+	<body>
+		<if condition="$pics">
+		<div class="banner">
+			<div class="swiper-container swiper-container-horizontal">
+				<div class="swiper-wrapper" style="transform: translate3d(-640px, 0px, 0px); transition-duration: 0ms;">
+				<foreach name="pics" item="vo" key="k">
+					<div class="swiper-slide" data-swiper-slide-index="{$k}">
+						<img src="{:sp_get_asset_upload_path($vo['url'])}">
+					</div>
+				</foreach>
+				</div>
+				<div class="swiper-pagination swiper-pagination-bullets">
+					<foreach name="pics" item="vo" key="k">
+						<span class="swiper-pagination-bullet"></span>
+					</foreach>
+				</div>
+			</div>
+		</div>
+		</if>
+
+		<if condition="$prize">
+		<div class="Packet">
+			<!--正常红包状态-->
+			<div class="main">
+				<div class="opacity"></div>
+				<div class="red"><img src="/themes/simplebootx/Qrcode/Public/images/asd.jpg"></div>
+				<!--说明文字-->
+				<div class="Packet-text">
+					<p>红包已加载！</p>
+				</div>
+			</div>
+
+		</div>
+		</if>
+
+		<div class="wrap">
+			<div class="tab">
+				<ul class="tab-hd">
+				<if condition="$hide">
+						<li style="width:100%">公司信息</li>
+				<else/>
+					<if condition="$order">
+						<li class="active">产品信息</li>
+						<li>公司信息</li>
+					<else/>
+						<li class="active">产品信息</li>
+						<li>公司信息</li>
+					</if>
+				</if>
+				</ul>
+				<ul class="tab-bd">
+				<if condition="!$hide">
+					<li class="thisclass">
+						<div class="part">
+							<div class="title">
+								<if condition="$category['xxlb']">
+
+									{$category['xxlb']}
+
+								</if>
+							</div>
+							<div class="part-text">
+								<if condition="$category['mr1']">
+
+									{$category['mr1']}：{$order.depart}<br/>
+
+								</if>
+							{$company.name}<br/>
+								<foreach name="trace" item="val" key="key">
+								{$key+1}、{$comname[$val['company']]['name']}<br/>
+								</foreach>
+							</div>
+						</div>
+						<div class="part">
+							<div class="title">
+								{$product.name}
+							</div>
+							<div class="part-text">
+								<h3>基本信息</h3>
+								{$product.description|htmlspecialchars_decode}
+							</div>
+						</div>
+						<if condition="$order.typedate neq '0000-00-00'">
+						<div class="part">
+							<div class="title">
+								生产日期
+							</div>
+							<div class="part-text">
+								{$order.typedate}
+							</div>
+						</div>
+						</if>
+						<if condition="$order['types']">
+						<div class="part">
+							<div class="title">
+								{$order.types}
+							</div>
+							<div class="part-text">
+								{$order.typesdate}
+								<?php
+								if(strtotime($order['typesdate']) < time() && $order['types'] == '过期日期') {
+									echo '该产品已过期，请勿使用。';
+								}
+								?>
+								
+							</div>
+						</div>
+						</if>
+						<!-- <div class="part">
+							<div class="title">
+								批次信息
+							</div>
+							<div class="part-text">
+								{$order.tech|htmlspecialchars_decode}
+							</div>
+						</div> -->
+						<if condition="$category['field1']">
+						<div class="part">
+							<div class="title">
+								{$category['field1']}
+							</div>
+							<div class="part-text">
+								{$order.field1|htmlspecialchars_decode}
+							</div>
+						</div>
+						</if>
+						<if condition="$category['field2']">
+						<div class="part">
+							<div class="title">
+								{$category['field2']}
+							</div>
+							<div class="part-text">
+								{$order.field2|htmlspecialchars_decode}
+							</div>
+						</div>
+						</if>
+					</li>
+				</if>
+					<li>
+						<div class="part part2">
+							<div class="title">
+								公司简介
+							</div>
+							<div class="part-text">
+								{$company.about|htmlspecialchars_decode}
+							</div>
+						</div>
+						<div class="part part2">
+							<div class="title">
+								企业文化
+							</div>
+							<div class="part-text">
+								{$company.culture|htmlspecialchars_decode}
+							</div>
+						</div>
+						
+						<div class="part part2">
+							<div class="title">
+								资质荣誉
+							</div>
+							<div class="part-text">
+								<php>
+									$imgs = json_decode($company['honor'],true);
+								</php>
+								<foreach name="imgs" item="vo">
+								<p style="margin-top: 5px;"><img src="{:sp_get_asset_upload_path($vo['url'])}"/></p>
+								</foreach>
+							</div>
+						</div>
+						<div class="part part2">
+							<div class="title">
+								形象展示
+							</div>
+							<div class="part-text">
+								<php>
+									$imgs = json_decode($company['pics'],true);
+								</php>
+								<foreach name="imgs" item="vo">
+								<p style="margin-top: 5px;"><img src="{:sp_get_asset_upload_path($vo['url'])}"/></p>
+								</foreach>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="flex-box i-tabbar">
+			<if condition="$company_user['wechat']">
+				<div class="flex-item-1 i-tabbar-item"><img src="__TMPL__/Public/images/index.png"/>
+					<p><a class="flex-a" href="{$company_user['wechat']}">微信公共号</a></p></div>
+			</if>
+			<if condition="$company_user['website']">
+				<div class="flex-item-1 i-tabbar-item"><img src="__TMPL__/Public/images/shop.png"/><p><a class="flex-a" href="{$company_user['website']}">进店看看</a></p></div>
+				<else />
+				<div class="flex-item-1 i-tabbar-item"><img src="__TMPL__/Public/images/index.png"/>
+					<p><a class="flex-a" href="{$company_user['wechat']}">技术支持：大友印相</a></p></div>
+
+			</if>
+		</div>
+		<div class="potion">
+			<a href="tel:{$company.phone}"><img src="/themes/simplebootx/Qrcode/Public/images/tel.png"/></a>
+		</div>
+		
+		<script type="text/javascript" src="__TMPL__Qrcode/Public/js/jquery.min.js"></script>
+		<script src="http://cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+		<script src="http://cdn.bootcss.com/jquery-weui/1.0.1/js/swiper.min.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				function tabs(tabTit, on, tabCon) {
+					$(tabTit).children().click(function() {
+						$(this).addClass(on).siblings().removeClass(on);
+						var index = $(tabTit).children().index(this);
+						$(tabCon).children().eq(index).show().siblings().hide();
+					});
+				};
+				tabs(".tab-hd", "active", ".tab-bd");
+				$('.tab-hd li').eq(0).trigger('click');
+			});
+
+			$(function() {
+				$(".swiper-container").swiper({
+					loop: true,
+					autoplay: 3000
+				});
+			})
+			</script>
+	</body>
+</html>

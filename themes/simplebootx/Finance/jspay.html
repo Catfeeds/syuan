@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+		<title>微信支付</title>
+		<link rel="stylesheet" href="//cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="//cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+        <script type="text/javascript" charset="utf-8">
+			var callback = '{$callback}';
+            wx.config({$jsconfig});
+			wx.ready(function(){
+				WeixinJSBridge.invoke(
+					'getBrandWCPayRequest', {$jspayconfig},
+					function(res) {
+						if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+							window.location.href = callback + '?pay_result=' + res.err_msg;
+						} else if(res.err_msg == "get_brand_wcpay_request:fail" ) {
+							$.confirm({
+								title: '支付失败',
+								text: '是否重新发起支付?',
+								onOK: function () {
+							    	window.location.reload(true);
+							  	},
+							  	onCancel: function () {
+							  		window.location.href = callback + '?pay_result=' + res.err_msg;
+							  	}
+							});
+						} else if(res.err_msg == "get_brand_wcpay_request:cancel") {
+							$.alert("您取消了支付", function() {
+								window.location.href = callback + '?pay_result=' + res.err_msg;
+							});
+						}
+					}
+				);
+			});
+        </script>
+    </body>
+</html>

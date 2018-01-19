@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>财务明细</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+    <link rel="stylesheet" type="text/css" href="__TMPL__User/Wechat/Public/css/app.css" />
+  </head>
+  <body class="detail">
+      <div class="weui-flex top">
+        <div><a class="top-left" href="javascript:history.back();"><img src="__TMPL__User/Wechat/Public/images/back.png"></a></div>
+        <div class="weui-flex__item">
+          <div class="placeholder">明细列表</div>
+        </div>
+      </div>
+      <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd">
+        <tc_include file="Finance:Wechat:balance_item" /> 
+        </div>
+      </div>
+      <gt name="nextpage" value="0">
+      <div class="weui-loadmore" data-url="{:UU('Finance/Wechat/balancelist')}" data-nextpage="{$nextpage}">加载更多</div>
+      </gt>
+      <!--js文件-->
+      <script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+      <script src="http://cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+      <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+      <script src="__TMPL__Public/js/core.js"></script>
+      <script src="__TMPL__User/Wechat/Public/js/app.js"></script>
+  </body>
+</html>

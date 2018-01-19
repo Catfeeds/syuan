@@ -1,0 +1,36 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs" style="margin-bottom:5px;">
+			<li class="active"><a href="{:U('AdminMenu/index')}">自定义菜单</a></li>
+			<li><a href="javascript:open_iframe_dialog('{:U('AdminMenu/add')}', '添加菜单', {width:'800px',height:'450px'})">添加菜单</a></li>
+		</ul>
+		<form method="post" class="js-ajax-form" action="{:U('AdminMenu/listorders')}">
+			<div class="table-actions" style="float:right;margin-right:10px;">
+				<a href="{:U('AdminMenu/delmenu')}" class="btn btn-warning btn-small">删除微信端自定义菜单</a>
+				<a href="{:U('AdminMenu/makemenu')}" class="btn btn-info btn-small">生成微信端自定义菜单</a>
+			</div>
+			<table class="table table-hover table-bordered table-list">
+				<thead>
+					<tr>
+						<th width="60">{:L('SORT')}</th>
+						<th width="120">名称</th>
+						<th>类型</th>
+						<th>内容</th>
+						<th>显示</th>
+						<th>{:L('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{$taxonomys}
+				</tbody>
+			</table>
+			<div class="table-actions">
+				<button type="submit" class="btn btn-primary btn-small js-ajax-submit">{:L('SORT')}</button>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

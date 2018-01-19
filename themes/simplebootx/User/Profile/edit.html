@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>修改资料-个人中心-{$site_name}</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+<link href="__PUBLIC__/js/WebUpload/webuploader.css"  rel="stylesheet" type="text/css">
+<link href="__PUBLIC__/js/artDialog/skins/default.css" rel="stylesheet" />
+<tc_include file="Public:head" />
+<style type="text/css">
+  .webuploaderlist {
+  margin: 0px;
+}
+.webuploaderlist li {
+  list-style-type:none;
+  width: 150px;
+  height:150px;
+  text-align:center;
+  border:1px dashed #a9b7b7;
+  display:block;
+  position: relative;
+    display: inline;
+  float:left;
+}
+.webuploaderlist li.hide {
+  display:none;
+}
+.webuploaderlist li img {
+  max-width:100%;
+  max-height:100%;
+  margin: 0 auto;
+  display: table-cell;
+  vertical-align: middle;
+}
+.webuploaderlist li span {
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:#FFF;
+  opacity:0.5;
+  filter:alpha(opacity=50);
+  border-radius:5px;
+  cursor: pointer;
+  text-align:center;
+  display:block;
+  z-index:1000;
+  top: 2px;
+}
+.webuploaderlist li span.view {
+  left:2px;
+  color:green;
+}
+.webuploaderlist li span.delete {
+  right:2px;
+  color:red;
+}
+.webuploaderlist li:last-child {
+  padding:5px 5px 0px;
+  height: auto;
+}
+</style>
+</head>
+<body class="body-white" id="top">
+	<tc_include file="Public:nav" />
+		<div class="container tc-main">
+        <div class="row">
+            <div class="span2">
+              <tc_include file="Public:usernav"/>
+            </div>
+            <div class="span10">
+              <tc_include file="Public:profilenav"/>
+              <div class="tab-content">
+                   <div class="tab-pane active" id="one">
+                   		<form class="form-horizontal" id="ff" action="{:leuu('profile/edit_post')}" method="post">
+                   			<div class="control-group">
+                   				<label class="control-label" for="input-user_nicename">公司名称</label>
+                   				<div class="controls">
+                   					{$user.user_nicename}
+                            <input type="hidden" name="user_nicename" value="{$user.user_nicename}"/>
+                   				</div>
+                   			</div>
+                        <div class="control-group">
+                          <label class="control-label" for="input-user_email">客服电话</label>
+                          <div class="controls">
+                            <input type="text" id="input-user_email" placeholder="电话" name="com[phone]" value="{$com.phone}">
+                          </div>
+                        </div>
+                   			<div class="control-group">
+                   				<label class="control-label" for="input-culture">企业简介</label>
+                   				<div class="controls">
+                   					<script type="text/plain" id="about" name="com[about]">{$com.about}</script>
+                   				</div>
+                   			</div>
+                   			<div class="control-group">
+                          <label class="control-label" for="input-culture">企业文化</label>
+                          <div class="controls">
+                            <script type="text/plain" id="culture" name="com[culture]">{$com.culture}</script>
+                          </div>
+                        </div>
+                        <div class="control-group">
+                          <label class="control-label">资质荣誉</label>
+                          <div class="controls">
+                              <div style="text-align: center;">
+                                <ul class="webuploaderlist">
+                                  <li id="imgs1">
+                                    <img src="__TMPL__Public/images/uploader.png" />
+                                  </li>
+                                </ul>
+                              </div>
+                          </div>
+                        </div>
+                        <div class="control-group">
+                          <label class="control-label">形象展示</label>
+                          <div class="controls">
+                            <div style="text-align: center;">
+                              <ul class="webuploaderlist">
+                                <li id="imgs2">
+                                  <img src="__TMPL__Public/images/uploader.png" />
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                   			<div class="control-group">
+                   				<div class="controls">
+				                  	<input type="hidden" name="id" value="{$user.id}">
+                   					<button type="button" class="btn btn-primary js-ajax-submit" id="subbtn">保存</button>
+                   				</div>
+                   			</div>
+                   		</form>
+                   </div>
+               </div>							
+            </div>
+        </div>
+		  <tc_include file="Public:footer" />
+	</div>
+	<!-- /container -->
+	<tc_include file="Public:scripts" />
+  <script type="text/javascript" src="__PUBLIC__/js/uploader.js"></script>
+  <script type="text/javascript">
+    //编辑器路径定义
+    var editorURL = GV.DIMAUB;
+    webupload('imgs1', 'com[honor]', false<notempty name="com.honor">, '<foreach name="com.honor" item="vo"><gt name="key" value="0">,</gt>{:sp_get_asset_upload_path($vo['url'])}</foreach>'</notempty>);
+    webupload('imgs2', 'com[pics]', false<notempty name="com.pics">, '<foreach name="com.pics" item="vo"><gt name="key" value="0">,</gt>{:sp_get_asset_upload_path($vo['url'])}</foreach>'</notempty>);
+  </script>
+  <script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.config.js"></script>
+  <script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.all.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      editor1 = new baidu.editor.ui.Editor({
+          toolbars: [
+              ['bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc']
+          ],
+          autoHeightEnabled: true,
+          autoFloatEnabled: true,
+          initialFrameWidth:'98%',
+          initialFrameHeight:200
+      });
+      editor1.render('about');
+      try {
+        editor1.sync();
+      } catch (err) {
+      }
+      editor2 = new baidu.editor.ui.Editor({
+          toolbars: [
+              ['bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc']
+          ],
+          autoHeightEnabled: true,
+          autoFloatEnabled: true,
+          initialFrameWidth:'98%',
+          initialFrameHeight:200
+      });
+      editor2.render('culture');
+      try {
+        editor2.sync();
+      } catch (err) {
+      }
+      $('#subbtn').click(function() {
+        $.post("{:leuu('profile/edit_post')}",$('#ff').serialize(),function(data) {
+          if(data.status == 1) {
+            if(data.url) {
+              window.location.href=data.url;
+            } else {
+              location.reload();
+            }
+          } else {
+            alert(data.info);
+          }
+        })
+      });
+    });
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		{:sp_get_admin_breadcrumb(array('url' => U('AdminMp/add'), 'icon' => 'plus', 'title' => '添加公众号'))}
+		<table class="table table-hover table-bordered mtop20">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>公众号</th>
+					<th>原始ID</th>
+					<th>微信号</th>
+					<th>公众号类型</th>
+					<th>创建时间</th>
+					<th>最后修改时间</th>
+					<th>{:L('ACTIONS')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="mplist" item="mp">
+				<tr>
+					<td>{$mp.mpid}</td>
+					<td>{$mp.name}</td>
+					<td>{$mp.original_id}</td>
+					<td>{$mp.wechat_account}</td>
+					<td>{$mp_types[$mp['type']]}</td>
+					<td>{$mp.create_at}</td>
+					<td>{$mp.update_at}</td>
+					<td>
+						<a href="{:U('AdminMp/edit',array('id'=>$mp['mpid']))}">{:L('EDIT')}</a>|
+						<a href="{:U('AdminMp/delete',array('id'=>$mp['mpid']))}" class="js-ajax-delete">{:L('DELETE')}</a>
+					</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

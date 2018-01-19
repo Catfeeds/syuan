@@ -1,0 +1,53 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('Sms/validate_list')}">短信验证列表</a></li>
+		</ul>
+		<form class="well form-search" method="get" action="{:U('Sms/validate_list')}">
+			<input type="hidden" name="g" value="Admin">
+			<input type="hidden" name="m" value="Sms">
+			<input type="hidden" name="a" value="validate_list">
+			<input type="text" name="mobile" style="width:130px;" value="{$param.mobile}" placeholder="接收号码" />
+			发送时间：<input type="text" name="creatstarttime" value="{$param.creatstarttime}" class="js-date date" style="width:100px;" />-<input style="width:100px;" type="text" name="createndtime" value="{$param.createndtime}" class="js-date date" />
+			验证时间：<input type="text" name="valistarttime" value="{$param.valistarttime}" class="js-date date" style="width:100px;" />-<input style="width:100px;" type="text" name="valiendtime" value="{$param.valiendtime}" class="js-date date" />
+			<select name="type" style="width:130px;">
+				<option value="0">选择类型</option>
+				<foreach name="types" key="key" item="name">
+					<option value="{$key}"<eq name="key" value="$param['type']"> selected </eq>>{$name}</option>
+				</foreach>
+			</select>
+			<button class="btn btn-primary">查询</button>
+		</form>
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">序号</th>
+					<th>手机号</th>
+					<th>类型</th>
+					<th>验证码</th>
+					<th>短信发送时间</th>
+					<th>验证时间</th>
+					<th>IP</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="vo">
+				<tr>
+					<td>{$vo.id}</td>
+					<td>{$vo.mobile}</td>
+					<td>{$types[$vo['type']]}</td>
+					<td>{$vo.code}</td>
+					<td>{$vo.create_at}</td>
+					<td>{$vo.validate_at}</td>
+					<td>{$vo.client_ip}</td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

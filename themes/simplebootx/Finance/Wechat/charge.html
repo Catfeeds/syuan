@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+		<title>充值</title>
+		<link rel="stylesheet" href="//cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+		<link rel="stylesheet" href="//cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+		<style type="text/css">
+			.charge {
+				width: 94%;
+				margin: 3%;
+				background-color: #FFF;
+				font-size: 1em;
+			}
+			.charge .weui-flex__item {
+				line-height: 2.5em;
+				padding: 5%;
+			}
+			.charge .account {
+				background-color: rgb(251,251,251);
+				font-size: 0.9em;	
+			}
+			.charge .account .weui-flex__item{
+				line-height: 2em;
+			}
+			.charge .input-tip .weui-flex__item{
+				line-height: 1em;
+				font-size: 0.9em;
+			}
+			.charge .input .weui-flex__item{
+				line-height: 1em;
+				font-size: 1.5em;
+				font-weight: bold;
+				padding-top: 0;
+			}
+			.charge .input .weui-flex__item div {
+				padding-bottom: 5px;
+				border-bottom: 1px solid rgb(238,238,238);
+			}
+			.charge .input .weui-flex__item div > input {
+				padding: 5px;
+				outline:none;
+				font-size: 1.2em;
+				font-weight: bold;
+				width: 85%;
+				-webkit-appearance:none;
+				border-radius: 0;
+				border: 0;
+				border-color:#FFF;
+				-webkit-tap-highlight-color:rgba(255,0,0,0);
+			}
+			.charge .account .weui-flex__item span{
+				color: rgb(126,140,178);
+				margin-left: 10px;
+			}
+			.charge .balance .weui-flex__item {
+				padding-top: 0;
+				line-height: 0.9em;
+				font-size: 0.8em;
+				color: rgb(160, 160, 160);
+			}
+			.charge .balance .weui-flex__item a{
+				color: rgb(126,140,178);
+			}
+			.charge .button .weui-flex__item {
+				padding-bottom: 0;
+			}
+		</style>
+	</head>
+	<body class="chargebody">
+		<div class="charge">
+			<div class="weui-flex account">
+			  <div class="weui-flex__item">充值方式: <span>微信支付</span></div>
+			</div>
+			<div class="weui-flex input-tip">
+			  <div class="weui-flex__item">
+				  充值金额
+				  <span style="font-size:0.8em;padding-left:10px;color:#ff7e00;">单次充值金额不能低于1元</span>
+			  </div>
+			</div>
+			<div class="weui-flex input">
+			  	<div class="weui-flex__item">
+			  	<div>
+			  	￥<input id="money" type="number" name="money">
+			  	</div>
+			  </div>
+			</div>
+			<div class="weui-flex balance">
+			  <div class="weui-flex__item">
+				  当前账户余额￥<span id="money-text">{$user.account.money}</span></a>
+			  </div>
+			</div>
+			<div class="weui-flex">
+				<div class="weui-flex__item button">
+				  <a href="javascript:void(0);" class="weui-btn weui-btn_primary weui-btn_disabled" data-url="{:UU('Finance/Wechat/charge')}" data-referer="{$referer}">充值</a>
+				</div>
+			</div>
+		</div>
+		<div class="weui-footer weui-footer_fixed-bottom">
+		  <p class="weui-footer__text">Copyright © 2008-2016 {$site_name}</p>
+		</div>
+		<script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+		<script src="//cdn.bootcss.com/jquery-weui/1.0.1/js/jquery-weui.min.js"></script>
+		<script src="__TMPL__Public/js/core.js"></script>
+		<script src="__TMPL__Public/js/morning.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			$(function() {
+				$('#money').focus();
+				$('#quickinput').bind('click', function(){
+					var money = $(this).attr('value');
+					if(money > 0) {
+						$('#money').val(money);
+						$('#money').trigger('keyup');
+					} else {
+						$('#money').focus();
+					}
+				});
+				$('#money').bind('keyup', function() {
+					var money = $('#money').val().length > 0 ? parseFloat($('#money').val()) : 0;
+					if($('a.weui-btn_primary').hasClass('weui-btn_disabled')) {
+						if(money >= 1) {
+							$('a.weui-btn_primary').removeClass('weui-btn_disabled');
+						}
+					} else {
+						if(money < 1) {
+							$('a.weui-btn_primary').addClass('weui-btn_disabled');
+						}
+					}
+				});
+				$('a.weui-btn_primary').bind('click', function() {
+					if($(this).hasClass('weui-btn_disabled')) {
+						return false;
+					}
+					var money = $('#money').val().length > 0 ? parseFloat($('#money').val()) : 0;
+					if(money < 1) {
+						$(this).addClass('weui-btn_disabled');
+						return false;
+					}
+					if(!$(this).hasClass('weui-btn_loading')) {
+						$(this).addClass('weui-btn_loading')
+						var url = $(this).data('url');
+						var referer = $(this).data('referer');
+						$.confirm("确认充值?", function() {
+							getJson(url, 'POST', {money: money, referer: referer}, function(info, url) {
+								window.location.href = url;
+							}, function(info) {
+								$.toptip(info, 2000, 'warning');
+								return true;
+							}, function() {
+								$('a.weui-btn_primary').removeClass('weui-btn_loading');
+							});
+						}, function() {
+							$('a.weui-btn_primary').removeClass('weui-btn_loading');
+						});
+					}
+				});
+			});
+		<notempty name="jsconfig">
+			wx.config({$jsconfig});
+			wx.ready(function(){
+				wx.hideMenuItems({
+				    menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone', 'menuItem:editTag', 'menuItem:delete', 'menuItem:copyUrl', 'menuItem:originPage', 'menuItem:readMode', 'menuItem:openWithQQBrowser', 'menuItem:openWithSafari', 'menuItem:share:email', 'menuItem:share:brand']
+				});
+			});
+		</notempty>
+        </script>
+	</body>
+</html>

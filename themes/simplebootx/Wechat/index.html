@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<title>{$wechatmp.name}</title>
+		<tc_include file="Public/head"/>
+		<style type="text/css">
+		*{ padding: 0; margin: 0; }
+		body{ background: #fff; font-family: '微软雅黑'; color: #333; font-size: 16px;}
+		.qr-container{width: 800px; margin: 0 auto;}
+		.qr-title, .qr-image, .qr-tip{ width: 600px; text-align:center; margin: 0 auto; }
+		.qr-title {font-size: 20px; font-weight: bold;}
+		@media screen and (max-width: 480px) {
+			.qr-container{width: 100%; margin: 0 auto; padding: 5px;}
+			.qr-title, .qr-image, .qr-tip{ width: 100%; text-align:center; margin: 0 auto; }
+			.qr-title {font-size: 20px; font-weight: bold;}
+		}
+		</style>
+	</head>
+<body>
+<div class="container">
+	<div class="qr-container">
+		<div class="qr-title text-info">{$wechatmp.name}</div>
+		<div class="qr-image">
+			<img src="{$wechatmp.qrcode}" />
+		</div>
+		<div class="qr-tip text-success">请使用微信扫码二维码关注我们, 体验精彩</div>
+	</div>
+</div>
+</body>
+</html>

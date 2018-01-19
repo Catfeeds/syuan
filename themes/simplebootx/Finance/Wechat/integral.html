@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>我的积分</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.1/style/weui.min.css">
+	<link rel="stylesheet" href="http://cdn.bootcss.com/jquery-weui/1.0.1/css/jquery-weui.min.css">
+	<link rel="stylesheet" type="text/css" href="__TMPL__User/Wechat/Public/css/app.css" />
+</head>
+<body>
+<div class="weui-flex top">
+  <div><a class="top-left" href="javascript:history.back();"><img src="__TMPL__User/Wechat/Public/images/back.png"></a></div>
+  <div class="weui-flex__item">
+    <div class="placeholder">积分</div>
+  </div>
+  <div><a class="top-right" href="{:UU('Finance/Wechat/integrallist')}">明细</a></div>
+</div>
+
+<div class="weui-flex">
+	<div class="weui-flex__item t_center money_icon"><img src="__TMPL__User/Wechat/Public/images/integral.png"></div>
+</div>
+<div class="weui-flex">
+	<div class="weui-flex__item t_center money_title">我的积分</div>
+</div>
+<div class="weui-flex">
+	<div class="weui-flex__item t_center money_contact">{$user.account.gold}</div>
+</div>
+</body>
+</html>
